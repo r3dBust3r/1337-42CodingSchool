@@ -11,7 +11,7 @@ static int ft_strlen(char *str)
 	It guarantees the result is null-terminated if size > 0.
 	It returns the total length it tried to create: strlen(dst) + strlen(src).
 */
-strlcat(char *dst, const char *src, size_t size)
+int ft_strlcat(char *dst, const char *src, size_t size)
 {
 	int dst_len = ft_strlen(dst);
 	int src_len = ft_strlen(src);
@@ -21,6 +21,6 @@ strlcat(char *dst, const char *src, size_t size)
 		dst[dst_len + i] = src[i];
 		i++;
 	}
-	dst[i] = '\n';
+	dst[i] = '\0';
 	return (src_len + dst_len);
 }
