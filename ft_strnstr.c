@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/22 13:21:10 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/22 13:54:31 by ottalhao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
 	Loop through each position i in haystack up to len.
 	For each position, check if needle matches character by character.
@@ -6,32 +18,38 @@
 	Otherwise, return NULL if no match found.
  */
 
-// char *strnstr(const char *haystack, const char *needle, size_t len);
-
-static int check_current(char *big, char *little, int curr_index)
+static int	check_current(const char *big,
+							const char *little,
+							size_t len,
+							int curr_index)
 {
-	int i = 0;
-	while (little[i])
+	size_t	i;
+
+	i = 0;
+	while ((curr_index + i < len) && little[i])
 	{
 		if (little[i] != big[i + curr_index])
 			return (0);
 		i++;
 	}
-	return (1);
+	if (little[i] == '\0')
+		return (1);
+	return (0);
 }
 
-char *ft_strnstr(const char *big, const char *little, size_t len)
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
-	if (! little[0])
-		return ((char*)big);
+	size_t	i;
 
-	int i = 0;
-	while (big[i] && i < len)
+	if (little[0] == '\0')
+		return ((char *)big);
+	i = 0;
+	while (i < len && big[i])
 	{
 		if (big[i] == little[0])
 		{
-			if (check_current((char*)big, (char*)little, i))
-				return ((char*)&big[i]);
+			if (check_current(big, little, len, i))
+				return ((char *)&big[i]);
 		}
 		i++;
 	}

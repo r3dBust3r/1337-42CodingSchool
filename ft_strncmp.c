@@ -1,15 +1,29 @@
-int ft_strncmp(const char *s1, const char *s2, size_t n)
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/21 21:25:46 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/21 21:42:05 by ottalhao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	int i = 0;
+	size_t	i;
+
+	i = 0;
 	if (n == 0)
-	{
 		return (0);
-	}
-	while ((s1[i] && s2[i]) || i < n)
+	while (i < n && (s1[i] && s2[i]))
 	{
 		if (s1[i] != s2[i])
-			break;
+			break ;
 		i++;
 	}
-	return s1[i] - s2[i];
+	if (i == n)
+		return (0);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

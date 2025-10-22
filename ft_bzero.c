@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/21 17:59:55 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/21 18:00:17 by ottalhao         ###   ########.fr       */
+/*   Created: 2025/10/21 18:14:13 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/21 18:18:58 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-size_t	ft_strlen(const char *s)
+void	ft_bzero(void *s, size_t n)
 {
-	size_t	i;
+	size_t			i;
+	unsigned char	*ptr;
 
 	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	ptr = (unsigned char *)s;
+	while (i < n)
+		*(ptr + i++) = 0;
 }

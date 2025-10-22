@@ -1,9 +1,25 @@
-void *ft_memcpy(void *dest, const void *src, size_t n)
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/21 18:23:09 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/21 18:34:04 by ottalhao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	size_t i = 0;
-	unsigned char *d = (unsigned char *)dest;
-	const unsigned char *s = (const unsigned char *)src;
+	size_t				i;
+	unsigned char		*temp_dest;
+	const unsigned char	*temp_src;
+
+	i = 0;
+	temp_dest = (unsigned char *)dest;
+	temp_src = (const unsigned char *)src;
 	while (i < n)
-		d[i] = s[i++];
+		temp_dest[i] = temp_src[i++];
 	return (dest);
 }

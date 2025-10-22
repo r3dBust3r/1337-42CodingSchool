@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/21 17:59:55 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/21 18:00:17 by ottalhao         ###   ########.fr       */
+/*   Created: 2025/10/22 10:15:30 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/22 10:31:22 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-size_t	ft_strlen(const char *s)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
 	size_t	i;
+	char	*temp_s;
 
 	i = 0;
-	while (s[i])
+	temp_s = (char *)s;
+	while (i < n)
+	{
+		if (temp_s[i] == (char)c)
+			return ((void *)&temp_s[i]);
 		i++;
-	return (i);
+	}
+	return (NULL);
 }
