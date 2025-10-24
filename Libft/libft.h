@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 14:12:48 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/24 14:24:39 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/10/24 18:44:37 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,5 @@ char	*ft_strrchr(const char *s, int c);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlen(const char *s);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 #endif
