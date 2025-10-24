@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/24 18:44:55 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/24 20:23:48 by ottalhao         ###   ########.fr       */
+/*   Created: 2025/10/24 20:18:13 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/24 20:38:21 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,29 @@ static int	my_strlen(char *str)
 	return (i);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	s_len;
 	size_t	alloc_size;
 	size_t	i;
+	size_t	j;
 	char	*p;
 
-	s_len = my_strlen((char *)s);
-	if (s_len - start < len)
-		alloc_size = s_len - start;
-	else
-		alloc_size = len;
-	p = (char *)malloc(sizeof(char) * (alloc_size + 1));
+	alloc_size = my_strlen((char *)s1) + my_strlen((char *)s2) + 1;
+	p = (char *)malloc(sizeof(char) * alloc_size);
 	if (!p)
 		return (NULL);
 	i = 0;
-	while (i < alloc_size)
-		p[i] = s[start + i++];
-	p[i] = '\0';
+	while (s1[i])
+	{
+		p[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		p[i + j] = s2[j];
+		j++;
+	}
+	p[i + j] = '\0';
 	return (p);
 }
