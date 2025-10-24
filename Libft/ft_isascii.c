@@ -6,9 +6,11 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 17:55:42 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/21 17:56:28 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/10/24 14:10:09 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_isascii(int c)
 {

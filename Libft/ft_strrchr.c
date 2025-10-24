@@ -6,11 +6,13 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 21:03:41 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/21 21:14:03 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/10/24 14:17:04 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static int	ft_strlen(const char *str)
+#include "libft.h"
+
+static int	my_strlen(const char *str)
 {
 	int	i;
 
@@ -24,7 +26,7 @@ char	*ft_strrchr(const char *s, int c)
 {
 	int	i;
 
-	i = ft_strlen(s);
+	i = my_strlen(s);
 	while (i != 0)
 	{
 		if (s[i - 1] == (char)c)

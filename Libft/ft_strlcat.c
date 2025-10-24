@@ -1,26 +1,40 @@
-static int ft_strlen(char *str)
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/24 09:04:57 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/24 14:11:03 by ottalhao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+
+static int	my_strlen(char *str)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (str[i])
 		i++;
 	return (i);
 }
-/*
-	It appends src to the end of dst.
-	It appends at most (size - strlen(dst) - 1) chars. that means (size) is the total buffer of (dst) 
-	It guarantees the result is null-terminated if size > 0.
-	It returns the total length it tried to create: strlen(dst) + strlen(src).
-*/
-int ft_strlcat(char *dst, const char *src, size_t size)
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	int dst_len = ft_strlen(dst);
-	int src_len = ft_strlen(src);
-	int i = 0;
-	while (i < (size - dst_len - 1))
-	{
-		dst[dst_len + i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (src_len + dst_len);
+	size_t	dst_len;
+	size_t	src_len;
+	size_t	i;
+
+	src_len = my_strlen(src);
+	dst_len = my_strlen(dst);
+	if (dst_len >= size)
+		return (size + src_len);
+	i = 0;
+	while (src[i] && (dst_len + i + 1) < size)
+		dst[dst_len + i] = src[i++];
+	dst[dst_len + i] = '\0';
+	return (dst_len + src_len);
 }

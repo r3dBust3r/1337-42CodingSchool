@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ottalhao <ottalhao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 21:26:50 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/22 21:44:36 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/10/24 14:11:03 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static int	ft_strlen(const char *s)
+#include "libft.h"
+
+static int	my_strlen(const char *s)
 {
 	int	i;
 
@@ -26,7 +28,7 @@ char	*ft_strdup(const char *s)
 	int		s_len;
 	char	*new_s;
 
-	s_len = ft_strlen(s);
+	s_len = my_strlen(s);
 	new_s = (char *)malloc(sizeof(char) * (s_len + 1));
 	if (!new_s)
 		return (NULL);

@@ -6,9 +6,11 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 17:50:21 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/21 17:51:44 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/10/24 14:10:09 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_isalpha(int c)
 {

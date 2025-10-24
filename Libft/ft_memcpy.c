@@ -6,9 +6,11 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 18:23:09 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/21 18:34:04 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/10/24 14:11:03 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {

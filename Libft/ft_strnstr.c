@@ -6,17 +6,11 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 13:21:10 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/22 13:54:31 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/10/24 14:11:03 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-	Loop through each position i in haystack up to len.
-	For each position, check if needle matches character by character.
-	Stop checking when you hit end of needle, end of haystack, or reach len.
-	If full needle matched, return pointer to start of match.
-	Otherwise, return NULL if no match found.
- */
+#include "libft.h"
 
 static int	check_current(const char *big,
 							const char *little,

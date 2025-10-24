@@ -1,33 +1,39 @@
-static int ft_strlen(char *str)
-{
-	int i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/23 17:49:25 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/10/24 14:11:03 by ottalhao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void *ft_memmove(void *dest, const void *src, size_t n)
-{
-	size_t i = 0;
-	unsigned char *d = (unsigned char *)dest;
-	const unsigned char *s = (const unsigned char *)src;
+#include "libft.h"
 
-	if (n == 0)
+void	*ft_memmove(void *dest, const void *src, size_t n)
+{
+	size_t			i;
+	unsigned char	*temp_dest;
+	const unsigned char	*temp_src;
+
+	if (!dest && !src)
+		return (NULL);
+	temp_dest = (unsigned char *)dest;
+	temp_src = (const unsigned char *)src;
+	if (temp_dest == temp_src || n == 0)
 		return (dest);
-
-	if ((const unsigned int *)src + n >= (unsigned int *)dest)
+	if (temp_dest < temp_src)
 	{
+		i = 0;
 		while (i < n)
-			d[i] = s[i++];
+			temp_dest[i] = temp_src[i++];
 	}
 	else
 	{
-		while (i < n)
-		{
-			d[i] = s[ft_strlen(s) - 1 - i];
-			i++;
-		}
+		while (n-- > 0)
+			temp_dest[n] = temp_src[n];
 	}
-
 	return (dest);
 }
