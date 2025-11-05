@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 18:44:55 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/11/04 15:57:14 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/05 17:37:05 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	i;
 	char	*p;
 
-	s_len = ft_strlen((char *)s);
+	s_len = ft_strlen(s);
+	if (s_len < start)
+		return (ft_strdup(""));
 	if (s_len - start < len)
 		alloc_size = s_len - start;
 	else
