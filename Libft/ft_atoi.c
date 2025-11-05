@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 13:55:54 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/24 14:09:33 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/04 21:21:08 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_atoi(const char *nptr)
 			s = -1;
 		i++;
 	}
-	while (nptr[i])
+	while (nptr[i] && nptr[i] >= '0' && nptr[i] <= '9')
 		r = r * 10 + (nptr[i++] - '0');
 	return (r * s);
 }

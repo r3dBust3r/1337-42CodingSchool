@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 21:26:50 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/24 14:11:03 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/04 00:39:27 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ char	*ft_strdup(const char *s)
 		return (NULL);
 	i = 0;
 	while (i < s_len)
-		new_s[i] = s[i++];
+	{
+		new_s[i] = s[i];
+		i++;
+	}
 	new_s[i] = '\0';
 	return (new_s);
 }

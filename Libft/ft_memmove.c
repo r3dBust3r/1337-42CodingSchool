@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 17:49:25 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/26 17:34:00 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:55:20 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	size_t			i;
-	unsigned char	*temp_dest;
+	size_t				i;
+	unsigned char		*temp_dest;
 	const unsigned char	*temp_src;
 
 	if (!dest && !src)
@@ -28,7 +28,10 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	{
 		i = 0;
 		while (i < n)
-			temp_dest[i] = temp_src[i++];
+		{
+			temp_dest[i] = temp_src[i];
+			i++;
+		}
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 18:23:09 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/24 14:11:03 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/04 00:36:36 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	temp_dest = (unsigned char *)dest;
 	temp_src = (const unsigned char *)src;
 	while (i < n)
-		temp_dest[i] = temp_src[i++];
+	{
+		temp_dest[i] = temp_src[i];
+		i++;
+	}
 	return (dest);
 }

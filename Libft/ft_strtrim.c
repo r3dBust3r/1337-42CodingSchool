@@ -6,21 +6,11 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 20:52:15 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/26 13:11:09 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:54:36 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static int	my_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
 
 static int	calc_allocsize(char *start, char *end)
 {
@@ -66,7 +56,7 @@ static char	*define_end_p(char *s1, char *set, char *end_p)
 	int	len;
 	int	j;
 
-	len = my_strlen((char *)s1) - 1;
+	len = ft_strlen((char *)s1) - 1;
 	while (len)
 	{
 		j = 0;
@@ -96,7 +86,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 
 	i = 0;
 	start_p = (char *)s1;
-	end_p = (char *)s1 + my_strlen((char *)s1) - 1;
+	end_p = (char *)s1 + ft_strlen((char *)s1) - 1;
 	start_p = define_start_p((char *)s1, (char *)set, start_p);
 	end_p = define_end_p((char *)s1, (char *)set, end_p);
 	alloc_size = calc_allocsize(start_p, end_p) + 1;

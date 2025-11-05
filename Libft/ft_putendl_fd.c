@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 13:32:49 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/10/28 13:34:50 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/04 18:10:59 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_putendl_fd(char *s, int fd)
 	while (s[i])
 	{
 		write(fd, &s[i], 1);
-		write(fd, 0x0, 1);
 		i++;
 	}
+	write(fd, "\n", 1);
 }
