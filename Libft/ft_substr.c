@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 18:44:55 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/11/05 17:37:05 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/08 16:07:01 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	i;
 	char	*p;
 
+	if (!s)
+		return (NULL);
 	s_len = ft_strlen(s);
 	if (s_len < start)
 		return (ft_strdup(""));
