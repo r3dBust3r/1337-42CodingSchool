@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 17:44:10 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/11/10 09:54:57 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/10 10:35:51 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,39 +27,37 @@ static int	calc_len(int n)
 	return (len);
 }
 
-static int	alloc_asc_n(char *asc_n, int len)
+static void	fill_digits(char *s, long num, int len)
 {
-	asc_n = (char *)malloc(sizeof(char) * (len + 1));
-	if (!asc_n)
-		return (NULL);
-	return (1);
+	s[len] = '\0';
+	if (num == 0)
+	{
+		s[0] = '0';
+		return ;
+	}
+	while (num > 0)
+	{
+		s[--len] = (num % 10) + '0';
+		num /= 10;
+	}
 }
 
 char	*ft_itoa(int n)
 {
-	int		len;
-	char	*asc_n;
+	char	*s;
 	long	num;
+	int		len;
 
 	len = calc_len(n);
-	if (!alloc_asc_n(asc_n, len))
+	s = (char *)malloc(sizeof(char) * (len + 1));
+	if (!s)
 		return (NULL);
 	num = n;
-	asc_n[len] = '\0';
 	if (num < 0)
 	{
-		asc_n[0] = '-';
+		s[0] = '-';
 		num = -num;
 	}
-	if (num == 0)
-	{
-		asc_n[0] = '0';
-		return (asc_n);
-	}
-	while (num > 0)
-	{
-		asc_n[--len] = (num % 10) + '0';
-		num /= 10;
-	}
-	return (asc_n);
+	fill_digits(s, num, len);
+	return (s);
 }

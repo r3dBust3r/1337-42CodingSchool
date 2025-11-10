@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 14:12:48 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/11/03 23:34:05 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/10 10:35:41 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define LIBFT_H
 # include <stddef.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <unistd.h>
 
 typedef struct s_list
