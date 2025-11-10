@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 17:44:10 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/11/05 18:59:36 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/10 09:54:57 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ static int	calc_len(int n)
 	return (len);
 }
 
+static int	alloc_asc_n(char *asc_n, int len)
+{
+	asc_n = (char *)malloc(sizeof(char) * (len + 1));
+	if (!asc_n)
+		return (NULL);
+	return (1);
+}
+
 char	*ft_itoa(int n)
 {
 	int		len;
@@ -34,7 +42,8 @@ char	*ft_itoa(int n)
 	long	num;
 
 	len = calc_len(n);
-	asc_n = (char *)malloc(sizeof(char) * (len + 1));
+	if (!alloc_asc_n(asc_n, len))
+		return (NULL);
 	num = n;
 	asc_n[len] = '\0';
 	if (num < 0)
