@@ -6,66 +6,46 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 21:43:44 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/11/18 22:26:41 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:13:35 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include "libft.h"
+#include "libftprintf.h"
 
 int ft_printf(const char *s, ...)
 {
+	unsigned int counter = 0;
+	char next;
+
 	va_list list;
 	va_start(list, s);
+
+	if (!s)
+		return (-1);
 
 	int i = 0;
 	while (s[i])
 	{
+		next = s[i + 1];
 		if (s[i] == '%')
 		{
-			if (s[i + 1] == '%')
-			{
-				ft_putchar_fd('%', 1);
-				i++;
-			}
-			if (s[i + 1] == 'c')
-			{
-				ft_putchar_fd(va_arg(list, int), 1);
-				i++;
-			}
-			if (s[i + 1] == 's')
-			{
-				ft_putstr_fd(va_arg(list, char *), 1);
-				i++;
-			}
-			if (s[i + 1] == 'p')
-			{
-				/** print mem address */
-			}
-			if (s[i + 1] == 'd' || s[i + 1] == 'i')
-			{
-				ft_putnbr_fd(va_arg(list, int), 1);
-				i++;
-			}
-			if (s[i + 1] == 'u')
-			{
-				/** print digit */
-			}
-			if (s[i + 1] == 'x')
-			{
-				/** print hex lower */
-			}
-			if (s[i + 1] == 'X')
-			{
-				/** print hex upper */
-			}
+			if (next == 'c') { ft_putchar(va_arg(list, int), &counter); i++; }
+			else if (next == 's') { ft_putstr(va_arg(list, char *), &counter); i++; }
+			else if (next == 'd' || next == 'i') { ft_putnbr(va_arg(list, int), &counter); i++; }
+			else if (next == 'u') { ft_putnbr_uns(va_arg(list, int), &counter); i++; }
+			else if (next == 'x') { ft_put_hex(va_arg(list, unsigned int), 1, &counter); i++; }
+			else if (next == 'X') { ft_put_hex(va_arg(list, unsigned int), 0, &counter); i++; }
+			else if (next == 'p') { ft_put_addr(va_arg(list, long long), &counter); i++; }
+			else if (next == '%') { ft_putchar('%', &counter); i++; }
 		}
 		else
 		{
-			write(1, &s[i], 1);
+			ft_putchar(s[i], &counter);
 		}
 		i++;
 	}
 
 	va_end(list);
+
+	return counter;
 }
