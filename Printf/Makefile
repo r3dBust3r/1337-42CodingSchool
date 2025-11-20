@@ -6,7 +6,7 @@
 #    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/20 21:08:51 by ottalhao          #+#    #+#              #
-#    Updated: 2025/11/20 21:11:34 by ottalhao         ###   ########.fr        #
+#    Updated: 2025/11/20 21:43:48 by ottalhao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,14 +27,14 @@ all: $(LIB_NAME)
 
 $(LIB_NAME): $(OBJS)
 	@ar rcs $(LIB_NAME) $(OBJS)
-	@echo "[OK] $(LIB_NAME) has been created/updated!"
+	@echo "[  OK  ] $(LIB_NAME) has been created/updated!"
 
 %.o:%.c $(HEADER)
-	$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	@rm -f $(OBJS)
-	@echo "[OK] the working space has been cleaned!"
+	@echo "[  OK  ] the working space has been cleaned!"
 
 fclean: clean
 	@rm -f $(LIB_NAME)
