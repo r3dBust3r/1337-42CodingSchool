@@ -6,14 +6,14 @@
 #    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/20 21:08:51 by ottalhao          #+#    #+#              #
-#    Updated: 2025/11/20 21:43:48 by ottalhao         ###   ########.fr        #
+#    Updated: 2025/11/21 15:29:05 by ottalhao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC       = cc
 FLAGS    = -Wall -Wextra -Werror
 LIB_NAME = libftprintf.a
-HEADER   = libftprintf.h
+HEADER   = ft_printf.h
 SRCS     = ft_printf.c \
            ft_putchar.c \
            ft_putnbr.c \

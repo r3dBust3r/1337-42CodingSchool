@@ -6,11 +6,11 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 20:58:11 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/11/20 21:01:03 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/11/21 15:29:35 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
 
 void	ft_putchar(char c, unsigned int *counter)
 {
