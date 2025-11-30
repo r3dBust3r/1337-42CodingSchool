@@ -1,0 +1,13 @@
+Hello, this is a short line.
+1234567890
+!@#$%^&*()_+-=[]{}|;':",./<>?
+This is a much longer line that is meant to test whether your get_next_line function can handle long lines without breaking or losing any data.
+🚀🌟✨🔥💧🍀🎉
+Another short line.
+.........................
+
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Line with a mix: 123 ABC !@# 🚴‍♂️🎵
+EOF
