@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 23:36:29 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/06 20:28:58 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/12/06 20:25:12 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,17 @@ static char	*clean_stash(char *stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[1024];
 	char		*line;
 	int			bytes;
 
 	bytes = 1;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash = read_and_stash(fd, stash, bytes);
-	if (!stash)
+	stash[fd] = read_and_stash(fd, stash[fd], bytes);
+	if (!stash[fd])
 		return (NULL);
-	line = extract_line(stash);
-	stash = clean_stash(stash);
+	line = extract_line(stash[fd]);
+	stash[fd] = clean_stash(stash[fd]);
 	return (line);
 }
