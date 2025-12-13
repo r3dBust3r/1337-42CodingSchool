@@ -48,7 +48,8 @@
 - [+] A custom message of your choice has to be displayed if an error due to a wrong password occurs when using sudo
 - [+] Each action using sudo has to be archived, both inputs and outputs. The log file has to be saved in the `/var/log/sudo/`
 - [+] The TTY mode has to be enabled for security reasons.
-- [+] For security reasons too, the paths that can be used by sudo must be restricted. Example `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin`
+- [+] For security reasons too, the paths that can be used by sudo must be restricted. 
+      Example `/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin`
 
 - [+] Create a script `monitoring.sh` in bash
 - [+] At server startup (cronjob), the script will display some information on all terminals and *every 10 minutes* (take a look at wall). The banner is optional. No error must be visible
@@ -76,20 +77,20 @@
 - [+] Setup a service of your choise, don't forget to modify the firewall.
 
 ### EOW
-- [ ] Check partitions
-- [ ] Check username
-- [ ] Check hostname
-- [ ] Check groups
-- [ ] Check sudo
-- [ ] Check ssh
-- [ ] Check password policies
-- [ ] Check monitoring.sh
-- [ ] Check firewall
-- [ ] Check appArmor
-- [ ] Check php, mariadb, lighthttpd
-- [ ] Check wordpress
-- [ ] Calculate the signature checksum value of *.vdi* file in *sha1* format
-- [ ] Submit the finale `signature.txt` & `README.md`
+- [+] Check partitions
+- [+] Check username
+- [+] Check hostname
+- [+] Check groups
+- [+] Check sudo
+- [+] Check ssh
+- [+] Check password policies
+- [+] Check monitoring.sh
+- [+] Check firewall
+- [+] Check appArmor
+- [+] Check php, mariadb, lighthttpd
+- [+] Check wordpress
+- [+] Calculate the signature checksum value of *.vdi* file in *sha1* format
+- [+] Submit the finale `signature.txt` & `README.md`
 
 ### NOTE
 - Note that your virtual machine’s *signature may be altered*
