@@ -54,7 +54,7 @@ echo "[*] Logged User: $(users | wc -w)"
 # Network IP + MAC
 echo -n "[*] Network: IP "
 /usr/sbin/ifconfig \
-    | grep -E "inet [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" \
+    | grep -E "inet ([0-9]{1,3}\.){3}[0-9]{1,3}" \
     | grep -v 127.0.0.1 \
     | awk '{printf "%s ", $2}'
 
