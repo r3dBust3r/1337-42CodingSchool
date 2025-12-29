@@ -1,0 +1,306 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
+/*   Updated: 2025/12/29 20:56:36 by ottalhao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+/************ LINKED LIST STRUCTURE ************/
+typedef struct push_swap
+{
+	int n;
+	int index;
+	struct push_swap *next;
+} ps_list;
+/************ LINKED LIST STRUCTURE ************/
+
+void	ft_putstr(char *s)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		write(1, &s[i], 1);
+		i++;
+	}
+}
+
+long ft_atol(const char *nptr)
+{
+	long	r;
+	int		s;
+	int		i;
+
+	s = 1;
+	r = 0;
+	i = 0;
+	while (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
+	if (nptr[i] == '+' || nptr[i] == '-')
+	{
+		if (nptr[i] == '-')
+			s = -1;
+		i++;
+	}
+	while (nptr[i] && nptr[i] >= '0' && nptr[i] <= '9')
+		r = r * 10 + (nptr[i++] - '0');
+	return (r * s);
+}
+
+int	ft_number(char *s)
+{
+	int i = 0;
+	while (s[i])
+	{
+		if (s[i] < '0' || s[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int is_empty(char **asc_n)
+{
+    int i = 0;
+    while (asc_n[i])
+        i++;
+    if (i == 0)
+		return 1;
+	return 0; 
+}
+
+/******************* split *******************/
+static int	count_elms(const char *s, char c)
+{
+	int	i;
+	int	elms;
+
+	elms = 0;
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		while (s[i] == c)
+			i++;
+		if (s[i])
+			elms++;
+		while (s[i] && s[i] != c)
+			i++;
+	}
+	return (elms);
+}
+
+static void	free_all(char **arr, int filled)
+{
+	int	i;
+
+	i = 0;
+	while (i < filled)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+static char	*alloc_word(const char *s, int start, int end)
+{
+	int		len;
+	int		j;
+	char	*word;
+
+	len = end - start;
+	word = malloc(sizeof(char) * (len + 1));
+	if (!word)
+		return (NULL);
+	j = 0;
+	while (j < len)
+	{
+		word[j] = s[start + j];
+		j++;
+	}
+	word[len] = '\0';
+	return (word);
+}
+
+static int	fill_parent_array(const char *s, char c, char **arr, int i)
+{
+	int		start;
+	int		index;
+	char	*word;
+
+	index = 0;
+	while (s[i])
+	{
+		while (s[i] == c)
+			i++;
+		if (!s[i])
+			break ;
+		start = i;
+		while (s[i] && s[i] != c)
+			i++;
+		word = alloc_word(s, start, i);
+		if (!word)
+		{
+			free_all(arr, index);
+			return (-1);
+		}
+		arr[index++] = word;
+	}
+	arr[index] = NULL;
+	return (0);
+}
+
+char	**ft_split(const char *s, char c)
+{
+	char	**arr;
+	int		count;
+	int		i;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	count = count_elms(s, c);
+	arr = malloc(sizeof(char *) * (count + 1));
+	if (!arr)
+		return (NULL);
+	if (fill_parent_array(s, c, arr, i) == -1)
+		return (NULL);
+	return (arr);
+}
+/******************* split *******************/
+
+/**************** ft_lstadd_back ****************/
+void	ft_lstadd_back(ps_list **lst, ps_list *new)
+{
+	ps_list	*temp;
+
+	if (!lst || !new)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	temp = *lst;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new;
+}
+/**************** ft_lstadd_back ****************/
+
+/**************** ft_lstnew ****************/
+ps_list	*ft_lstnew(int n)
+{
+	ps_list	*new_node;
+
+	new_node = malloc(sizeof(ps_list));
+	if (!new_node)
+		return (NULL);
+	new_node->n = n;
+	new_node->next = NULL;
+	return (new_node);
+}
+/**************** ft_lstnew ****************/
+
+int main(int ac, char **av)
+{
+	/** no parameters */
+	if (ac == 1)
+	{
+		printf("Error: No params!\n");
+		return 1;
+	}
+
+	/** 1 param */
+	if (ac == 2)
+		return 0;
+
+	ps_list	**stack_a = malloc(sizeof(ps_list)); // Check mem allocation
+	ps_list	*node;
+	ps_list	*current;
+
+	char	**asc_n;
+	
+	int		i = 1; // av index
+	int		j = 0; // asc_n index returned by split
+	int		k = 0; // asc_n[j] characters index
+	long	n = 0; // number
+
+	while (i < ac)
+	{
+		// "1 2 3" {"1", "2", "3"}
+		asc_n = ft_split(av[i], ' ');
+
+		// TODO: Check if asc_n empty
+		if (is_empty(asc_n))
+		{
+			printf("Error: Found empty str!\n");
+			return 1;
+		}
+
+		// 1 2 3 "45 67"
+		j = 0;
+		while (asc_n[j])
+		{
+			// TODO: Validate if asc_n[j] is a valid number.
+			k = 0;
+			while (asc_n[j][k])
+			{
+				if (k == 0 && (asc_n[j][k] == '+' || asc_n[j][k] == '-'))
+					k++;
+				if (asc_n[j][k] < '0' || asc_n[j][k] > '9')
+				{
+					printf("Error: Not a valid number!\n");
+					return 1;
+				}
+				k++;
+			}
+
+			// TODO: Convert asc_n[j] to a long using ft_atol.
+			n = ft_atol(asc_n[j]);
+
+			// printf("%ld\n", n);
+
+			// TODO: Check for Integer Overflow (is it within INT_MIN and INT_MAX?).
+			if (n < -2147483648 || n > 2147483647)
+			{
+				printf("Error: Out of range [-2147483648, 2147483647]\n");
+				return 1;
+			}
+
+			// TODO: Check for Duplicates (look through your stack to see if the number is already there).
+			current = *stack_a;
+			while (current)
+			{
+				if (n == current->n)
+				{
+					printf("Error: Found duplicate!\n");
+					return 1;
+				}
+				current = current->next;
+			}
+
+			// TODO: Add to Stack: Create a new node and add it to the bottom of Stack A.
+			node = ft_lstnew(n);
+			ft_lstadd_back(stack_a, node);
+
+			j++;
+		}
+
+		i++;
+	}
+
+	return 0;
+}
