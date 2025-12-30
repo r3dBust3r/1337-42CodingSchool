@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: otmane <otmane@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/30 16:11:59 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/12/30 21:08:44 by otmane           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,21 +299,32 @@ void rotate_stack_both(ps_list **stack_a, ps_list **stack_b)
 	rotate_stack(stack_b, "rb");
 }
 
-void rra()
+/** rra() & rrb() */
+void rev_rotate_stack(ps_list **lst, char *operation)
 {
-	// (reverse rotate a): Shift down all elements of stack a by 1.
-	// The last element becomes the first one.
+	ps_list *last = *lst;
+	while (last->next)
+	    last = last->next;
+	ps_list *second_last = *lst;
+	int n_lst = count_lst(lst);
+	int i = 0;
+	while (i < n_lst - 2)
+	{
+	    second_last = second_last->next;
+	    i++;
+	}
+	second_last->next = NULL;
+	last->next = *lst;
+	*lst = last;
+	ft_putstr(operation);
+	ft_putstr("\n");
 }
 
-void rrb()
+/** rrr() */
+void rrr(ps_list **stack_a, ps_list **stack_b)
 {
-	// (reverse rotate b): Shift down all elements of stack b by 1.
-	// The last element becomes the first one.
-}
-	
-void rrr()
-{
-	// rra and rrb at the same time.
+	rev_rotate_stack(stack_a, "rra");
+	rev_rotate_stack(stack_b, "rrb");
 }
 /**************** operations ****************/
 
