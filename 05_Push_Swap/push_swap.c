@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/30 11:01:55 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/12/30 16:11:59 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,20 @@ char	**ft_split(const char *s, char c)
 }
 /******************* split *******************/
 
+/**************** count_lst ****************/
+int count_lst(ps_list **lst)
+{
+    int i = 0;
+    ps_list *current = *lst;
+    while (current)
+    {
+        current = current->next;
+        i++;
+    }
+    return i;
+}
+/**************** count_lst ****************/
+
 /**************** ft_lstadd_back ****************/
 void	ft_lstadd_back(ps_list **lst, ps_list *new)
 {
@@ -215,50 +229,74 @@ ps_list	*ft_lstnew(int n)
 /**************** ft_lstnew ****************/
 
 /**************** operations ****************/
-void sa()
+/** sa() & sb() */
+void swap_stack(ps_list **lst, char *operation)
 {
-	// (swap a): Swap the first 2 elements at the top of stack a.
-	// Do nothing if there is only one element or none
+    if (count_lst(lst) < 2)
+        return;
+    ps_list *first = *lst;
+    ps_list *second = (*lst)->next;
+    first->next = second->next;
+    second->next = first;
+    *lst = second;
+	ft_putstr(operation);
+	ft_putstr("\n");
 }
 
-void sb()
+/** ss() */
+void swap_stack_both(ps_list **stack_a, ps_list **stack_b)
 {
-	// (swap b): Swap the first 2 elements at the top of stack b.
-	// Do nothing if there is only one element or none
+	swap_stack(stack_a, "sa");
+	swap_stack(stack_b, "sb");
 }
 
-void ss()
+/** pa() & pb() */
+void push_stack(ps_list **stack_a, ps_list **stack_b, char *operation)
 {
-	// sa and sb at the same time.
+	if (operation == "pa")
+	{
+		if (count_lst(stack_b) == 0)
+			return;
+		ps_list *node_to_push = *stack_b;
+		*stack_b = (*stack_b)->next;
+		node_to_push->next = *stack_a;
+		*stack_a = node_to_push;
+		ft_putstr("pa\n");
+	}
+	else
+	{
+		if (count_lst(stack_a) == 0)
+			return;
+		ps_list *node_to_push = *stack_a;
+		*stack_a = (*stack_a)->next;
+		node_to_push->next = *stack_b;
+		*stack_b = node_to_push;
+		ft_putstr("pb\n");
+	}
 }
 
-void pa()
+/** ra() & rb() */
+void rotate_stack(ps_list **lst, char* operation)
 {
-	// (push a): Take the first element at the top of b and put it at the top of a.
-	// Do nothing if b is empty.
+	if (count_lst(lst) == 0)
+	    return;
+	ps_list *first = *lst;
+	ps_list *second = (*lst)->next;
+	ps_list *last = *lst;
+	while (last->next)
+	    last = last->next;
+	last->next = first;
+	first->next = NULL;
+	*lst = second;
+    ft_putstr(operation);
+    ft_putstr("\n");
 }
 
-void pb()
+/** rr() */
+void rotate_stack_both(ps_list **stack_a, ps_list **stack_b)
 {
-	// (push b): Take the first element at the top of a and put it at the top of b.
-	// Do nothing if a is empty.
-}
-
-void ra()
-{
-	// (rotate a): Shift up all elements of stack a by 1.
-	// The first element becomes the last one.
-}
-
-void rb()
-{
-	// (rotate b): Shift up all elements of stack b by 1.
-	// The first element becomes the last one.
-}
-
-void rr()
-{
-	// ra and rb at the same time.
+	rotate_stack(stack_a, "ra");
+	rotate_stack(stack_b, "rb");
 }
 
 void rra()
