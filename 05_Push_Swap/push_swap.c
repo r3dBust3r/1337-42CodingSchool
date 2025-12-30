@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/29 20:56:36 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/12/30 11:01:55 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,71 @@ ps_list	*ft_lstnew(int n)
 }
 /**************** ft_lstnew ****************/
 
+/**************** operations ****************/
+void sa()
+{
+	// (swap a): Swap the first 2 elements at the top of stack a.
+	// Do nothing if there is only one element or none
+}
+
+void sb()
+{
+	// (swap b): Swap the first 2 elements at the top of stack b.
+	// Do nothing if there is only one element or none
+}
+
+void ss()
+{
+	// sa and sb at the same time.
+}
+
+void pa()
+{
+	// (push a): Take the first element at the top of b and put it at the top of a.
+	// Do nothing if b is empty.
+}
+
+void pb()
+{
+	// (push b): Take the first element at the top of a and put it at the top of b.
+	// Do nothing if a is empty.
+}
+
+void ra()
+{
+	// (rotate a): Shift up all elements of stack a by 1.
+	// The first element becomes the last one.
+}
+
+void rb()
+{
+	// (rotate b): Shift up all elements of stack b by 1.
+	// The first element becomes the last one.
+}
+
+void rr()
+{
+	// ra and rb at the same time.
+}
+
+void rra()
+{
+	// (reverse rotate a): Shift down all elements of stack a by 1.
+	// The last element becomes the first one.
+}
+
+void rrb()
+{
+	// (reverse rotate b): Shift down all elements of stack b by 1.
+	// The last element becomes the first one.
+}
+	
+void rrr()
+{
+	// rra and rrb at the same time.
+}
+/**************** operations ****************/
+
 int main(int ac, char **av)
 {
 	/** no parameters */
@@ -227,7 +292,7 @@ int main(int ac, char **av)
 	if (ac == 2)
 		return 0;
 
-	ps_list	**stack_a = malloc(sizeof(ps_list)); // Check mem allocation
+	ps_list	*stack_a = NULL;
 	ps_list	*node;
 	ps_list	*current;
 
@@ -240,7 +305,7 @@ int main(int ac, char **av)
 
 	while (i < ac)
 	{
-		// "1 2 3" {"1", "2", "3"}
+		// split each argument
 		asc_n = ft_split(av[i], ' ');
 
 		// TODO: Check if asc_n empty
@@ -281,7 +346,7 @@ int main(int ac, char **av)
 			}
 
 			// TODO: Check for Duplicates (look through your stack to see if the number is already there).
-			current = *stack_a;
+			current = stack_a;
 			while (current)
 			{
 				if (n == current->n)
@@ -294,12 +359,20 @@ int main(int ac, char **av)
 
 			// TODO: Add to Stack: Create a new node and add it to the bottom of Stack A.
 			node = ft_lstnew(n);
-			ft_lstadd_back(stack_a, node);
+			ft_lstadd_back(&stack_a, node);
 
 			j++;
 		}
 
 		i++;
+	}
+
+	i = 0;
+	current = stack_a;
+	while (current)
+	{
+		printf("{NODE[%d]: %d} -> ", ++i, current->n);
+		current = current->next;
 	}
 
 	return 0;
