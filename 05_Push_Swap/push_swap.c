@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/31 11:47:34 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/12/31 13:23:32 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,16 +334,32 @@ void rrr(ps_list **stack_a, ps_list **stack_b)
 void print_lst(ps_list **lst)
 {
 	ps_list *current = *lst;
-	printf("[");
+	printf("\n----------\n");
 	while (current)
 	{
-		printf("%d", current->n);
+		printf("  %d", current->n);
 		current = current->next;
-		if (current) printf(" -> ");
+		if (current) printf("\n");
 	}
-	printf("]\n");
+	printf("\n----------\n");
 }
 /**************** Testing functions **************/
+
+/****************** Sorting ******************/
+void pswp_sort(ps_list **stack_a, ps_list **stack_b)
+{
+	push_stack(stack_a,stack_b, "pb");
+	push_stack(stack_a,stack_b, "pb");
+	swap_stack(stack_a, "sa");
+	rotate_stack(stack_a, "ra");
+	push_stack(stack_a,stack_b, "pa");
+	rotate_stack(stack_a, "ra");
+	push_stack(stack_a,stack_b, "pa");
+
+	// rev_rotate_stack(stack_a, "rra");
+	// rev_rotate_stack(stack_a, "rra");
+}
+/****************** Sorting ******************/
 
 int main(int ac, char **av)
 {
@@ -428,6 +444,20 @@ int main(int ac, char **av)
 
 		i++;
 	}
+
+	ps_list *stack_b = NULL;
+
+	printf("\nSTACK_A");
+	print_lst(&stack_a);
+	printf("\nSTACK_B");
+	print_lst(&stack_b);
+
+	pswp_sort(&stack_a, &stack_b);
+
+	printf("\nSTACK_A");
+	print_lst(&stack_a);
+	printf("\nSTACK_B");
+	print_lst(&stack_b);
 
 	return 0;
 }
