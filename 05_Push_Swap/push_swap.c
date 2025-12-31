@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/31 13:23:32 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/12/31 15:33:21 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,16 +348,49 @@ void print_lst(ps_list **lst)
 /****************** Sorting ******************/
 void pswp_sort(ps_list **stack_a, ps_list **stack_b)
 {
-	push_stack(stack_a,stack_b, "pb");
-	push_stack(stack_a,stack_b, "pb");
-	swap_stack(stack_a, "sa");
-	rotate_stack(stack_a, "ra");
-	push_stack(stack_a,stack_b, "pa");
-	rotate_stack(stack_a, "ra");
-	push_stack(stack_a,stack_b, "pa");
+	// swap_stack(stack_a, "sa"); // sa()
+	// swap_stack(stack_b, "sb"); // sb()
+	// swap_stack_both(stack_a, stack_b); // ss()
+	// push_stack(stack_a, stack_b, "pa"); // pa()
+	// push_stack(stack_a, stack_b, "pb"); // pb()
+	// rotate_stack(stack_a, "ra"); // ra()
+	// rotate_stack(stack_b, "rb"); // rb()
+	// rotate_stack_both(stack_a, stack_b); // rr()
+	// rev_rotate_stack(stack_a, "rra"); // rra()
+	// rev_rotate_stack(stack_b, "rrb"); // rrb()
+	// rrr(stack_a, stack_b); // rrr()
+	
+	ps_list *nd_1 = *stack_a;
+	ps_list *nd_2 = (*stack_a)->next;
+	ps_list *nd_3 = (*stack_a)->next->next;
 
-	// rev_rotate_stack(stack_a, "rra");
-	// rev_rotate_stack(stack_a, "rra");
+
+	if (nd_1->n < nd_2->n && nd_2->n < nd_3->n) // 1 2 3
+	{
+		return;
+	}
+	if (nd_1->n < nd_2->n && nd_1->n < nd_3->n && nd_2->n > nd_3->n) // 1 3 2
+	{
+		swap_stack(stack_a, "sa");
+		rotate_stack(stack_a, "ra");
+	}
+	if (nd_1->n > nd_2->n && nd_2->n < nd_3->n && nd_1->n < nd_3->n) // 2 1 3
+	{
+		swap_stack(stack_a, "sa");
+	}
+	if (nd_1->n > nd_2->n && nd_1->n > nd_3->n && nd_2->n < nd_3->n) // 3 1 2
+	{
+		rotate_stack(stack_a, "ra");
+	}
+	if (nd_1->n < nd_2->n && nd_1->n > nd_3->n && nd_2->n > nd_3->n) // 2 3 1
+	{
+		rev_rotate_stack(stack_a, "rra");
+	}
+	if (nd_1->n > nd_2->n && nd_1->n > nd_3->n && nd_2->n > nd_3->n) // 3 2 1
+	{
+		swap_stack(stack_a, "sa");
+		rev_rotate_stack(stack_a, "rra");
+	}
 }
 /****************** Sorting ******************/
 
@@ -449,15 +482,15 @@ int main(int ac, char **av)
 
 	printf("\nSTACK_A");
 	print_lst(&stack_a);
-	printf("\nSTACK_B");
-	print_lst(&stack_b);
+	// printf("\nSTACK_B");
+	// print_lst(&stack_b);
 
 	pswp_sort(&stack_a, &stack_b);
 
 	printf("\nSTACK_A");
 	print_lst(&stack_a);
-	printf("\nSTACK_B");
-	print_lst(&stack_b);
+	// printf("\nSTACK_B");
+	// print_lst(&stack_b);
 
 	return 0;
 }
