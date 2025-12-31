@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otmane <otmane@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/30 21:08:44 by otmane           ###   ########.fr       */
+/*   Updated: 2025/12/31 11:47:34 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,11 +302,13 @@ void rotate_stack_both(ps_list **stack_a, ps_list **stack_b)
 /** rra() & rrb() */
 void rev_rotate_stack(ps_list **lst, char *operation)
 {
+	int n_lst = count_lst(lst);
+	if (n_lst < 2)
+		return;
 	ps_list *last = *lst;
 	while (last->next)
 	    last = last->next;
 	ps_list *second_last = *lst;
-	int n_lst = count_lst(lst);
 	int i = 0;
 	while (i < n_lst - 2)
 	{
@@ -328,6 +330,21 @@ void rrr(ps_list **stack_a, ps_list **stack_b)
 }
 /**************** operations ****************/
 
+/**************** Testing functions **************/
+void print_lst(ps_list **lst)
+{
+	ps_list *current = *lst;
+	printf("[");
+	while (current)
+	{
+		printf("%d", current->n);
+		current = current->next;
+		if (current) printf(" -> ");
+	}
+	printf("]\n");
+}
+/**************** Testing functions **************/
+
 int main(int ac, char **av)
 {
 	/** no parameters */
@@ -336,10 +353,6 @@ int main(int ac, char **av)
 		printf("Error: No params!\n");
 		return 1;
 	}
-
-	/** 1 param */
-	if (ac == 2)
-		return 0;
 
 	ps_list	*stack_a = NULL;
 	ps_list	*node;
@@ -416,13 +429,16 @@ int main(int ac, char **av)
 		i++;
 	}
 
-	i = 0;
-	current = stack_a;
-	while (current)
-	{
-		printf("{NODE[%d]: %d} -> ", ++i, current->n);
-		current = current->next;
-	}
-
 	return 0;
 }
+
+/**
+ * 
+ * TODO: Check malloc
+ * TODO: Check leaks
+ * TODO: Remove forbidden functions [printf, etc...]
+ * TODO: Remove forbidden headers
+ * TODO: Remove testing functions
+ * TODO: Create Makefile
+ * 
+ */
