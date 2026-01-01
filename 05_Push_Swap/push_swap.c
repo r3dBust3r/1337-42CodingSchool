@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/01 13:43:00 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/01 16:36:01 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ void	ft_lstadd_back(ps_list **lst, ps_list *new)
 /**************** ft_lstadd_back ****************/
 
 /**************** ft_lstnew ****************/
-ps_list	*ft_lstnew(int n, int *index)
+ps_list	*ft_lstnew(int n)
 {
 	ps_list	*new_node;
 
@@ -223,7 +223,7 @@ ps_list	*ft_lstnew(int n, int *index)
 	if (!new_node)
 		return (NULL);
 	new_node->n = n;
-	new_node->index = *index;
+	new_node->index = -1;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -335,14 +335,14 @@ void rrr(ps_list **stack_a, ps_list **stack_b)
 void print_lst(ps_list **lst)
 {
 	ps_list *current = *lst;
-	printf("\n----------\n");
+	printf("\n---------------------\n");
 	while (current)
 	{
-		printf("  %d", current->n);
+		printf("  idx: %d\t|\tval: %d", current->index, current->n);
 		current = current->next;
 		if (current) printf("\n");
 	}
-	printf("\n----------\n");
+	printf("\n---------------------\n");
 }
 /**************** Testing functions **************/
 
@@ -381,8 +381,7 @@ void pswp_sort_3(ps_list **stack_a, ps_list **stack_b)
 	}
 }
 
-/********** TEMP FUNCTIONS ***********/
-int find_index(ps_list **lst, int n)
+int find_distance(ps_list **lst, int n)
 {
 	int i = 0;
 	ps_list *current = *lst;
@@ -395,7 +394,42 @@ int find_index(ps_list **lst, int n)
 	}
 	return i;
 }
-/********** TEMP FUNCTIONS ***********/
+
+void assign_indexes(ps_list **lst)
+{
+	unsigned int count = count_lst(lst);
+	unsigned int index = 0;
+	unsigned int i = 0;
+	while (i < count)
+	{
+		ps_list *smallest_node = NULL;
+		ps_list *current = *lst;
+		while (current)
+		{
+			if (current->index == -1)
+			{
+				smallest_node = current;
+				break;
+			}
+			current = current->next;
+		}
+		current = *lst;
+		while (current)
+		{
+			if (current->index == -1)
+			{
+				if (current->n < smallest_node->n)
+				{
+					smallest_node = current;
+				}
+			}
+			current = current->next;
+		}
+		smallest_node->index = index;
+		index++;
+		i++;
+	}
+}
 
 void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 {
@@ -431,49 +465,12 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 		int limit = chunk_size;
 		int pushed = 0;
 
-		while (*stack_a)
-		{
-			// 1. Find the cheapest node with index < limit [cite: 212, 235, 237]
-			ps_list *hold_first = *stack_a;
-			ps_list *current = *stack_a;
-			while (current->index < limit)
-			{
-				if (current->n < hold_first->n)
-				{
-					hold_first = current;
-				}
-				current = current->next;
-			}
-
-			// 2. Move it to top of A and pb [cite: 245, 278, 279]
-			unsigned int distance = find_index(stack_a, hold_first->n);
-			char *operation = "ra";
-			if (distance > count / 2)
-			{
-				distance = count - distance;
-			}
-			int i = 0;
-			while (i < distance)
-			{
-				if (operation == "ra")
-				{
-					rotate_stack(stack_a, "ra"); // ra()
-				}
-				else
-				{
-					rev_rotate_stack(stack_a, "rra"); // rra()
-				}
-				i++;
-			}
-			push_stack(stack_a, stack_b, "pb"); // pb()
-
-			// 3. If you've pushed 'limit' amount of numbers, limit += chunk_size [cite: 280]
-			pushed++;
-			if (pushed == limit)
-			{
-				limit += chunk_size;
-			}
-		}
+		// while (*stack_a) // stackA has nodes
+		// {
+		// 	// 1. Find the cheapest node with index < limit [cite: 212, 235, 237]
+		// 	// 2. Move it to top of A and pb [cite: 245, 278, 279]
+		// 	// 3. If you've pushed 'limit' amount of numbers, limit += chunk_size [cite: 280]
+		// }
 	}
 }
 /****************** Sorting ******************/
@@ -496,7 +493,6 @@ int main(int ac, char **av)
 	int		i = 1; // av index
 	int		j = 0; // asc_n index returned by split
 	int		k = 0; // asc_n[j] characters index
-	int		index = 0; // node index
 	long	n = 0; // number
 
 	while (i < ac)
@@ -554,9 +550,8 @@ int main(int ac, char **av)
 			}
 
 			// TODO: Add to Stack: Create a new node and add it to the bottom of Stack A.
-			node = ft_lstnew(n, &index);
+			node = ft_lstnew(n);
 			ft_lstadd_back(&stack_a, node);
-			index++;
 
 			j++;
 		}
@@ -570,6 +565,8 @@ int main(int ac, char **av)
 	// print_lst(&stack_a);
 	// printf("\nSTACK_B");
 	// print_lst(&stack_b);
+
+	assign_indexes(&stack_a);
 
 	pswp_sort(&stack_a, &stack_b, count_lst(&stack_a));
 
