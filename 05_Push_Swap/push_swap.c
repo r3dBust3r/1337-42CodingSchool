@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/01 10:15:34 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/01 13:43:00 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ void	ft_lstadd_back(ps_list **lst, ps_list *new)
 /**************** ft_lstadd_back ****************/
 
 /**************** ft_lstnew ****************/
-ps_list	*ft_lstnew(int n)
+ps_list	*ft_lstnew(int n, int *index)
 {
 	ps_list	*new_node;
 
@@ -223,6 +223,7 @@ ps_list	*ft_lstnew(int n)
 	if (!new_node)
 		return (NULL);
 	new_node->n = n;
+	new_node->index = *index;
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -387,7 +388,6 @@ int find_index(ps_list **lst, int n)
 	ps_list *current = *lst;
 	while (current)
 	{
-		// printf("%d\n", current->n);
 		if (current->n == n)
 			break;
 		current = current->next;
@@ -402,217 +402,79 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 	// swap_stack(stack_a, "sa"); // sa()
 	// swap_stack(stack_b, "sb"); // sb()
 	// swap_stack_both(stack_a, stack_b); // ss()
+	
 	// push_stack(stack_a, stack_b, "pa"); // pa()
 	// push_stack(stack_a, stack_b, "pb"); // pb()
+	
 	// rotate_stack(stack_a, "ra"); // ra()
 	// rotate_stack(stack_b, "rb"); // rb()
 	// rotate_stack_both(stack_a, stack_b); // rr()
+	
 	// rev_rotate_stack(stack_a, "rra"); // rra()
 	// rev_rotate_stack(stack_b, "rrb"); // rrb()
 	// rrr(stack_a, stack_b); // rrr()
 
-
-	/** Testing insertion sort */
-	// int distance = 0;
-	// int i = 0;
-	// while (i < count)
-	// {
-	// 	ps_list *current = *stack_a;
-	// 	ps_list *smallest_node = *stack_a;
-	// 	while (current)
-	// 	{
-	// 		if (current->n < smallest_node->n)
-	// 		{
-	// 			smallest_node = current;
-	// 		}
-	// 		current = current->next;
-	// 	}
-	//  	distance = find_index(stack_a,smallest_node->n);
-	// 	int j = 0;
-	// 	while (j < distance)
-	// 	{
-	// 		rotate_stack(stack_a, "ra");
-	// 		j++;
-	// 	}
-	// 	push_stack(stack_a, stack_b, "pb");
-	// 	i++;
-	// }
-
-	// i = 0;
-	// while (i < count)
-	// {
-	// 	push_stack(stack_a, stack_b, "pa");
-	// 	i++;
-	// }
-	
-	// printf("smallest: %d\nindex: %d", smallest_node->n, );
-
-
-	if (count == 3)
+	if (count == 2)
+	{
+		
+	}
+	else if (count == 3)
 	{
 		// sort 3 nodes
 		pswp_sort_3(stack_a, stack_b);
 	}
-	else if (count == 5)
+	else if (count == 4) {}
+	else if (count == 5) {}
+	else
 	{
-		int i = 0;
-		// loop to push 2 nodes to B
-		while (count_lst(stack_a) > 3)
+		int chunk_size = (count <= 100) ? (count / 5) : (count / 11); // Strategy from [cite: 201, 286]
+		int limit = chunk_size;
+		int pushed = 0;
+
+		while (*stack_a)
 		{
-			
-			ps_list *smallest_node = *stack_a;
-			// find th smallest node
+			// 1. Find the cheapest node with index < limit [cite: 212, 235, 237]
+			ps_list *hold_first = *stack_a;
 			ps_list *current = *stack_a;
-			while (current)
+			while (current->index < limit)
 			{
-				if (current->n < smallest_node->n)
+				if (current->n < hold_first->n)
 				{
-					smallest_node = current;
+					hold_first = current;
 				}
 				current = current->next;
 			}
 
-			// count its distance from the head
-			int distance = 0;
-			current = *stack_a;
-			while (current)
+			// 2. Move it to top of A and pb [cite: 245, 278, 279]
+			unsigned int distance = find_index(stack_a, hold_first->n);
+			char *operation = "ra";
+			if (distance > count / 2)
 			{
-				if (current->n == smallest_node->n)
-					break;
-				distance++;
-				current = current->next;
+				distance = count - distance;
 			}
-
-			/**
-				if distance == 4, which means it's at the bottom
-				if yes, do rra
-				else do ra
-			*/
-			if (distance == 4)
+			int i = 0;
+			while (i < distance)
 			{
-				rev_rotate_stack(stack_a, "rra");
-			}
-			else
-			{
-				int j = 0;
-				while (j < distance)
+				if (operation == "ra")
 				{
-					rotate_stack(stack_a, "ra");
-					j++;
+					rotate_stack(stack_a, "ra"); // ra()
 				}
-			}
-			push_stack(stack_a, stack_b, "pb");
-			i++;
-		}
-		/**
-			sort the 3 nodes in A
-		*/
-		pswp_sort_3(stack_a, stack_b);
-		
-		/*
-			push the biggest node to A, then push the other one
-		*/
-		if ((*stack_b)->n < (*stack_b)->next->n)
-			rotate_stack(stack_b, "rb");
-		push_stack(stack_a, stack_b, "pa");
-		push_stack(stack_a, stack_b, "pa");
-	}
-	else if (count == 100)
-	{
-		/**
-			[working on 5 chunks]		
-
-			00 -> 19
-			20 -> 39
-			40 -> 59
-			60 -> 79
-			80 -> 99
-		*/
-		
-		printf("\n\nTESTING INSERTION SORT ON 100\n\n");
-
-		int i = 0;
-		unsigned int operations = 0;
-		while (i < count)
-		{
-			ps_list *smallest_node = *stack_a;
-			ps_list *current = *stack_a;
-			while (current)
-			{
-				if (current->n < smallest_node->n)
+				else
 				{
-					smallest_node = current;
+					rev_rotate_stack(stack_a, "rra"); // rra()
 				}
-				current = current->next;
+				i++;
 			}
-			// printf("------------------------- %d", smallest_node->n);
-			unsigned int distance = find_index(stack_a, smallest_node->n);
-			int j = 0;
-			while (j < distance)
-			{
-				rotate_stack(stack_a, "ra"); // ra()
-				operations++;
-				j++;
-			}
-			operations++;
 			push_stack(stack_a, stack_b, "pb"); // pb()
-			i++;
-		}
 
-		i = 0;
-		while (i < count)
-		{
-			push_stack(stack_a, stack_b, "pa"); // pa()
-			operations++;
-			i++;
-		}
-
-		printf("\n\n------------------------- [ DONE in %d operations ]-------------------------\n", operations);
-		
-	}
-	else if (count == 500)
-	{
-		printf("\n\nTESTING INSERTION SORT ON 500\n\n");
-
-		int i = 0;
-		unsigned int operations = 0;
-		while (i < count)
-		{
-			ps_list *smallest_node = *stack_a;
-			ps_list *current = *stack_a;
-			while (current)
+			// 3. If you've pushed 'limit' amount of numbers, limit += chunk_size [cite: 280]
+			pushed++;
+			if (pushed == limit)
 			{
-				if (current->n < smallest_node->n)
-				{
-					smallest_node = current;
-				}
-				current = current->next;
+				limit += chunk_size;
 			}
-			// printf("------------------------- %d", smallest_node->n);
-			unsigned int distance = find_index(stack_a, smallest_node->n);
-			int j = 0;
-			while (j < distance)
-			{
-				rotate_stack(stack_a, "ra"); // ra()
-				operations++;
-				j++;
-			}
-			operations++;
-			push_stack(stack_a, stack_b, "pb"); // pb()
-			i++;
 		}
-
-		i = 0;
-		while (i < count)
-		{
-			push_stack(stack_a, stack_b, "pa"); // pa()
-			operations++;
-			i++;
-		}
-
-		printf("\n\n------------------------- [ DONE in %d operations ]-------------------------\n", operations);
 	}
-	
 }
 /****************** Sorting ******************/
 
@@ -634,6 +496,7 @@ int main(int ac, char **av)
 	int		i = 1; // av index
 	int		j = 0; // asc_n index returned by split
 	int		k = 0; // asc_n[j] characters index
+	int		index = 0; // node index
 	long	n = 0; // number
 
 	while (i < ac)
@@ -691,8 +554,9 @@ int main(int ac, char **av)
 			}
 
 			// TODO: Add to Stack: Create a new node and add it to the bottom of Stack A.
-			node = ft_lstnew(n);
+			node = ft_lstnew(n, &index);
 			ft_lstadd_back(&stack_a, node);
+			index++;
 
 			j++;
 		}
