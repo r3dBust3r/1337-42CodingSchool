@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/31 15:33:21 by ottalhao         ###   ########.fr       */
+/*   Updated: 2025/12/31 18:31:52 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,24 +346,11 @@ void print_lst(ps_list **lst)
 /**************** Testing functions **************/
 
 /****************** Sorting ******************/
-void pswp_sort(ps_list **stack_a, ps_list **stack_b)
+void pswp_sort_3(ps_list **stack_a, ps_list **stack_b)
 {
-	// swap_stack(stack_a, "sa"); // sa()
-	// swap_stack(stack_b, "sb"); // sb()
-	// swap_stack_both(stack_a, stack_b); // ss()
-	// push_stack(stack_a, stack_b, "pa"); // pa()
-	// push_stack(stack_a, stack_b, "pb"); // pb()
-	// rotate_stack(stack_a, "ra"); // ra()
-	// rotate_stack(stack_b, "rb"); // rb()
-	// rotate_stack_both(stack_a, stack_b); // rr()
-	// rev_rotate_stack(stack_a, "rra"); // rra()
-	// rev_rotate_stack(stack_b, "rrb"); // rrb()
-	// rrr(stack_a, stack_b); // rrr()
-	
 	ps_list *nd_1 = *stack_a;
 	ps_list *nd_2 = (*stack_a)->next;
 	ps_list *nd_3 = (*stack_a)->next->next;
-
 
 	if (nd_1->n < nd_2->n && nd_2->n < nd_3->n) // 1 2 3
 	{
@@ -391,6 +378,162 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b)
 		swap_stack(stack_a, "sa");
 		rev_rotate_stack(stack_a, "rra");
 	}
+}
+
+/********** TEMP FUNCTIONS ***********/
+int find_index(ps_list **lst, int n)
+{
+	int i = 0;
+	ps_list *current = *lst;
+	while (current)
+	{
+		// printf("%d\n", current->n);
+		if (current->n == n)
+			break;
+		current = current->next;
+		i++;
+	}
+	return i;
+}
+/********** TEMP FUNCTIONS ***********/
+
+void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
+{
+	// swap_stack(stack_a, "sa"); // sa()
+	// swap_stack(stack_b, "sb"); // sb()
+	// swap_stack_both(stack_a, stack_b); // ss()
+	// push_stack(stack_a, stack_b, "pa"); // pa()
+	// push_stack(stack_a, stack_b, "pb"); // pb()
+	// rotate_stack(stack_a, "ra"); // ra()
+	// rotate_stack(stack_b, "rb"); // rb()
+	// rotate_stack_both(stack_a, stack_b); // rr()
+	// rev_rotate_stack(stack_a, "rra"); // rra()
+	// rev_rotate_stack(stack_b, "rrb"); // rrb()
+	// rrr(stack_a, stack_b); // rrr()
+
+
+	/** Testing insertion sort */
+	// int distance = 0;
+	// int i = 0;
+	// while (i < count)
+	// {
+	// 	ps_list *current = *stack_a;
+	// 	ps_list *smallest_node = *stack_a;
+	// 	while (current)
+	// 	{
+	// 		if (current->n < smallest_node->n)
+	// 		{
+	// 			smallest_node = current;
+	// 		}
+	// 		current = current->next;
+	// 	}
+	//  	distance = find_index(stack_a,smallest_node->n);
+	// 	int j = 0;
+	// 	while (j < distance)
+	// 	{
+	// 		rotate_stack(stack_a, "ra");
+	// 		j++;
+	// 	}
+	// 	push_stack(stack_a, stack_b, "pb");
+	// 	i++;
+	// }
+
+	// i = 0;
+	// while (i < count)
+	// {
+	// 	push_stack(stack_a, stack_b, "pa");
+	// 	i++;
+	// }
+	
+	// printf("smallest: %d\nindex: %d", smallest_node->n, );
+
+
+	if (count == 3)
+	{
+		// sort 3 nodes
+		pswp_sort_3(stack_a, stack_b);
+	}
+	else if (count == 5)
+	{
+		int i = 0;
+		// loop to push 2 nodes to B
+		while (count_lst(stack_a) > 3)
+		{
+			
+			ps_list *smallest_node = *stack_a;
+			// find th smallest node
+			ps_list *current = *stack_a;
+			while (current)
+			{
+				if (current->n < smallest_node->n)
+				{
+					smallest_node = current;
+				}
+				current = current->next;
+			}
+
+			// count its distance from the head
+			int distance = 0;
+			current = *stack_a;
+			while (current)
+			{
+				if (current->n == smallest_node->n)
+					break;
+				distance++;
+				current = current->next;
+			}
+
+			/**
+				if distance == 4, which means it's at the bottom
+				if yes, do rra
+				else do ra
+			*/
+			if (distance == 4)
+			{
+				rev_rotate_stack(stack_a, "rra");
+			}
+			else
+			{
+				int j = 0;
+				while (j < distance)
+				{
+					rotate_stack(stack_a, "ra");
+					j++;
+				}
+			}
+			push_stack(stack_a, stack_b, "pb");
+			i++;
+		}
+		/**
+			sort the 3 nodes in A
+		*/
+		pswp_sort_3(stack_a, stack_b);
+		
+		/*
+			push the biggest node to A, then push the other one
+		*/
+		if ((*stack_b)->n < (*stack_b)->next->n)
+			rotate_stack(stack_b, "rb");
+		push_stack(stack_a, stack_b, "pa");
+		push_stack(stack_a, stack_b, "pa");
+	}
+	else if (count == 100)
+	{
+		/**
+			[working on 5 chunks]		
+
+			00 -> 19
+			20 -> 39
+			40 -> 59
+			60 -> 79
+			80 -> 99
+		*/
+	}
+	else if (count == 500)
+	{
+		
+	}
+	
 }
 /****************** Sorting ******************/
 
@@ -480,12 +623,12 @@ int main(int ac, char **av)
 
 	ps_list *stack_b = NULL;
 
-	printf("\nSTACK_A");
-	print_lst(&stack_a);
+	// printf("\nSTACK_A");
+	// print_lst(&stack_a);
 	// printf("\nSTACK_B");
 	// print_lst(&stack_b);
 
-	pswp_sort(&stack_a, &stack_b);
+	pswp_sort(&stack_a, &stack_b, count_lst(&stack_a));
 
 	printf("\nSTACK_A");
 	print_lst(&stack_a);
@@ -504,4 +647,10 @@ int main(int ac, char **av)
  * TODO: Remove testing functions
  * TODO: Create Makefile
  * 
+ *	2				Swap if needed
+ *	3				Specialized "Case" sorting (max 2 moves) 
+ *	4 - 6			Push smallest to B until 3 left in A 
+ *	7 - 100			5 Chunks (approx. 20 numbers each) 
+ *	101 - 500+		11+ Chunks to minimize rotations
+ *
  */
