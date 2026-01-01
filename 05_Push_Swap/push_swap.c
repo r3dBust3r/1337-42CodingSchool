@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/31 18:31:52 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/01 10:15:34 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -528,10 +528,89 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 			60 -> 79
 			80 -> 99
 		*/
+		
+		printf("\n\nTESTING INSERTION SORT ON 100\n\n");
+
+		int i = 0;
+		unsigned int operations = 0;
+		while (i < count)
+		{
+			ps_list *smallest_node = *stack_a;
+			ps_list *current = *stack_a;
+			while (current)
+			{
+				if (current->n < smallest_node->n)
+				{
+					smallest_node = current;
+				}
+				current = current->next;
+			}
+			// printf("------------------------- %d", smallest_node->n);
+			unsigned int distance = find_index(stack_a, smallest_node->n);
+			int j = 0;
+			while (j < distance)
+			{
+				rotate_stack(stack_a, "ra"); // ra()
+				operations++;
+				j++;
+			}
+			operations++;
+			push_stack(stack_a, stack_b, "pb"); // pb()
+			i++;
+		}
+
+		i = 0;
+		while (i < count)
+		{
+			push_stack(stack_a, stack_b, "pa"); // pa()
+			operations++;
+			i++;
+		}
+
+		printf("\n\n------------------------- [ DONE in %d operations ]-------------------------\n", operations);
+		
 	}
 	else if (count == 500)
 	{
-		
+		printf("\n\nTESTING INSERTION SORT ON 500\n\n");
+
+		int i = 0;
+		unsigned int operations = 0;
+		while (i < count)
+		{
+			ps_list *smallest_node = *stack_a;
+			ps_list *current = *stack_a;
+			while (current)
+			{
+				if (current->n < smallest_node->n)
+				{
+					smallest_node = current;
+				}
+				current = current->next;
+			}
+			// printf("------------------------- %d", smallest_node->n);
+			unsigned int distance = find_index(stack_a, smallest_node->n);
+			int j = 0;
+			while (j < distance)
+			{
+				rotate_stack(stack_a, "ra"); // ra()
+				operations++;
+				j++;
+			}
+			operations++;
+			push_stack(stack_a, stack_b, "pb"); // pb()
+			i++;
+		}
+
+		i = 0;
+		while (i < count)
+		{
+			push_stack(stack_a, stack_b, "pa"); // pa()
+			operations++;
+			i++;
+		}
+
+		printf("\n\n------------------------- [ DONE in %d operations ]-------------------------\n", operations);
 	}
 	
 }
