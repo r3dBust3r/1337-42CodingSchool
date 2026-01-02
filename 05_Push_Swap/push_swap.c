@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/02 17:27:54 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/02 20:24:59 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -491,7 +491,7 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 	{
 		int chunk_size = (count <= 100) ? (count / 3) : (count / 9);
 		int limit = chunk_size;
-
+		//pushed = 0
 		while (*stack_a)
 		{
 			// 1. Find the cheapest node with index < limit
@@ -533,6 +533,8 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 			}
 		}
 
+		// print_lst(stack_b);
+		// exit(0);
 		
 		while (*stack_b)
 		{
@@ -687,6 +689,8 @@ int main(int ac, char **av)
  * TODO: Remove forbidden headers
  * TODO: Remove testing functions
  * TODO: Create Makefile
+ * TODO: Create Markdown
+ * TODO: Push
  * 
  *	2				Swap if needed
  *	3				Specialized "Case" sorting (max 2 moves) 
