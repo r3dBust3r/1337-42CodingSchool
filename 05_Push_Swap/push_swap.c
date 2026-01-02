@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/01 16:36:01 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/02 10:53:20 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,6 +431,35 @@ void assign_indexes(ps_list **lst)
 	}
 }
 
+int find_hold_first(ps_list *stack_a, unsigned int limit)
+{
+	int position = 0;
+	while (stack_a)
+	{
+		if (stack_a->index < limit)
+			return position;
+		stack_a = stack_a->next;
+		position++;
+	}
+	return -1;
+}
+int find_hold_last(ps_list *stack_a, unsigned int limit)
+{
+	// ps_list *current = *stack_a;
+	int position = -1;
+	int i = 0;
+	while (stack_a)
+	{
+		if (stack_a->index < limit)
+		{
+			position = i;
+		}
+		stack_a = stack_a->next;
+		i++;
+	}
+	return position;
+}
+			
 void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 {
 	// swap_stack(stack_a, "sa"); // sa()
@@ -461,16 +490,81 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 	else if (count == 5) {}
 	else
 	{
-		int chunk_size = (count <= 100) ? (count / 5) : (count / 11); // Strategy from [cite: 201, 286]
+		int chunk_size = (count <= 100) ? (count / 5) : (count / 2); // Strategy from [cite: 201, 286]
 		int limit = chunk_size;
 		int pushed = 0;
 
-		// while (*stack_a) // stackA has nodes
-		// {
-		// 	// 1. Find the cheapest node with index < limit [cite: 212, 235, 237]
-		// 	// 2. Move it to top of A and pb [cite: 245, 278, 279]
-		// 	// 3. If you've pushed 'limit' amount of numbers, limit += chunk_size [cite: 280]
-		// }
+		while (*stack_a)
+		{
+			// 1. Find the cheapest node with index < limit [cite: 212, 235, 237]
+			int hold_first = find_hold_first(*stack_a, limit);
+			int hold_last = find_hold_last(*stack_a, limit);
+			int hold_first_distance = hold_first;
+			int hold_last_distance = count - hold_last;
+
+			// 2. Move it to top of A and pb [cite: 245, 278, 279]
+			int i = 0;
+			if (hold_first_distance <= hold_last_distance)
+			{
+				while (i < hold_first_distance)
+				{
+					rotate_stack(stack_a, "ra"); // ra()
+					i++;
+				}
+			}
+			else
+			{
+				while (i < hold_last_distance)
+				{
+					rev_rotate_stack(stack_a, "rra"); // rra()
+					i++;
+				}
+			}
+			
+			// printf("\n:: hold first: %d\n:: hold last: %d\n\n", hold_first_distance, hold_last_distance);
+			// exit(0);
+			
+			// 3. If you've pushed 'limit' amount of numbers, limit += chunk_size [cite: 280]
+			push_stack(stack_a, stack_b, "pb"); // pb()
+		}
+
+		int i = 0;
+		while (i < count)
+		{
+			int count = count_lst(stack_b);
+
+			ps_list *biggest_node = *stack_b;
+			ps_list *current = *stack_b;
+			while (current)
+			{
+				if (current->n > biggest_node->n)
+				{
+					biggest_node = current;
+				}
+				current = current->next;
+			}
+			int biggest_node_distance = find_distance(stack_b, biggest_node->n);
+			if (biggest_node_distance <= count / 2)
+			{
+				int j = 0;
+				while (j < biggest_node_distance)
+				{
+					rotate_stack(stack_b, "rb"); // rb()
+					j++;
+				}
+			}
+			else
+			{
+				int j = 0;
+				while (j < count - biggest_node_distance)
+				{
+					rev_rotate_stack(stack_b, "rrb"); // rb()
+					j++;
+				}
+			}
+			push_stack(stack_a, stack_b, "pa"); // pa()
+			i++;
+		}
 	}
 }
 /****************** Sorting ******************/
