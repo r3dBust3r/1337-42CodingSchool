@@ -6,7 +6,7 @@
 #    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 14:50:37 by ottalhao          #+#    #+#              #
-#    Updated: 2026/01/03 15:04:57 by ottalhao         ###   ########.fr        #
+#    Updated: 2026/01/03 18:55:19 by ottalhao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,19 +19,22 @@ SRCS        = assign_indexes.c count_lst.c find_distance.c ft_atol.c ft_lstadd_b
 OBJS        = $(SRCS:.c=.o)
 HEADERS     = push_swap.h
 
-all: $(NAME)
+all: $(NAME) clean
+	@echo "[*] Push_swap has been compiled"
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
+	@echo "[*] Cleaning..."
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@echo "[*] Full Cleaning..."
 
 re: fclean all
 

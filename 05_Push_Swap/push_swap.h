@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:46 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 15:03:59 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/03 19:26:37 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		ft_number(char *s);
 int		is_empty(char **asc_n);
 char	**ft_split(const char *s, char c);
 int		count_lst(ps_list **lst);
-void	ft_lstadd_back(ps_list **lst, ps_list *new);
+void	ft_lstadd_back(ps_list **lst, ps_list *node);
 ps_list	*ft_lstnew(int n);
 void	swap_stack(ps_list **lst, char *operation);
 void	swap_stack_both(ps_list **stack_a, ps_list **stack_b);

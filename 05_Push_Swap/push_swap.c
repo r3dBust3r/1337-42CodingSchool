@@ -6,35 +6,38 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 22:13:51 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/03 23:01:33 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+
+								#include "stdio.h" // REMOVE ME 
+
 
 #include <unistd.h>
 #include <stdlib.h>
 
-/************ LINKED LIST STRUCTURE ************/
-typedef struct s_list
+typedef struct	s_list
 {
-	int n;
-	int index;
-	struct s_list *next;
+	int				n;
+	int				index;
+	struct s_list	*next;
 } t_list;
-/************ LINKED LIST STRUCTURE ************/
 
-void	ft_putstr(char *s)
+void	ft_putstr_fd(char *s, int fd)
 {
 	unsigned int	i;
 
 	i = 0;
 	while (s[i])
 	{
-		write(1, &s[i], 1);
+		write(fd, &s[i], 1);
 		i++;
 	}
 }
 
-long ft_atol(const char *nptr)
+long	ft_atol(const char *nptr)
 {
 	long	r;
 	int		s;
@@ -58,7 +61,9 @@ long ft_atol(const char *nptr)
 
 int	ft_number(char *s)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (s[i])
 	{
 		if (s[i] < '0' || s[i] > '9')
@@ -68,14 +73,16 @@ int	ft_number(char *s)
 	return (1);
 }
 
-int is_empty(char **asc_n)
+int	is_empty(char **asc_n)
 {
-    int i = 0;
-    while (asc_n[i])
-        i++;
-    if (i == 0)
-		return 1;
-	return 0; 
+	int	i;
+
+	i = 0;
+	while (asc_n[i])
+		i++;
+	if (i == 0)
+		return (1);
+	return (0);
 }
 
 /******************* split *******************/
@@ -180,40 +187,38 @@ char	**ft_split(const char *s, char c)
 }
 /******************* split *******************/
 
-/**************** count_lst ****************/
-int count_lst(t_list **lst)
+int	count_lst(t_list **lst)
 {
-    int i = 0;
-    t_list *current = *lst;
-    while (current)
-    {
-        current = current->next;
-        i++;
-    }
-    return i;
-}
-/**************** count_lst ****************/
+	t_list	*current;
+	int		i;
 
-/**************** ft_lstadd_back ****************/
-void	ft_lstadd_back(t_list **lst, t_list *new)
+	i = 0;
+	current = *lst;
+	while (current)
+	{
+		current = current->next;
+		i++;
+	}
+	return (i);
+}
+
+void	ft_lstadd_back(t_list **lst, t_list *node)
 {
 	t_list	*temp;
 
-	if (!lst || !new)
+	if (!lst || !node)
 		return ;
 	if (!*lst)
 	{
-		*lst = new;
+		*lst = node;
 		return ;
 	}
 	temp = *lst;
 	while (temp->next)
 		temp = temp->next;
-	temp->next = new;
+	temp->next = node;
 }
-/**************** ft_lstadd_back ****************/
 
-/**************** ft_lstnew ****************/
 t_list	*ft_lstnew(int n)
 {
 	t_list	*new_node;
@@ -226,32 +231,27 @@ t_list	*ft_lstnew(int n)
 	new_node->next = NULL;
 	return (new_node);
 }
-/**************** ft_lstnew ****************/
 
-/**************** operations ****************/
-/** sa() & sb() */
-void swap_stack(t_list **lst, char *operation)
+void	swap_stack(t_list **lst, char *operation)
 {
-    if (count_lst(lst) < 2)
-        return;
-    t_list *first = *lst;
-    t_list *second = (*lst)->next;
-    first->next = second->next;
-    second->next = first;
-    *lst = second;
-	ft_putstr(operation);
-	ft_putstr("\n");
+	if (count_lst(lst) < 2)
+		return;
+	t_list *first = *lst;
+	t_list *second = (*lst)->next;
+	first->next = second->next;
+	second->next = first;
+	*lst = second;
+	ft_putstr_fd(operation, 1);
+	ft_putstr_fd("\n", 1);
 }
 
-/** ss() */
-void swap_stack_both(t_list **stack_a, t_list **stack_b)
+void	swap_stack_both(t_list **stack_a, t_list **stack_b)
 {
 	swap_stack(stack_a, "sa");
 	swap_stack(stack_b, "sb");
 }
 
-/** pa() & pb() */
-void push_stack(t_list **stack_a, t_list **stack_b, char *operation)
+void	push_stack(t_list **stack_a, t_list **stack_b, char *operation)
 {
 	if (operation == "pa")
 	{
@@ -261,7 +261,7 @@ void push_stack(t_list **stack_a, t_list **stack_b, char *operation)
 		*stack_b = (*stack_b)->next;
 		node_to_push->next = *stack_a;
 		*stack_a = node_to_push;
-		ft_putstr("pa\n");
+		ft_putstr_fd("pa\n", 1);
 	}
 	else
 	{
@@ -271,36 +271,33 @@ void push_stack(t_list **stack_a, t_list **stack_b, char *operation)
 		*stack_a = (*stack_a)->next;
 		node_to_push->next = *stack_b;
 		*stack_b = node_to_push;
-		ft_putstr("pb\n");
+		ft_putstr_fd("pb\n", 1);
 	}
 }
 
-/** ra() & rb() */
-void rotate_stack(t_list **lst, char* operation)
+void	rotate_stack(t_list **lst, char* operation)
 {
 	if (count_lst(lst) == 0)
-	    return;
+		return;
 	t_list *first = *lst;
 	t_list *second = (*lst)->next;
 	t_list *last = *lst;
 	while (last->next)
-	    last = last->next;
+		last = last->next;
 	last->next = first;
 	first->next = NULL;
 	*lst = second;
-    ft_putstr(operation);
-    ft_putstr("\n");
+	ft_putstr_fd(operation, 1);
+	ft_putstr_fd("\n", 1);
 }
 
-/** rr() */
-void rotate_stack_both(t_list **stack_a, t_list **stack_b)
+void	rotate_stack_both(t_list **stack_a, t_list **stack_b)
 {
 	rotate_stack(stack_a, "ra");
 	rotate_stack(stack_b, "rb");
 }
 
-/** rra() & rrb() */
-void rev_rotate_stack(t_list **lst, char *operation)
+void	rev_rotate_stack(t_list **lst, char *operation)
 {
 	int n_lst = count_lst(lst);
 	if (n_lst < 2)
@@ -312,41 +309,23 @@ void rev_rotate_stack(t_list **lst, char *operation)
 	int i = 0;
 	while (i < n_lst - 2)
 	{
-	    second_last = second_last->next;
-	    i++;
+		second_last = second_last->next;
+		i++;
 	}
 	second_last->next = NULL;
 	last->next = *lst;
 	*lst = last;
-	ft_putstr(operation);
-	ft_putstr("\n");
+	ft_putstr_fd(operation, 1);
+	ft_putstr_fd("\n", 1);
 }
 
-/** rrr() */
-void rrr(t_list **stack_a, t_list **stack_b)
+void	rrr(t_list **stack_a, t_list **stack_b)
 {
 	rev_rotate_stack(stack_a, "rra");
 	rev_rotate_stack(stack_b, "rrb");
 }
-/**************** operations ****************/
 
-/**************** Testing functions **************/
-#include <stdio.h> // REMOVE ME
-void print_lst(t_list **lst)
-{
-	t_list *current = *lst;
-	printf("\n---------------------\n");
-	while (current)
-	{
-		printf("  idx: %d\t|\tval: %d", current->index, current->n);
-		current = current->next;
-		if (current) printf("\n");
-	}
-	printf("\n---------------------\n");
-}
-/**************** Testing functions **************/
-
-int find_distance(t_list *lst, int n)
+int	find_distance(t_list *lst, int n)
 {
 	int i = 0;
 	while (lst)
@@ -395,36 +374,7 @@ void assign_indexes(t_list **lst)
 	}
 }
 
-int find_hold_first(t_list *lst, unsigned int limit)
-{
-	int position = 0;
-	while (lst)
-	{
-		if (lst->index < limit)
-			return position;
-		lst = lst->next;
-		position++;
-	}
-	return -1;
-}
-int find_hold_last(t_list *lst, unsigned int limit)
-{
-	// t_list *current = *lst;
-	int position = -1;
-	int i = 0;
-	while (lst)
-	{
-		if (lst->index < limit)
-		{
-			position = i;
-		}
-		i++;
-		lst = lst->next;
-	}
-	return position;
-}
-
-void pswp_sort_3(t_list **stack_a, t_list **stack_b)
+void	pswp_sort_3(t_list **stack_a, t_list **stack_b)
 {
 	t_list	*nd_1 = *stack_a;
 	t_list	*nd_2 = (*stack_a)->next;
@@ -471,7 +421,7 @@ void pswp_sort_4(t_list **stack_a, t_list **stack_b)
 	push_stack(stack_a, stack_b, "pa");
 }
 
-void pswp_sort_5(t_list **stack_a, t_list **stack_b)
+void	pswp_sort_5(t_list **stack_a, t_list **stack_b)
 {
 	int	i = 2;
 	while (i)
@@ -522,30 +472,34 @@ void pswp_sort(t_list **stack_a, t_list **stack_b, unsigned int count)
 		pswp_sort_5(stack_a, stack_b);
 	else
 	{
-		int chunk_size = (count <= 100) ? (count / 7) : (count / 15);
+		int chunk_size;
+		if (count < 100)
+			chunk_size = count;
+		else if (count < 300)
+			chunk_size = count / 7;
+		else
+			chunk_size = count / 15;
+
 		int pushed = 0;
 		while (*stack_a)
 		{
 			if ((*stack_a)->index <= pushed)
 			{
-				push_stack(stack_a, stack_b, "pb"); // pb()
-				rotate_stack(stack_b, "rb"); // rb()
+				push_stack(stack_a, stack_b, "pb");
+				rotate_stack(stack_b, "rb");
 				pushed++;
 			}
 			else if ((*stack_a)->index < pushed + chunk_size)
 			{
-				push_stack(stack_a, stack_b, "pb"); // pb()
+				push_stack(stack_a, stack_b, "pb");
 				pushed++;
 			}
 			else
-			{
-				rotate_stack(stack_a, "ra"); // ra()
-			}
+				rotate_stack(stack_a, "ra");
 		}
 
 		while (*stack_b)
 		{
-			// TODO: find the biggest node
 			t_list *biggest_node = *stack_b;
 			t_list *current = *stack_b;
 			while (current) {
@@ -553,46 +507,51 @@ void pswp_sort(t_list **stack_a, t_list **stack_b, unsigned int count)
 					biggest_node = current;
 				current = current->next;
 			}
-
-			// TODO: Find its distance
 			int distance = find_distance(*stack_b, biggest_node->n);
-			
-			// TODO: move it to the top of B
-			if (distance <= count_lst(stack_b) / 2) {
-				// TODO: move with RB
-				int i = 0;
-				while (i < distance)	
+			if (distance <= count_lst(stack_b) / 2)
+			{
+				while (distance)	
 				{
-					rotate_stack(stack_b, "rb"); // rb()
-					i++;
+					rotate_stack(stack_b, "rb");
+					distance--;
 				}
 			} else {
-				// TODO: move with RRB
-				int i = 0;
-				while (i < count_lst(stack_b) - distance)
+				distance = count_lst(stack_b) - distance;
+				while (distance)
 				{
-					rev_rotate_stack(stack_b, "rrb"); // rrb()
-					i++;
+					rev_rotate_stack(stack_b, "rrb");
+					distance--;
 				}
 			}
-
-			// TODO: push it to A
-			push_stack(stack_a, stack_b, "pa"); // pa()
+			push_stack(stack_a, stack_b, "pa");
 		}
-
-		// print_lst(stack_a);
 	}
 }
-/****************** Sorting ******************/
 
-int main(int ac, char **av)
+
+
+
+
+/**************** Testing functions **************/
+#include <stdio.h> // REMOVE ME
+void print_lst(t_list **lst)
 {
-	/** no parameters */
-	if (ac == 1)
+	t_list *current = *lst;
+	printf("\n---------------------\n");
+	while (current)
 	{
-		printf("Error: No params!\n");
-		return 1;
+		printf("  idx: %d\t|\tval: %d", current->index, current->n);
+		current = current->next;
+		if (current) printf("\n");
 	}
+	printf("\n---------------------\n");
+}
+/**************** Testing functions **************/
+
+int	main(int ac, char **av)
+{
+	if (ac == 1)
+		return (ft_putstr_fd("Error\n", 2), 1);
 
 	t_list	*stack_a = NULL;
 	t_list	*node;
@@ -600,108 +559,66 @@ int main(int ac, char **av)
 
 	char	**asc_n;
 	
-	int		i = 1; // av index
-	int		j = 0; // asc_n index returned by split
-	int		k = 0; // asc_n[j] characters index
-	long	n = 0; // number
+	int		i = 1;
+	int		j = 0;
+	int		k = 0;
+	long	n = 0;
 
 	while (i < ac)
 	{
-		// split each argument
 		asc_n = ft_split(av[i], ' ');
-
-		// TODO: Check if asc_n empty
 		if (is_empty(asc_n))
-		{
-			printf("Error: Found empty str!\n");
-			return 1;
-		}
-
-		// 1 2 3 "45 67"
+			return (ft_putstr_fd("Error\n", 2), 1);
 		j = 0;
 		while (asc_n[j])
 		{
-			// TODO: Validate if asc_n[j] is a valid number.
 			k = 0;
 			while (asc_n[j][k])
 			{
 				if (k == 0 && (asc_n[j][k] == '+' || asc_n[j][k] == '-'))
 					k++;
 				if (asc_n[j][k] < '0' || asc_n[j][k] > '9')
-				{
-					printf("Error: Not a valid number!\n");
-					return 1;
-				}
+					return (ft_putstr_fd("Error\n", 2), 1);
 				k++;
 			}
-
-			// TODO: Convert asc_n[j] to a long using ft_atol.
 			n = ft_atol(asc_n[j]);
-
-			// printf("%ld\n", n);
-
-			// TODO: Check for Integer Overflow (is it within INT_MIN and INT_MAX?).
 			if (n < -2147483648 || n > 2147483647)
-			{
-				printf("Error: Out of range [-2147483648, 2147483647]\n");
-				return 1;
-			}
-
-			// TODO: Check for Duplicates (look through your stack to see if the number is already there).
+				return (ft_putstr_fd("Error\n", 2), 1);
 			current = stack_a;
 			while (current)
 			{
 				if (n == current->n)
-				{
-					printf("Error: Found duplicate!\n");
-					return 1;
-				}
+					return (ft_putstr_fd("Error\n", 2), 1);
 				current = current->next;
 			}
-
-			// TODO: Add to Stack: Create a new node and add it to the bottom of Stack A.
 			node = ft_lstnew(n);
 			ft_lstadd_back(&stack_a, node);
-
 			j++;
 		}
-
 		i++;
 	}
-
 	t_list *stack_b = NULL;
-
-	// printf("\nSTACK_A");
-	// print_lst(&stack_a);
-	// printf("\nSTACK_B");
-	// print_lst(&stack_b);
-
 	assign_indexes(&stack_a);
-
 	pswp_sort(&stack_a, &stack_b, count_lst(&stack_a));
-
-	// printf("\nSTACK_A");
-	print_lst(&stack_a);
-	// printf("\nSTACK_B");
-	// print_lst(&stack_b);
-
+	print_lst(&stack_a); // REMOVE ME LATER
 	return 0;
 }
 
 /**
  * 
- * TODO: [ ] Check malloc
+ * TODO: [+] Check malloc
+ * TODO: [+] push_swap to s_list
+ * TODO: [+] ps_list to t_list
+ * TODO: [+] Putfd -> 2
  * TODO: [ ] Check leaks
+ * TODO: [ ] Doesn't Handle to 24, Fix it
+ * TODO: [ ] Create Makefile
+ * TODO: [ ] Remove testing functions
  * TODO: [ ] Remove forbidden functions [printf, etc...]
  * TODO: [ ] Remove forbidden headers
- * TODO: [ ] Remove testing functions
- * TODO: [ ] Create Makefile
- * TODO: [ ] Putfd -> 2
- * TODO: [ ] push_swap to s_list
- * TODO: [ ] t_list to t_list
  * TODO: [ ] Remove all comments
+ * TODO: [ ] Norminette
  * TODO: [ ] Create Markdown
  * TODO: [ ] Push
  * 
- *
  */
