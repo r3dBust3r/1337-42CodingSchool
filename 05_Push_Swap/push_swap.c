@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/02 20:24:59 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/03 13:08:05 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,49 +489,70 @@ void pswp_sort(ps_list **stack_a, ps_list **stack_b, unsigned int count)
 	else if (count == 5) {}
 	else
 	{
-		int chunk_size = (count <= 100) ? (count / 3) : (count / 9);
-		int limit = chunk_size;
-		//pushed = 0
+		int chunk_size = (count <= 100) ? (count / 7) : (count / 15);
+		int pushed = 0;
 		while (*stack_a)
 		{
-			// 1. Find the cheapest node with index < limit
-			int hold_first_distance = find_hold_first(*stack_a, limit);
-			int hold_last_distance = count_lst(stack_a) - find_hold_last(*stack_a, limit);
-
-			if (hold_first_distance == -1)
+			if ((*stack_a)->index <= pushed)
 			{
-				limit += chunk_size;
-				continue;
+				push_stack(stack_a, stack_b, "pb"); // pb()
+				rotate_stack(stack_b, "rb"); // rb()
+				pushed++;
 			}
-
-			// 2. Move it to top of A and pb [cite: 245, 278, 279]
-			int i = 0;
-			if (hold_first_distance <= hold_last_distance)
+			else if ((*stack_a)->index < pushed + chunk_size)
 			{
-				while (i < hold_first_distance)
-				{
-					rotate_stack(stack_a, "ra"); // ra()
-					i++;
-				}
+				push_stack(stack_a, stack_b, "pb"); // pb()
+				pushed++;
 			}
 			else
 			{
-				while (i < hold_last_distance)
-				{
-					rev_rotate_stack(stack_a, "rra"); // rra()
-					i++;
-				}
-			}
-
-			// printf("Hold first: %d\nHold last: %d\nChoosing: %d\n\n", hold_first_distance, hold_last_distance, (hold_first_distance <= hold_last_distance) ? hold_first_distance : hold_last_distance);
-			
-			push_stack(stack_a, stack_b, "pb"); // pb()
-
-			if ((*stack_b)->index < (limit - (chunk_size / 2)))
-			{
-				rotate_stack(stack_b, "rb");
+				rotate_stack(stack_a, "ra"); // ra()
 			}
 		}
+		
+		// int chunk_size = (count <= 100) ? (count / 3) : (count / 9);
+		// int limit = chunk_size;
+		// //pushed = 0
+		// while (*stack_a)
+		// {
+		// 	// 1. Find the cheapest node with index < limit
+		// 	int hold_first_distance = find_hold_first(*stack_a, limit);
+		// 	int hold_last_distance = count_lst(stack_a) - find_hold_last(*stack_a, limit);
+
+		// 	if (hold_first_distance == -1)
+		// 	{
+		// 		limit += chunk_size;
+		// 		continue;
+		// 	}
+
+		// 	// 2. Move it to top of A and pb [cite: 245, 278, 279]
+		// 	int i = 0;
+		// 	if (hold_first_distance <= hold_last_distance)
+		// 	{
+		// 		while (i < hold_first_distance)
+		// 		{
+		// 			rotate_stack(stack_a, "ra"); // ra()
+		// 			i++;
+		// 		}
+		// 	}
+		// 	else
+		// 	{
+		// 		while (i < hold_last_distance)
+		// 		{
+		// 			rev_rotate_stack(stack_a, "rra"); // rra()
+		// 			i++;
+		// 		}
+		// 	}
+
+		// 	// printf("Hold first: %d\nHold last: %d\nChoosing: %d\n\n", hold_first_distance, hold_last_distance, (hold_first_distance <= hold_last_distance) ? hold_first_distance : hold_last_distance);
+
+		// 	push_stack(stack_a, stack_b, "pb"); // pb()
+
+		// 	if ((*stack_b)->index < (limit - (chunk_size / 2)))
+		// 	{
+		// 		rotate_stack(stack_b, "rb");
+		// 	}
+		// }
 
 		// print_lst(stack_b);
 		// exit(0);
