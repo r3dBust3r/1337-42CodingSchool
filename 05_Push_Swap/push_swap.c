@@ -6,13 +6,13 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 23:01:33 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 11:15:07 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 
-								#include "stdio.h" // REMOVE ME 
+#include "stdio.h" // REMOVE ME 
 
 
 #include <unistd.h>
@@ -231,6 +231,12 @@ t_list	*ft_lstnew(int n)
 	new_node->next = NULL;
 	return (new_node);
 }
+int str_empty(char *s)
+{
+	if (!s || s[0] == '\0')
+		return 1;
+	return 0;
+}
 
 void	swap_stack(t_list **lst, char *operation)
 {
@@ -241,19 +247,23 @@ void	swap_stack(t_list **lst, char *operation)
 	first->next = second->next;
 	second->next = first;
 	*lst = second;
-	ft_putstr_fd(operation, 1);
-	ft_putstr_fd("\n", 1);
+	if (!str_empty(operation))
+	{
+		ft_putstr_fd(operation, 1);
+		ft_putstr_fd("\n", 1);
+	}
 }
 
 void	swap_stack_both(t_list **stack_a, t_list **stack_b)
 {
-	swap_stack(stack_a, "sa");
-	swap_stack(stack_b, "sb");
+	swap_stack(stack_a, "");
+	swap_stack(stack_b, "");
+	ft_putstr_fd("ss\n", 1);
 }
 
 void	push_stack(t_list **stack_a, t_list **stack_b, char *operation)
 {
-	if (operation == "pa")
+	if (operation[0] == 'p' && operation[1] == 'a')
 	{
 		if (count_lst(stack_b) == 0)
 			return;
@@ -277,7 +287,7 @@ void	push_stack(t_list **stack_a, t_list **stack_b, char *operation)
 
 void	rotate_stack(t_list **lst, char* operation)
 {
-	if (count_lst(lst) == 0)
+	if (count_lst(lst) < 2)
 		return;
 	t_list *first = *lst;
 	t_list *second = (*lst)->next;
@@ -287,14 +297,18 @@ void	rotate_stack(t_list **lst, char* operation)
 	last->next = first;
 	first->next = NULL;
 	*lst = second;
-	ft_putstr_fd(operation, 1);
-	ft_putstr_fd("\n", 1);
+	if (!str_empty(operation))
+	{		
+		ft_putstr_fd(operation, 1);
+		ft_putstr_fd("\n", 1);
+	}
 }
-
+	
 void	rotate_stack_both(t_list **stack_a, t_list **stack_b)
 {
-	rotate_stack(stack_a, "ra");
-	rotate_stack(stack_b, "rb");
+	rotate_stack(stack_a, "");
+	rotate_stack(stack_b, "");
+	ft_putstr_fd("rr\n", 1);
 }
 
 void	rev_rotate_stack(t_list **lst, char *operation)
@@ -315,14 +329,18 @@ void	rev_rotate_stack(t_list **lst, char *operation)
 	second_last->next = NULL;
 	last->next = *lst;
 	*lst = last;
-	ft_putstr_fd(operation, 1);
-	ft_putstr_fd("\n", 1);
+	if (!str_empty(operation))
+	{	
+		ft_putstr_fd(operation, 1);
+		ft_putstr_fd("\n", 1);
+	}
 }
 
 void	rrr(t_list **stack_a, t_list **stack_b)
 {
-	rev_rotate_stack(stack_a, "rra");
-	rev_rotate_stack(stack_b, "rrb");
+	rev_rotate_stack(stack_a, "");
+	rev_rotate_stack(stack_b, "");
+	ft_putstr_fd("rrr\n", 1);
 }
 
 int	find_distance(t_list *lst, int n)
@@ -438,12 +456,12 @@ void	pswp_sort_5(t_list **stack_a, t_list **stack_b)
 		char *operation = "ra";
 		if (distance > 2)
 		{
-			distance = 5 - distance;
+			distance = count_lst(stack_a) - distance;
 			operation = "rra";
 		}
 		while (distance)
 		{
-			if (operation == "ra")
+			if (operation[0] == 'r' && operation[1] == 'a')
 				rotate_stack(stack_a, "ra");
 			else
 				rev_rotate_stack(stack_a, "rra");
@@ -529,7 +547,45 @@ void pswp_sort(t_list **stack_a, t_list **stack_b, unsigned int count)
 }
 
 
+void	free_tab(char **tab)
+{
+	int i = 0;
 
+	if (!tab)
+		return;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+
+void	free_stack(t_list **lst)
+{
+	t_list	*tmp;
+
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free(*lst);
+		*lst = tmp;
+	}
+}
+
+
+int	error_exit(t_list **a, t_list **b, char **tab)
+{
+	if (a)
+		free_stack(a);
+	if (b)
+		free_stack(b);
+	if (tab)
+		free_tab(tab);
+	ft_putstr_fd("Error\n", 2);
+	return (1);
+}
 
 
 /**************** Testing functions **************/
@@ -551,13 +607,13 @@ void print_lst(t_list **lst)
 int	main(int ac, char **av)
 {
 	if (ac == 1)
-		return (ft_putstr_fd("Error\n", 2), 1);
+		return (1);
 
 	t_list	*stack_a = NULL;
 	t_list	*node;
 	t_list	*current;
 
-	char	**asc_n;
+	char	**tab;
 	
 	int		i = 1;
 	int		j = 0;
@@ -566,41 +622,51 @@ int	main(int ac, char **av)
 
 	while (i < ac)
 	{
-		asc_n = ft_split(av[i], ' ');
-		if (is_empty(asc_n))
-			return (ft_putstr_fd("Error\n", 2), 1);
+		tab = ft_split(av[i], ' ');
+		if (!tab || is_empty(tab))
+			return error_exit(&stack_a, NULL, tab);
 		j = 0;
-		while (asc_n[j])
+		while (tab[j])
 		{
 			k = 0;
-			while (asc_n[j][k])
+			while (tab[j][k])
 			{
-				if (k == 0 && (asc_n[j][k] == '+' || asc_n[j][k] == '-'))
+				if (k == 0 && (tab[j][k] == '+' || tab[j][k] == '-'))
 					k++;
-				if (asc_n[j][k] < '0' || asc_n[j][k] > '9')
-					return (ft_putstr_fd("Error\n", 2), 1);
+				if (tab[j][k] < '0' || tab[j][k] > '9')
+					return error_exit(&stack_a, NULL, tab);
 				k++;
 			}
-			n = ft_atol(asc_n[j]);
+			n = ft_atol(tab[j]);
 			if (n < -2147483648 || n > 2147483647)
-				return (ft_putstr_fd("Error\n", 2), 1);
+				return error_exit(&stack_a, NULL, tab);
 			current = stack_a;
 			while (current)
 			{
 				if (n == current->n)
-					return (ft_putstr_fd("Error\n", 2), 1);
+					return error_exit(&stack_a, NULL, tab);
 				current = current->next;
 			}
 			node = ft_lstnew(n);
+			if (!node)
+				return error_exit(&stack_a, NULL, tab);
 			ft_lstadd_back(&stack_a, node);
 			j++;
 		}
+		free_tab(tab);
+		tab = NULL;
 		i++;
 	}
+	
 	t_list *stack_b = NULL;
 	assign_indexes(&stack_a);
 	pswp_sort(&stack_a, &stack_b, count_lst(&stack_a));
+
 	print_lst(&stack_a); // REMOVE ME LATER
+	
+	free_stack(&stack_a);
+	free_stack(&stack_b);
+
 	return 0;
 }
 
