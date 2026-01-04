@@ -6,26 +6,28 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 14:03:57 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 11:31:27 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 14:08:24 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-
-int str_empty(char *s)
+int	str_empty(char *s)
 {
 	if (!s || s[0] == '\0')
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 
 void	swap_stack(t_list **lst, char *operation)
 {
+	t_list	*first;
+	t_list	*second;
+
 	if (count_lst(lst) < 2)
-		return;
-	t_list *first = *lst;
-	t_list *second = (*lst)->next;
+		return ;
+	first = *lst;
+	second = (*lst)->next;
 	first->next = second->next;
 	second->next = first;
 	*lst = second;
