@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 11:36:06 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 11:37:17 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 12:33:44 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	free_tab(char **tab)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (!tab)
-		return;
+		return ;
 	while (tab[i])
 	{
 		free(tab[i]);
@@ -25,7 +26,6 @@ void	free_tab(char **tab)
 	}
 	free(tab);
 }
-
 
 void	free_stack(t_list **lst)
 {
