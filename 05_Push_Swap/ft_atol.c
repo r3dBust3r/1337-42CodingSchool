@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_number.c                                        :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 13:58:17 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 15:24:18 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/03 13:57:17 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/04 11:20:42 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	ft_number(char *s)
+long	ft_atol(const char *nptr)
 {
-	int	i;
+	long	r;
+	int		s;
+	int		i;
 
+	s = 1;
+	r = 0;
 	i = 0;
-	while (s[i])
+	while (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
+	if (nptr[i] == '+' || nptr[i] == '-')
 	{
-		if (s[i] < '0' || s[i] > '9')
-			return (0);
+		if (nptr[i] == '-')
+			s = -1;
 		i++;
 	}
-	return (1);
+	while (nptr[i] && nptr[i] >= '0' && nptr[i] <= '9')
+		r = r * 10 + (nptr[i++] - '0');
+	return (r * s);
 }

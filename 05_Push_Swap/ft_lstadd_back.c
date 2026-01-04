@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_distance.c                                    :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 14:16:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 15:23:36 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/03 14:02:14 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/04 11:24:31 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	find_distance(ps_list *lst, int n)
+void	ft_lstadd_back(t_list **lst, t_list *node)
 {
-	int	i;
+	t_list	*temp;
 
-	i = 0;
-	while (lst)
+	if (!lst || !node)
+		return ;
+	if (!*lst)
 	{
-		if (lst->n == n)
-			break ;
-		lst = lst->next;
-		i++;
+		*lst = node;
+		return ;
 	}
-	return (i);
+	temp = *lst;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = node;
 }

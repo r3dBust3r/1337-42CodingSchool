@@ -6,13 +6,12 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 14:00:09 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 14:00:32 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 11:23:16 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-/******************* split *******************/
 static int	count_elms(const char *s, char c)
 {
 	int	i;
@@ -112,4 +111,3 @@ char	**ft_split(const char *s, char c)
 		return (NULL);
 	return (arr);
 }
-/******************* split *******************/

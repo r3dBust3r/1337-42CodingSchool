@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*   count_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 13:57:17 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 15:23:48 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/03 14:01:19 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/04 11:23:55 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-long	ft_atol(const char *nptr)
+int	count_lst(t_list **lst)
 {
-	long	r;
-	int		s;
+	t_list	*current;
 	int		i;
 
-	s = 1;
-	r = 0;
 	i = 0;
-	while (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13))
-		i++;
-	if (nptr[i] == '+' || nptr[i] == '-')
+	current = *lst;
+	while (current)
 	{
-		if (nptr[i] == '-')
-			s = -1;
+		current = current->next;
 		i++;
 	}
-	while (nptr[i] && nptr[i] >= '0' && nptr[i] <= '9')
-		r = r * 10 + (nptr[i++] - '0');
-	return (r * s);
+	return (i);
 }

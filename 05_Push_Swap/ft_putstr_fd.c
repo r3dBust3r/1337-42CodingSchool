@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 14:02:14 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/03 19:26:50 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/03 13:50:56 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/04 11:20:04 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	ft_lstadd_back(ps_list **lst, ps_list *node)
+void	ft_putstr_fd(char *s, int fd)
 {
-	ps_list	*temp;
+	unsigned int	i;
 
-	if (!lst || !node)
-		return ;
-	if (!*lst)
+	i = 0;
+	while (s[i])
 	{
-		*lst = node;
-		return ;
+		write(fd, &s[i], 1);
+		i++;
 	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = node;
 }
