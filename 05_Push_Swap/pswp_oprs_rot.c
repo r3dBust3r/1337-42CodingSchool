@@ -6,19 +6,23 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 14:03:57 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 11:28:22 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 12:45:15 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	rotate_stack(t_list **lst, char* operation)
+void	rotate_stack(t_list **lst, char *operation)
 {
-	if (count_lst(lst) < 2)
-		return;
-	t_list *first = *lst;
-	t_list *second = (*lst)->next;
-	t_list *last = *lst;
+	t_list	*first;
+	t_list	*second;
+	t_list	*last;
+
+	if (!lst || !*lst || !(*lst)->next)
+		return ;
+	first = *lst;
+	second = (*lst)->next;
+	last = *lst;
 	while (last->next)
 		last = last->next;
 	last->next = first;
@@ -30,7 +34,7 @@ void	rotate_stack(t_list **lst, char* operation)
 		ft_putstr_fd("\n", 1);
 	}
 }
-	
+
 void	rotate_stack_both(t_list **stack_a, t_list **stack_b)
 {
 	rotate_stack(stack_a, "");
@@ -40,24 +44,23 @@ void	rotate_stack_both(t_list **stack_a, t_list **stack_b)
 
 void	rev_rotate_stack(t_list **lst, char *operation)
 {
-	int n_lst = count_lst(lst);
-	if (n_lst < 2)
-		return;
-	t_list *last = *lst;
+	t_list	*last;
+	t_list	*second_last;
+
+	if (!lst || !*lst || !(*lst)->next)
+		return ;
+	second_last = *lst;
+	last = (*lst)->next;
 	while (last->next)
-	    last = last->next;
-	t_list *second_last = *lst;
-	int i = 0;
-	while (i < n_lst - 2)
 	{
-		second_last = second_last->next;
-		i++;
+		second_last = last;
+		last = last->next;
 	}
 	second_last->next = NULL;
 	last->next = *lst;
 	*lst = last;
 	if (!str_empty(operation))
-	{	
+	{
 		ft_putstr_fd(operation, 1);
 		ft_putstr_fd("\n", 1);
 	}
