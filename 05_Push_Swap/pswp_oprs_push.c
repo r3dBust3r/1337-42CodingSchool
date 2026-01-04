@@ -6,32 +6,42 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 11:32:51 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 11:33:09 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 12:36:28 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	push_stack(t_list **stack_a, t_list **stack_b, char *operation)
+void	push_a(t_list **stack_a, t_list **stack_b)
 {
-	if (operation[0] == 'p' && operation[1] == 'a')
-	{
-		if (count_lst(stack_b) == 0)
-			return;
-		t_list *node_to_push = *stack_b;
-		*stack_b = (*stack_b)->next;
-		node_to_push->next = *stack_a;
-		*stack_a = node_to_push;
-		ft_putstr_fd("pa\n", 1);
-	}
+	t_list	*node;
+
+	if (!*stack_b)
+		return ;
+	node = *stack_b;
+	*stack_b = (*stack_b)->next;
+	node->next = *stack_a;
+	*stack_a = node;
+	ft_putstr_fd("pa\n", 1);
+}
+
+void	push_b(t_list **stack_a, t_list **stack_b)
+{
+	t_list	*node;
+
+	if (!*stack_a)
+		return ;
+	node = *stack_a;
+	*stack_a = (*stack_a)->next;
+	node->next = *stack_b;
+	*stack_b = node;
+	ft_putstr_fd("pb\n", 1);
+}
+
+void	push_stack(t_list **stack_a, t_list **stack_b, char *op)
+{
+	if (op[1] == 'a')
+		push_a(stack_a, stack_b);
 	else
-	{
-		if (count_lst(stack_a) == 0)
-			return;
-		t_list *node_to_push = *stack_a;
-		*stack_a = (*stack_a)->next;
-		node_to_push->next = *stack_b;
-		*stack_b = node_to_push;
-		ft_putstr_fd("pb\n", 1);
-	}
+		push_b(stack_a, stack_b);
 }
