@@ -6,13 +6,13 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 13:57:17 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 11:20:42 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 14:12:04 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-long	ft_atol(const char *nptr)
+long long	ft_atol(const char *nptr)
 {
 	long	r;
 	int		s;

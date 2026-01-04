@@ -6,13 +6,13 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 11:32:51 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 12:36:28 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 12:42:26 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	push_a(t_list **stack_a, t_list **stack_b)
+static void	push_a(t_list **stack_a, t_list **stack_b)
 {
 	t_list	*node;
 
@@ -25,7 +25,7 @@ void	push_a(t_list **stack_a, t_list **stack_b)
 	ft_putstr_fd("pa\n", 1);
 }
 
-void	push_b(t_list **stack_a, t_list **stack_b)
+static void	push_b(t_list **stack_a, t_list **stack_b)
 {
 	t_list	*node;
 

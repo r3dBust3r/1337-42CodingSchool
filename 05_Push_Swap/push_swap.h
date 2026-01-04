@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:46 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 14:44:09 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/04 16:09:00 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,10 @@ void		pswp_sort_3(t_list **stack_a);
 void		pswp_sort_4(t_list **stack_a, t_list **stack_b);
 void		pswp_sort_5(t_list **stack_a, t_list **stack_b);
 void		pswp_sort(t_list **stack_a, t_list **stack_b, unsigned int count);
+
+int			non_digits(t_list **stack_a, char **tab, int j);
+int			out_of_range(t_list **stack_a, long long *n, char **tab, int *j);
+int			node_exists(t_list **stack_a, char **tab, long long n);
+int			create_and_store(t_list **stack_a, char **tab, long long n);
 
 #endif
