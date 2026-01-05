@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 14:18:41 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 14:40:43 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/05 14:28:31 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,25 @@ static void	sort_by_chunks(
 	}
 }
 
-static void	rotate_to_top(t_list **stack, t_list *node)
+static void	rotate_to_top(
+	t_list **stack,
+	t_list *node,
+	char *op_r,
+	char *op_rr)
 {
-	int		distance;
-	char	*operation;
+	int	distance;
 
 	distance = find_distance(*stack, node->n);
-	operation = "ra";
-	if (distance > 2)
+	if (distance > count_lst(stack) / 2)
 	{
 		distance = count_lst(stack) - distance;
-		operation = "rra";
+		while (distance--)
+			rev_rotate_stack(stack, op_rr);
 	}
-	while (distance)
+	else
 	{
-		if (operation[1] == 'a')
-			rotate_stack(stack, "ra");
-		else
-			rev_rotate_stack(stack, "rra");
-		distance--;
+		while (distance--)
+			rotate_stack(stack, op_r);
 	}
 }
 
@@ -91,7 +91,7 @@ static void	push_biggest_to_a(t_list **stack_a, t_list **stack_b)
 			biggest = current;
 		current = current->next;
 	}
-	rotate_to_top(stack_b, biggest);
+	rotate_to_top(stack_b, biggest, "rb", "rrb");
 	push_stack(stack_a, stack_b, "pa");
 }
 
