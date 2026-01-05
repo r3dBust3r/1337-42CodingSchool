@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/03 13:57:17 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 16:25:30 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/05 13:42:32 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ long long	ft_atol(const char *nptr)
 	{
 		r = r * 10 + (nptr[i++] - '0');
 		if (r < -2147483648 || r > 2147483647)
-			break;
+			break ;
 	}
 	return (r * s);
 }

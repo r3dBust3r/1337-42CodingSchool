@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 16:25:30 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/04 16:11:59 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/05 13:44:14 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,17 @@ static int	parse_and_feed(t_list **stack_a, int ac, char **av, char **tab)
 	return (0);
 }
 
+static int	lst_sorted(t_list *lst)
+{
+	while (lst->next)
+	{
+		if (lst->index > lst->next->index)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}
+
 int	main(int ac, char **av)
 {
 	t_list	*stack_a;
@@ -65,7 +76,8 @@ int	main(int ac, char **av)
 	if (parse_and_feed(&stack_a, ac, av, tab))
 		return (1);
 	assign_indexes(&stack_a);
-	pswp_sort(&stack_a, &stack_b, count_lst(&stack_a));
+	if (!lst_sorted(stack_a))
+		pswp_sort(&stack_a, &stack_b, count_lst(&stack_a));
 	free_stack(&stack_a);
 	free_stack(&stack_b);
 	return (0);
