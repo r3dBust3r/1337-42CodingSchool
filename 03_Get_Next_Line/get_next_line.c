@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 23:36:29 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/06 20:28:58 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/07 12:21:38 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = extract_line(stash);
 	stash = clean_stash(stash);
+	if(stash && !(*stash))
+		free(stash);
 	return (line);
 }
