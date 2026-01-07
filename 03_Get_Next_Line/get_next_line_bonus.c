@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 23:36:29 by ottalhao          #+#    #+#             */
-/*   Updated: 2025/12/06 20:25:12 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:14:12 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,35 @@ static char	*extract_line(char *stash)
 	return (line);
 }
 
+static char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	size_t	s_len;
+	size_t	alloc_size;
+	size_t	i;
+	char	*p;
+
+	if (!s)
+		return (NULL);
+	s_len = ft_strlen(s);
+	if (s_len < start)
+		return (ft_strdup(""));
+	if (s_len - start < len)
+		alloc_size = s_len - start;
+	else
+		alloc_size = len;
+	p = (char *)malloc(sizeof(char) * (alloc_size + 1));
+	if (!p)
+		return (NULL);
+	i = 0;
+	while (i < alloc_size)
+	{
+		p[i] = s[start + i];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
+}
+
 static char	*clean_stash(char *stash)
 {
 	int		i;
@@ -81,15 +110,7 @@ static char	*clean_stash(char *stash)
 		free(stash);
 		return (NULL);
 	}
-	new_stash = malloc(ft_strlen(stash) - i);
-	if (!new_stash)
-		return (free(stash), NULL);
-	if (stash[i] == '\n')
-		i++;
-	j = 0;
-	while (stash[i])
-		new_stash[j++] = stash[i++];
-	new_stash[j] = '\0';
+	new_stash = ft_substr(stash, i + 1, ft_strlen(stash));
 	free(stash);
 	return (new_stash);
 }
