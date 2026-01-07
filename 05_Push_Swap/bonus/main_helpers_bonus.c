@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_helpers.c                                     :+:      :+:    :+:   */
+/*   main_helpers_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 16:07:38 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 10:37:49 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/07 17:59:08 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "checker_bonus.h"
 
 int	non_digits(t_list **stack_a, char **tab, int j)
 {

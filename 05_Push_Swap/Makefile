@@ -6,7 +6,7 @@
 #    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/03 14:50:37 by ottalhao          #+#    #+#              #
-#    Updated: 2026/01/07 12:46:37 by ottalhao         ###   ########.fr        #
+#    Updated: 2026/01/07 18:00:08 by ottalhao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,11 @@ SRCS        = ft_lstnew.c ft_lstadd_back.c count_lst.c assign_indexes.c find_dis
               pswp_sort.c push_swap.c main_helpers.c
 OBJS        = $(SRCS:.c=.o)
 HEADERS     = push_swap.h
-BONUS       = bonus/checker.c bonus/checker_helpers.c bonus/main_helpers.c bonus/count_lst.c bonus/free_mem.c \
-              bonus/ft_atol.c bonus/ft_lstadd_back.c bonus/ft_lstnew.c bonus/ft_putstr_fd.c bonus/ft_split.c \
-              bonus/get_next_line.c bonus/check_result.c bonus/get_next_line_utils.c bonus/is_empty.c \
-              bonus/pswp_oprs_swp.c bonus/pswp_oprs_push.c bonus/pswp_oprs_rot.c
+BONUS       = bonus/checker_bonus.c bonus/checker_helpers_bonus.c bonus/main_helpers_bonus.c bonus/count_lst_bonus.c \
+              bonus/free_mem_bonus.c bonus/ft_atol_bonus.c bonus/ft_lstadd_back_bonus.c bonus/ft_lstnew_bonus.c \
+              bonus/ft_putstr_fd_bonus.c bonus/ft_split_bonus.c bonus/get_next_line_bonus.c bonus/check_result_bonus.c \
+              bonus/get_next_line_utils_bonus.c bonus/is_empty_bonus.c bonus/pswp_oprs_swp_bonus.c \
+              bonus/pswp_oprs_push_bonus.c bonus/pswp_oprs_rot_bonus.c
 BNS_OBJS    = $(BONUS:.c=.o)
 BNS_NAME    = checker
 BNS_HEADERS = checker.h

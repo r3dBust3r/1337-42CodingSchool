@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_empty.c                                         :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 13:59:11 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 10:07:14 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/03 14:02:14 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/07 17:58:53 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "checker_bonus.h"
 
-int	is_empty(char **asc_n)
+void	ft_lstadd_back(t_list **lst, t_list *node)
 {
-	int	i;
+	t_list	*temp;
 
-	i = 0;
-	while (asc_n[i])
-		i++;
-	if (i == 0)
-		return (1);
-	return (0);
+	if (!lst || !node)
+		return ;
+	if (!*lst)
+	{
+		*lst = node;
+		return ;
+	}
+	temp = *lst;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = node;
 }

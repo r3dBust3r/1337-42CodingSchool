@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   count_lst.c                                        :+:      :+:    :+:   */
+/*   check_result_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 14:01:19 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 10:11:44 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/07 12:40:27 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/07 17:58:15 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "checker_bonus.h"
 
-int	count_lst(t_list **lst)
+static int	lst_sorted(t_list *lst)
 {
-	t_list	*current;
-	int		i;
-
-	i = 0;
-	current = *lst;
-	while (current)
+	while (lst->next)
 	{
-		current = current->next;
-		i++;
+		if (lst->n > lst->next->n)
+			return (0);
+		lst = lst->next;
 	}
-	return (i);
+	return (1);
+}
+
+void	check_result(t_list *stack_a, t_list *stack_b)
+{
+	if (lst_sorted(stack_a) && !stack_b)
+		ft_putstr_fd("OK\n", 1);
+	else
+		ft_putstr_fd("KO\n", 1);
 }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pswp_oprs_push.c                                   :+:      :+:    :+:   */
+/*   pswp_oprs_push_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 11:32:51 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 10:07:26 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/07 17:59:11 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "checker_bonus.h"
 
 static void	push_a(t_list **stack_a, t_list **stack_b)
 {

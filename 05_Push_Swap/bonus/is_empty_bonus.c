@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   is_empty_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/03 13:50:56 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 10:10:23 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/03 13:59:11 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/07 17:59:05 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "checker_bonus.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	is_empty(char **asc_n)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
-	while (s[i])
-	{
-		write(fd, &s[i], 1);
+	while (asc_n[i])
 		i++;
-	}
+	if (i == 0)
+		return (1);
+	return (0);
 }

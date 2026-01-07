@@ -1,52 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_mem.c                                         :+:      :+:    :+:   */
+/*   ft_putstr_fd_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/04 11:36:06 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 10:06:57 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/01/03 13:50:56 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/01/07 17:58:57 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "checker_bonus.h"
 
-void	free_tab(char **tab)
+void	ft_putstr_fd(char *s, int fd)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i])
+	while (s[i])
 	{
-		free(tab[i]);
+		write(fd, &s[i], 1);
 		i++;
 	}
-	free(tab);
-}
-
-void	free_stack(t_list **lst)
-{
-	t_list	*tmp;
-
-	while (*lst)
-	{
-		tmp = (*lst)->next;
-		free(*lst);
-		*lst = tmp;
-	}
-}
-
-int	error_exit(t_list **a, t_list **b, char **tab)
-{
-	if (a)
-		free_stack(a);
-	if (b)
-		free_stack(b);
-	if (tab)
-		free_tab(tab);
-	ft_putstr_fd("Error\n", 2);
-	return (1);
 }

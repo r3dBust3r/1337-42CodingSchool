@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checker_helpers.c                                  :+:      :+:    :+:   */
+/*   checker_helpers_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 10:36:42 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 12:15:30 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/07 17:58:37 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "checker_bonus.h"
 
 int	exec_swap(char *line, t_list **a, t_list **b)
 {
