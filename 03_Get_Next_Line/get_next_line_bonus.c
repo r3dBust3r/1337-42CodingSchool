@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 23:36:29 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 14:14:12 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:20:04 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ static char	*ft_substr(char const *s, unsigned int start, size_t len)
 static char	*clean_stash(char *stash)
 {
 	int		i;
-	int		j;
 	char	*new_stash;
 
 	i = 0;
