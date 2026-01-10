@@ -1,18 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ft_garden_data.py                                  :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/08 17:10:48 by ottalhao          #+#    #+#              #
-#    Updated: 2026/01/10 09:30:20 by ottalhao         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 class Plant:
     """
-    The class `Plant` has attributes for name, height, and age, initialized through its constructor.
+    The class `Plant` has attributes for name, height, and age,
+    initialized through its constructor.
     """
     def __init__(self, name, height, age):
         self.name = name

@@ -1,23 +1,12 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ft_garden_security.py                              :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/08 18:36:22 by ottalhao          #+#    #+#              #
-#    Updated: 2026/01/10 09:44:16 by ottalhao         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 class SecurePlant:
     """
-    The `SecurePlant` class ensures that negative values are not accepted for height and age attributes.
+    The `SecurePlant` class ensures that negative values are not accepted
+    for height and age attributes.
     """
     def __init__(self, name, height, age):
         """
-        The function initializes a plant object with a name, height, and age, checking for negative values
-        and printing a message if found.
+        The function initializes a plant object with a name, height, and
+        age, checking for negative values and printing a message if found.
         """
         if (height < 0):
             print("Height cannot be negative")
@@ -32,8 +21,8 @@ class SecurePlant:
 
     def set_height(self, height):
         """
-        The `set_height` function sets the height attribute of an object, rejecting negative values
-        and providing feedback messages.
+        The `set_height` function sets the height attribute of an object,
+        rejecting negative values and providing feedback messages.
         """
         if (height < 0):
             print(f"Invalid operation attempted: height {height}cm [REJECTED]")
@@ -44,7 +33,8 @@ class SecurePlant:
 
     def set_age(self, age):
         """
-        The `set_age` function sets the age attribute of an object, rejecting negative values
+        The `set_age` function sets the age attribute of
+        an object, rejecting negative values
         and providing feedback messages.
         """
         if (age < 0):
@@ -70,7 +60,10 @@ class SecurePlant:
         """
         This function prints the current plant's name, height, and age.
         """
-        print(f"Current plant: {self.__name} ({self.__height}cm, {self.__age} days)")
+        name = self.__name
+        height = self.__height
+        age = self.__age
+        print(f"Current plant: {name} ({height}cm, {age} days)")
 
 
 print("=== Garden Security System ===")

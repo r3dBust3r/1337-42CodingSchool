@@ -1,26 +1,15 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ft_garden_analytics.py                             :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/08 22:00:38 by ottalhao          #+#    #+#              #
-#    Updated: 2026/01/10 10:07:55 by ottalhao         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 class GardenManager:
     """
-    The `GardenManager` class manages gardens, tracks plant types and growth, and provides methods for
-    adding plants, helping plants grow, generating reports, and performing height validation tests.
+    The `GardenManager` class manages gardens, tracks plant types
+    and growth, and provides methods for adding plants, helping plants
+    grow, generating reports, and performing height validation tests.
     """
     total_gardens = 0
 
     def __init__(self, manager):
         """
-        This function initializes a Garden object with a manager, plant lists, and counters for
-        different types of plants.
+        This function initializes a Garden object with a manager,
+        plant lists, and counters for different types of plants.
         """
         GardenManager.total_gardens += 1
         self.manager = manager.capitalize()
@@ -34,8 +23,8 @@ class GardenManager:
 
     def add_plant(self, plant):
         """
-        This function adds a plant to a garden, updates plant counters based on plant kind, and
-        prints a message indicating the plant addition.
+        This function adds a plant to a garden, updates plant counters based
+        on plant kind, and prints a message indicating the plant addition.
         """
         self.plants.append(plant)
         self.all_plants_counter += 1
@@ -51,8 +40,8 @@ class GardenManager:
 
     def help_growth(self):
         """
-        This function helps all plants grow by a specified height and updates the growth
-        progress for each plant.
+        This function helps all plants grow by a specified height and
+        updates the growth progress for each plant.
         """
         print("")
         print(f"{self.manager} is helping all plants grow...")
@@ -64,7 +53,8 @@ class GardenManager:
 
     def report(self):
         """
-        This function prints a summary of the plants in the garden managed by a specific person.
+        This function prints a summary of the plants in the garden managed
+        by a specific person.
         """
         print("")
         print(f"=== {self.manager}'s Garden Report ===")
@@ -73,22 +63,27 @@ class GardenManager:
             print(f"- {p.get_details()}")
 
         print("")
-        print(f"Plants added: {self.all_plants_counter}, Total growth: {self.plants_growth}cm")
-        print(f"Plant types: {self.regular_plants} regular, {self.flowering_plants} flowering, {self.prize_flowers_plants} prize flowers")
+        all_plc = self.all_plants_counter
+        all_plg = self.plants_growth
+        r = self.regular_plants
+        fp = self.flowering_plants
+        pf = self.prize_flowers_plants
+        print(f"Plants added: {all_plc}, Total growth: {all_plg}cm")
+        print(f"Plant types: {r} regular, {fp} flowering, {pf} prize flowers")
 
     @classmethod
     def create_garden_network(cls):
         """
-        This function is a class method that prints the total number of gardens managed by
-        the class.
+        This function is a class method that prints the total number of
+        gardens managed by the class.
         """
         print(f"Total gardens managed: {cls.total_gardens}")
 
     @staticmethod
     def high_validation_test(height):
         """
-        This function is a high validation test, if a given height is greater than 0 and returns True,
-        otherwise returns False.
+        This function is a high validation test, if a given height is greater
+        than 0 and returns True, otherwise returns False.
         """
         if (height > 0):
             return True
@@ -96,13 +91,14 @@ class GardenManager:
 
     class GardenStats():
         """
-        The `GardenStats` class contains a static method `calc_score` that calculates a score based on the
-        height and kind of plants in a garden.
+        The `GardenStats` class contains a static method `calc_score` that
+        calculates a score based on the height and kind of plants in a garden.
         """
         @staticmethod
         def calc_score(plants):
             """
-            This static method calculates a score based on the height and kind of plants in a given list.
+            This static method calculates a score based on the height and
+            kind of plants in a given list.
             """
             score = 0
             for p in plants:
@@ -116,41 +112,46 @@ class GardenManager:
 
 class Plant:
     """
-    The `Plant` class defines plants with a name, height, and methods to grow and get details.
+    The `Plant` class defines plants with a name, height,
+    and methods to grow and get details.
     """
     kind = "regular"
 
     def __init__(self, name, height):
         """
-        This function is a constructor that initializes an object with a name and height
-        attribute.
+        This function is a constructor that initializes an object
+        with a name and height attribute.
         """
         self.name = name
         self.height = height
 
     def grow(self, height):
         """
-        This function increases the height of an object by a specified amount.
+        This function increases the height of an object by
+        a specified amount.
         """
         self.height += height
 
     def get_details(self):
         """
-        This function returns a string containing the name and height of a plant.
+        This function returns a string containing the name
+        and height of a plant.
         """
         return (f"{self.name}: {self.height}cm")
 
 
 class FloweringPlant(Plant):
     """
-    The `FloweringPlant` class represents a flowering plant with attributes such as name, height, color,
-    and methods to check its status and get details.
+    The `FloweringPlant` class represents a flowering plant with
+    attributes such as name, height, color, and methods
+    to check its status and get details.
     """
     kind = "flowering"
 
     def __init__(self, name, height, color):
         """
-        The function initializes a flowering plant with attributes for name, height, and color.
+        The function initializes a flowering plant with attributes
+        for name, height, and color.
         """
         super().__init__(name, height)
         self.color = color
@@ -163,33 +164,42 @@ class FloweringPlant(Plant):
 
     def get_details(self):
         """
-        This function returns a string containing the name, height, color of flowers, and
-        status of an object.
+        This function returns a string containing the name, height, color
+        of flowers, and status of an object.
         """
-        return (f"{self.name}: {self.height}cm, {self.color} flowers ({self.status()})")
+        name = self.name
+        height = self.height
+        color = self.color
+        return (f"{name}: {height}cm, {color} flowers ({self.status()})")
 
 
 class PrizeFlower(FloweringPlant):
     """
-    The `PrizeFlower` class represents flowering plants with competition points and provides a method to
-    get details including name, height, color, status, and competition points.
+    The `PrizeFlower` class represents flowering plants with competition
+    points and provides a method to get details including name, height,
+    color, status, and competition points.
     """
     kind = "prize flowers"
 
     def __init__(self, name, height, color, competition_points):
         """
-        This function is an initializer method that sets attributes for a price flower, including
-        name, height, color, and competition points.
+        This function is an initializer method that sets attributes for
+        a price flower, including name, height, color, and competition points.
         """
         super().__init__(name, height, color)
         self.competition_points = competition_points
 
     def get_details(self):
         """
-        This function returns a formatted string containing the name, height, color,
-        status, and competition points of an object.
+        This function returns a formatted string containing the name, height,
+        color, status, and competition points of an object.
         """
-        return (f"{self.name}: {self.height}cm, {self.color} flowers ({self.status()}), Prize points: {self.competition_points}")
+        nm = self.name
+        hig = self.height
+        clr = self.color
+        pts = self.competition_points
+        sts = self.status()
+        return (f"{nm}: {hig}cm, {clr} flowers ({sts}), Prize points: {pts}")
 
 
 print("=== Garden Management System Demo ===")

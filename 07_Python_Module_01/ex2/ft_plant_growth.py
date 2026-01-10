@@ -1,24 +1,13 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ft_plant_growth.py                                 :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/01/08 17:18:20 by ottalhao          #+#    #+#              #
-#    Updated: 2026/01/10 09:37:17 by ottalhao         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 class Plant:
     """
-    The class `Plant` represents a plant with attributes for name, height, and age, along with methods
+    The class `Plant` represents a plant with attributes
+    for name, height, and age, along with methods
     to get information and simulate growth.
     """
     def __init__(self, name, height, age):
         """
-        Define a class constructor that initializes instances with attributes for
-        name, height, and age.
+        Define a class constructor that initializes instances
+        with attributes for name, height, and age.
         """
         self.name = name
         self.height = height
@@ -26,20 +15,23 @@ class Plant:
 
     def age(self):
         """
-        The function `age()` is intended to return the age attribute of the object it is called on.
+        The function `age()` is intended to return the age attribute
+        of the object it is called on.
         """
         return self.age
 
     def grow(self, n):
         """
-        The `grow` function increases both the height and age attributes of an object by 6.
+        The `grow` function increases both the height and age attributes
+        of an object by 6.
         """
         self.height += n
         self.age += n
 
     def get_info(self):
         """
-        The `get_info` function prints the name, height, and age in days of an object.
+        The `get_info` function prints the name, height, and age in
+        days of an object.
         """
         print(f"{self.name}: {self.height}cm, {self.age} days old")
 
