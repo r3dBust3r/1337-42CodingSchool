@@ -6,7 +6,7 @@ class Plant:
     """
     def __init__(self, name, height, age):
         """
-        Define a class constructor that initializes instances
+        The constructor that initializes instances
         with attributes for name, height, and age.
         """
         self.name = name
@@ -22,7 +22,7 @@ class Plant:
 
     def grow(self, n):
         """
-        The `grow` function increases both the height and age attributes
+        The function `grow()` increases both the height and age attributes
         of an object by 6.
         """
         self.height += n

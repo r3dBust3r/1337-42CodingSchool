@@ -4,6 +4,10 @@ class Plant:
     initialized through its constructor.
     """
     def __init__(self, name, height, age):
+        """
+        The constructor that initializes instances
+        with attributes for name, height, and age.
+        """
         self.name = name
         self.height = height
         self.age = age
