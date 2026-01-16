@@ -25,7 +25,10 @@ try:
     print(f"ROUTINE ACCESS: Attempting access to '{standard_archive}'...")
     with open(standard_archive, "r") as f_name:
         print(f"SUCCESS: Archive recovered - '{f_name.read()}'")
-except Exception:
-    pass
+        print("STATUS: Normal operations resumed")
+except FileNotFoundError:
+    print("RESPONSE: File not found in storage matrix")
+except PermissionError:
+    print("RESPONSE: Security protocols deny access")
 
 print("\nAll crisis scenarios handled successfully. Archives secure.")
