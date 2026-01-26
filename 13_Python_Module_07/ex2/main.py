@@ -1,24 +1,45 @@
-from ex2 import EliteCard
+from typing import List, Dict
+from ex0 import Card
+from ex2 import Combatable, Magical, EliteCard
 
 
-# $> python3 -m ex2.main
+def main():
+    print("=== DataDeck Ability System ===\n")
 
-# === DataDeck Ability System ===
+    print("EliteCard capabilities:")
 
-# EliteCard capabilities:
-# - Card: ['play', 'get_card_info', 'is_playable']
-# - Combatable: ['attack', 'defend', 'get_combat_stats']
-# - Magical: ['cast_spell', 'channel_mana', 'get_magic_stats']
+    for clss in [Card, Combatable, Magical]:
+        clss_methods: List = []
+        for key, val in clss.__dict__.items():
+            if callable(val) and key != '__init__':
+                clss_methods.append(key)
 
-# Playing Arcane Warrior (Elite Card):
+        print(
+            f"- {clss.__name__.split('.')[-1]}: "
+            f"{clss_methods}"
+        )
 
-# Combat phase:
-# Attack result: {'attacker': 'Arcane Warrior', 'target': 'Enemy', 'damage': 5, 'combat_type': 'melee'}
-# Defense result: {'defender': 'Arcane Warrior', 'damage_taken': 2, 'damage_blocked': 3, 'still_alive': True}
+    print("\nPlaying Arcane Warrior (Elite Card):\n")
+    arcane_warrior: EliteCard = EliteCard(
+        "Arcane Warrior", 10,
+        "Legendary", 5, 3, 7
+    )
 
-# Magic phase:
-# Spell cast: {'caster': 'Arcane Warrior', 'spell': 'Fireball', 'targets': ['Enemy1', 'Enemy2'], 'mana_used': 4}
-# Mana channel: {'channeled': 3, 'total_mana': 7}
+    print("Combat phase:")
+    play_dict: Dict[str, str] = {'target': 'Enemy', 'combat_type': 'melee'}
+    print(f"Attack result: {arcane_warrior.play(play_dict)}")
+    print(f"Defense result: {arcane_warrior.defend(5)}\n")
 
-# Multiple interface implementation successful!
+    print("Magic phase:")
+    print(
+        f"Spell cast: "
+        f"{arcane_warrior.cast_spell('Fireball', ['Enemy1', 'Enemy2'])}\n"
+    )
 
+    print(f"Mana channel: {arcane_warrior.channel_mana(3)}\n")
+
+    print("Multiple interface implementation successful!")
+
+
+if __name__ == "__main__":
+    main()

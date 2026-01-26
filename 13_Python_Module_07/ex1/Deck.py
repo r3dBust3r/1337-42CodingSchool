@@ -6,7 +6,7 @@ from random import shuffle, choice
 
 
 class Deck:
-    def __init__(self):
+    def __init__(self) -> None:
         self.cards = []
 
     def add_card(self, card: Card) -> None:
@@ -24,10 +24,26 @@ class Deck:
         return choice(self.cards)
 
     def get_deck_stats(self) -> dict:
+        creatures: int = 0
+        spells: int = 0
+        artifacts: int = 0
+
+        for card in self.cards:
+            if isinstance(card, CreatureCard):
+                creatures += 1
+
+        for card in self.cards:
+            if isinstance(card, SpellCard):
+                spells += 1
+
+        for card in self.cards:
+            if isinstance(card, ArtifactCard):
+                artifacts += 1
+
         return {
             'total_cards': len(self.cards),
-            'creatures': len([card for card in self.cards if isinstance(card, CreatureCard)]),
-            'spells': len([card for card in self.cards if isinstance(card, SpellCard)]),
-            'artifacts': len([card for card in self.cards if isinstance(card, ArtifactCard)]),
+            'creatures': creatures,
+            'spells': spells,
+            'artifacts': artifacts,
             'avg_cost': 4.0
         }
