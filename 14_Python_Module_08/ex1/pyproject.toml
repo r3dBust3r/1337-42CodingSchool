@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "matrix-analysis"
+version = "0.1.0"
+description = "Simple matrix analysis script"
+authors = ["ottalhao ottalhao@student.1337.ma"]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+
+pandas = "^2.2"
+requests = "2.32.5"
+matplotlib = "3.10.8"
+numpy = "2.4.1"
