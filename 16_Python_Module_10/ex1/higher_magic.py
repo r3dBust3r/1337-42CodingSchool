@@ -1,11 +1,7 @@
-from typing import Callable, Any, Tuple
+from typing import Any, Tuple, Callable
 
 
-def spell_combiner(spell1: callable, spell2: callable) -> callable:
-    # spell_combiner(spell1, spell2) - Combine two spells:
-    # • Return a new function that calls both spells with the same arguments
-    # • The combined spell should return a tuple of both results
-    # • Example: combined = spell_combiner(fireball, heal)
+def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
     def combined(*args, **kwargs) -> Tuple[Any, Any]:
         return (
             spell1(*args, **kwargs),
@@ -14,22 +10,14 @@ def spell_combiner(spell1: callable, spell2: callable) -> callable:
     return combined
 
 
-def power_amplifier(base_spell: callable, multiplier: int) -> callable:
-    # power_amplifier(base_spell, multiplier) - Amplify spell power:
-    # • Return a new function that multiplies the base spell’s result by multiplier
-    # • Assume base spell returns a number (damage, healing, etc.)
-    # • Example: mega_fireball = power_amplifier(fireball, 3)
+def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
     def amplified(*args, **kwargs):
         return base_spell(*args, **kwargs) * multiplier
 
     return amplified
 
 
-def conditional_caster(condition: callable, spell: callable) -> callable:
-    # conditional_caster(condition, spell) - Cast spell conditionally:
-    # • Return a function that only casts the spell if condition returns True
-    # • If condition fails, return "Spell fizzled"
-    # • Both condition and spell receive the same arguments
+def conditional_caster(condition: Callable, spell: Callable) -> Callable:
     def caster(*args, **kwargs):
         if condition(*args, **kwargs):
             return spell(*args, **kwargs)
@@ -38,11 +26,7 @@ def conditional_caster(condition: callable, spell: callable) -> callable:
     return caster
 
 
-def spell_sequence(spells: list[callable]) -> callable:
-    # spell_sequence(spells) - Create spell sequence:
-    # • Return a function that casts all spells in order
-    # • Each spell receives the same arguments
-    # • Return a list of all spell results
+def spell_sequence(spells: list[Callable]) -> Callable:
     def sp_sq(*args, **kwargs):
         result = []
         for spell in spells:
@@ -52,22 +36,20 @@ def spell_sequence(spells: list[callable]) -> callable:
         return result
     return sp_sq
 
+
 def fireball(target):
     return f"Fireball hits {target}"
+
 
 def heal(target):
     return f"Heals {target}"
 
+
 def damage(amount):
     return amount
 
-def main():
 
-    # $> python3 higher_magic.py
-    # Testing spell combiner...
-    # Combined spell result: Fireball hits Dragon, Heals Dragon
-    # Testing power amplifier...
-    # Original: 10, Amplified: 30
+def main():
 
     print("Testing spell combiner...")
 
