@@ -6,11 +6,11 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 23:36:29 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/01/07 14:20:04 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/02/04 12:13:49 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*read_and_stash(int fd, char *stash, int bytes)
 {
