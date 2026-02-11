@@ -2,7 +2,12 @@
 
 ```c
 int execve(char *path, char *argv[], char *envp[]);
+int execve(const char *pathname, char *const argv[], char *const envp[]);
 ```
+*filename*: The path to the executable file (e.g., "/bin/ls").
+*argv*: A NULL-terminated array of strings for the new program's arguments. By convention, argv[0] should be the name of the program itself.
+*envp*: A NULL-terminated array of strings, in key=value format, representing the environment variables for the new program. 
+
 
 What it really does
 
