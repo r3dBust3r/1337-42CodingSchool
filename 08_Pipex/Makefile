@@ -6,28 +6,27 @@
 #    By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/06 11:36:20 by ottalhao          #+#    #+#              #
-#    Updated: 2026/02/06 11:57:57 by ottalhao         ###   ########.fr        #
+#    Updated: 2026/03/08 07:41:13 by ottalhao         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-all: pipex
+NAME     = pipex
+CC       = cc
+CFLAGS   = -Wall -Wextra -Werror
+SRCS     = pipex.c utils.c ft_split.c ft_strncmp.c ft_strjoin.c
+OBJS     = $(SRCS:.c=.o)
 
-pipex:
-	@cc -Wall -Wextra -Werror pipex.c -o pipex
-	@echo "Building pipex"
+all: $(NAME)
 
-bonus:
-	@echo "bonus"
-	@echo "Building pipex's bonus"
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-	@find . -type f -name "*.o" -print -exec rm -rf {} \;
-	@echo "Cleaning object files"
+	rm -f $(OBJS)
 
 fclean: clean
-	@rm -rf pipex
-	@echo "Cleaning pipex bin file"
+	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re
