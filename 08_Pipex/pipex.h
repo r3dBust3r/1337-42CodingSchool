@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 11:41:52 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/03/08 07:47:10 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/03/09 03:21:11 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-# include <string.h>
 
 char	**ft_split(const char *s, char c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);

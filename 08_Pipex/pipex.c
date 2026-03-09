@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 11:37:00 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/03/08 07:46:59 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/03/09 03:21:46 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	error_exit(char *msg)
 {
 	perror(msg);
-	exit(EXIT_FAILURE);
+	exit(1);
 }
 
 void	child_process(char **av, char **ep, int *fd)
@@ -24,7 +24,10 @@ void	child_process(char **av, char **ep, int *fd)
 
 	infile = open(av[1], O_RDONLY);
 	if (infile == -1)
+	{
+		unlink(av[4]);
 		error_exit("infile error");
+	}
 	dup2(infile, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
