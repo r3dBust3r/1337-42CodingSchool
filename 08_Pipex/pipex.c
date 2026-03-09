@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 11:37:00 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/03/09 03:21:46 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/03/09 15:24:07 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	error_exit(char *msg)
 	exit(1);
 }
 
-void	child_process(char **av, char **ep, int *fd)
+void	child1_process(char **av, char **ep, int *fd)
 {
 	int	infile;
 
@@ -36,7 +36,7 @@ void	child_process(char **av, char **ep, int *fd)
 	execute(av[2], ep);
 }
 
-void	parent_process(char **av, char **ep, int *fd)
+void	child2_process(char **av, char **ep, int *fd)
 {
 	int	outfile;
 
@@ -51,26 +51,34 @@ void	parent_process(char **av, char **ep, int *fd)
 	execute(av[3], ep);
 }
 
-int	main(int ac, char **av, char **ep)
+void	run_pipe(char **av, char **ep)
 {
 	int		fd[2];
 	pid_t	pid1;
+	pid_t	pid2;
 
+	if (pipe(fd) == -1)
+		error_exit("pipe error");
+	pid1 = fork();
+	if (pid1 == -1)
+		error_exit("fork error");
+	if (pid1 == 0)
+		child1_process(av, ep, fd);
+	pid2 = fork();
+	if (pid2 == -1)
+		error_exit("fork error");
+	if (pid2 == 0)
+		child2_process(av, ep, fd);
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
+}
+
+int	main(int ac, char **av, char **ep)
+{
 	if (ac == 5)
-	{
-		if (pipe(fd) == -1)
-			error_exit("pipe error");
-		pid1 = fork();
-		if (pid1 == -1)
-			error_exit("fork error");
-		if (pid1 == 0)
-			child_process(av, ep, fd);
-		else
-		{
-			parent_process(av, ep, fd);
-			waitpid(pid1, NULL, 0);
-		}
-	}
+		run_pipe(av, ep);
 	else
 		write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 37);
 	return (0);
