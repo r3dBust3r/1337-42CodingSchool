@@ -1,2 +1,5 @@
 __pycache__
 .mypy_cache
+__temp__.py
+__test__.py
+__temp__/
