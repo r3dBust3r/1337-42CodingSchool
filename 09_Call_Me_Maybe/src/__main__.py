@@ -13,6 +13,20 @@ class FunctionDefinition(BaseModel):
 
 
 
+def get_valid_next_tokens(current_prefix, validated_functions, model):
+    allowed_ids = []
+    for f in validated_functions:
+        if f.name.startswith(current_prefix):
+            remainder = f.name[len(current_prefix):]
+
+            if remainder:
+                allowed_ids.append(model.encode(remainder)[0].tolist()[0])
+            else:
+                allowed_ids.extend(model.encode('"')[0].tolist())
+
+    return list(set(allowed_ids))
+
+
 
 def main():
     with open('./data/input/functions_definition.json', 'rt') as f:
@@ -48,58 +62,83 @@ def main():
 
     json_start = '{"name": "'
 
-    prompt = "What's the square root of 81?"
+    prompt = input("\nGPT> ")
     tokens = model.encode(context + '\n' + prompt + '\n' + json_start)
     tokens = tokens[0].tolist()
 
     json_generated = json_start
 
 
-    allowed_ids = []
-    for f in validated_functions:
-        allowed_ids.append(
-            model.encode(f.name)[0].tolist()[0]
-        )
-
 
     while True:
         logits = model.get_logits_from_input_ids(tokens)
 
-        if json_generated.endswith('{"name": "'):
-            logits[0] = float('-inf')
+        if '{"name": "' in json_generated:
+            after_name = json_generated.split('{"name": "')[1]
+            allowed_ids = get_valid_next_tokens(after_name, validated_functions, model)
 
-            for token, index in model_dict.items():
-                if index not in allowed_ids:
-                    logits[index] = float('-inf')
+            if '"' not in after_name:
+                for id in range(len(model_dict)):
+                    if id not in allowed_ids:
+                        logits[id] = float('-inf')
 
-            for i in range(len(model_dict), len(logits)):
-                logits[i] = float('-inf')
+            else:
+                # 1. extract the chosen function
+                chosen_function = [f for f in validated_functions if f.name == after_name.split('"')[0]][0]
+
+                # fast forward the bridge
+                bridge_text = ', "parameters": {'
+                tokens.extend(model.encode(bridge_text)[0].tolist())
+                json_generated += bridge_text
+
+                # go straight into the parameters
+                params = [k for k in chosen_function.parameters.keys()]                    
+
+                for i in range(len(params)):
+                    param_name = params[i]
+
+                    if i == 0:
+                        key_injection = f'"{param_name}": '
+                    else:
+                        key_injection = f', "{param_name}": '
+
+                    tokens.extend(model.encode(key_injection)[0].tolist())
+                    json_generated += key_injection
+
+                    # spin up the this loop for the value
+                    while True:
+                        logits = model.get_logits_from_input_ids(tokens)
+                        
+                        for j in range(len(model_dict), len(logits)):
+                            logits[j] = float('-inf')
+                            
+                        best_token = logits.index(max(logits))
+                        next_text = model.decode([best_token])
+                        
+                        # hit the brakes on commas and braces
+                        if ',' in next_text or '}' in next_text: break 
+                            
+                        tokens.append(best_token)
+                        json_generated += next_text
+                        print(json_generated)
+
+                # finished all parameters. inject the final closure!
+                final_closure = "}}"
+                tokens.extend(model.encode(final_closure)[0].tolist())
+                json_generated += final_closure
+                
+                print(json_generated)
+                break
 
 
+        for i in range(len(model_dict), len(logits)):
+            logits[i] = float('-inf')
 
-        token = logits.index(max(logits))
-        tokens.append(token)
 
-        json_generated += model.decode([token])
+        token_id = logits.index(max(logits))
+        tokens.append(token_id)
+        json_generated += model.decode(token_id)
         print(json_generated)
-
-        # Break the loop when the JSON is VALID
-        opened = 0
-        _break = False
-        for c in json_generated:
-            if c == '{':
-                opened += 1
-                continue
-            elif c == '}':
-                opened -= 1
-                if not opened:
-                    _break = True
-                    break
-        if _break:
-            break
-
-
-
 
 
 if __name__ == "__main__":
