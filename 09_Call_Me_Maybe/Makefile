@@ -32,4 +32,9 @@ clean:
 	@find . -type d -name "__pycache__" -print -exec rm -rf {} +
 	@find . -type d -name ".mypy_cache" -print -exec rm -rf {} +
 
+redownload-deps:
+	@uv cache clean
+	@rm -rf .venv
+	@uv sync
+
 .PHONY: all run install lint lint-strict debug clean
