@@ -178,6 +178,9 @@ class FunctionCallingSystem:
         output = [r.model_dump() for r in results]
 
         try:
+            if not self.output_path.endswith(".json"):
+                self.output_path += ".json"
+
             with open(self.output_path, "wt") as f:
                 json.dump(output, f, indent=2)
         except Exception:
