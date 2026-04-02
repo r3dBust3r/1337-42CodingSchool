@@ -1,3 +1,4 @@
+from .system import FunctionCallingSystem
 import argparse
 import sys
 
@@ -29,10 +30,17 @@ def main() -> None:
     args = parser.parse_args()
 
     try:
-        ...
+        system = FunctionCallingSystem(
+            functions_path=args.functions_definition,
+            input_path=args.input,
+            output_path=args.output,
+        )
+        system.run()
+
     except KeyboardInterrupt:
         print("\nInterrupted", file=sys.stderr)
         sys.exit(0)
+
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
