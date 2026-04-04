@@ -1,16 +1,21 @@
 from .models import FunctionDefinition
 
 from typing import Any, Dict, List, Optional, Set
-from llm_sdk import Small_LLM_Model # type: ignore[attr-defined]
+from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 import json
 
 NEG_INF = float("-inf")
+
 
 class ConstrainedDecoder:
     """
     Guides the LLM token-by-token to produce schema-compliant JSON
     """
-    def __init__(self, model: Small_LLM_Model, functions: List[FunctionDefinition]) -> None:
+    def __init__(
+            self,
+            model: Small_LLM_Model,
+            functions: List[FunctionDefinition]
+    ) -> None:
         """
         Initialise the decoder and precompute lookup structures
         """
@@ -23,7 +28,6 @@ class ConstrainedDecoder:
         self._load_vocab()
         self._pretokenize_functions()
         self._build_number_token_ids()
-
 
     def _load_vocab(self) -> None:
         """Load the model vocabulary JSON from disk"""
@@ -51,12 +55,11 @@ class ConstrainedDecoder:
             if len(ids) == 1:
                 self._number_token_ids.add(ids[0])
 
-
     def _restore_token_to_str(self, token_id: int) -> str:
         """
         Decode a single token ID to its string representation
         """
-        return self.model.decode([token_id])
+        return str(self.model.decode([token_id]))
 
     def _mask(
         self, logits: List[float], allowed: Set[int]
@@ -75,7 +78,6 @@ class ConstrainedDecoder:
         Return the index of the maximum logit value
         """
         return logits.index(max(logits))
-
 
     def _valid_next_name_ids(self, generated: List[int]) -> Set[int]:
         """
@@ -120,8 +122,7 @@ class ConstrainedDecoder:
             if match:
                 return match
 
-        return self.model.decode(name_tokens)
-
+        return str(self.model.decode(name_tokens))
 
     def generate_number(self, context_tokens: List[int]) -> float:
         """
@@ -154,7 +155,10 @@ class ConstrainedDecoder:
         try:
             return float(generated)
         except ValueError:
-            print(f"  Warning: could not parse '{generated}' as number — using 0.0")
+            print(
+                f"  Warning: could not parse '{generated}' "
+                "as number - using 0.0"
+            )
             return 0.0
 
     def generate_string(self, context_tokens: List[int]) -> str:
@@ -214,5 +218,5 @@ class ConstrainedDecoder:
             return self.generate_string(context_tokens)
         if param_type == "boolean":
             return self.generate_boolean(context_tokens)
-        print(f"  Warning: unknown type '{param_type}' — treating as string.")
+        print(f"  Warning: unknown type '{param_type}' - treating as string.")
         return self.generate_string(context_tokens)

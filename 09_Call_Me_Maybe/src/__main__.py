@@ -3,7 +3,6 @@ import argparse
 import sys
 
 
-
 def main() -> None:
     """Parse CLI arguments and launch the function calling"""
     parser = argparse.ArgumentParser(

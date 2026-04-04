@@ -3,16 +3,23 @@ from .decoder import ConstrainedDecoder
 
 from typing import Any, Dict, List, Optional
 from pydantic import ValidationError
-from llm_sdk import Small_LLM_Model # type: ignore[attr-defined]
+from llm_sdk import Small_LLM_Model  # type: ignore[attr-defined]
 import json
 import os
 import sys
 
 
 class FunctionCallingSystem:
-    """End-to-end system: natural language prompt -> structured function call"""
+    """
+    End-to-end system: natural language prompt -> structured function call
+    """
 
-    def __init__(self, functions_path: str, input_path: str, output_path: str) -> None:
+    def __init__(
+            self,
+            functions_path: str,
+            input_path: str,
+            output_path: str
+    ) -> None:
         """Store configuration paths. Does not load files or the model yet"""
         self.functions_path = functions_path
         self.input_path = input_path
@@ -21,7 +28,6 @@ class FunctionCallingSystem:
         self.prompts: List[TestPrompt] = []
         self._model: Optional[Small_LLM_Model] = None
         self._decoder: Optional[ConstrainedDecoder] = None
-
 
     def _load_functions(self) -> None:
         """Load and validate function definitions from the JSON file"""
@@ -80,7 +86,6 @@ class FunctionCallingSystem:
 
         print(f"Loaded {len(self.prompts)} prompts")
 
-
     def _build_context(self) -> str:
         """
         Build the system prompt that describes all available functions
@@ -97,7 +102,6 @@ class FunctionCallingSystem:
         context.append("")
         return "\n".join(context)
 
-
     @staticmethod
     def _serialize_value(value: Any, param_type: str) -> str:
         """
@@ -109,8 +113,11 @@ class FunctionCallingSystem:
             return "true" if value else "false"
         return str(value)
 
-
-    def _process_prompt(self, prompt: str, context: str) -> Optional[FunctionCall]:
+    def _process_prompt(
+            self,
+            prompt: str,
+            context: str
+    ) -> Optional[FunctionCall]:
         """
         Translate one natural language prompt into a structured function call
         """
@@ -166,7 +173,6 @@ class FunctionCallingSystem:
             print(f"  Error: result validation failed: {e}")
             return None
 
-
     def _save_results(self, results: List[FunctionCall]) -> None:
         """
         Write function call results to the output JSON file
@@ -187,7 +193,6 @@ class FunctionCallingSystem:
             raise
 
         print(f"\nSaved {len(results)} results to: -> '{self.output_path}'")
-
 
     def run(self) -> None:
         """Execute the complete function calling pipeline"""
