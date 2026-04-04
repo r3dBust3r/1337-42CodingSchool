@@ -3,7 +3,7 @@ from .decoder import ConstrainedDecoder
 
 from typing import Any, Dict, List, Optional
 from pydantic import ValidationError
-from llm_sdk import Small_LLM_Model
+from llm_sdk import Small_LLM_Model # type: ignore[attr-defined]
 import json
 import os
 import sys
