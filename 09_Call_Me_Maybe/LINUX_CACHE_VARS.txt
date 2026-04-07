@@ -1,0 +1,13 @@
+# TEMP CONFIG FOR CALL ME MAYBE
+mkdir -p /goinfre/$USER/.cache
+mkdir -p /goinfre/$USER/.local/share
+mkdir -p /goinfre/$USER/.local/state
+mkdir -p /goinfre/$USER/.tmp
+
+export XDG_CACHE_HOME="/goinfre/$USER/.cache"
+export XDG_DATA_HOME="/goinfre/$USER/.local/share"
+export XDG_STATE_HOME="/goinfre/$USER/.local/state"
+
+export UV_CACHE_DIR="/goinfre/$USER/.cache/uv"
+export PIP_CACHE_DIR="/goinfre/$USER/.cache/pip"
+export TMPDIR="/goinfre/$USER/.tmp"
