@@ -1,0 +1,8 @@
+.venv/
+__temp__/
+__pycache__/
+.mypy_cache/
+__temp__.py
+__test__.py
+___*
+NOTES.md
