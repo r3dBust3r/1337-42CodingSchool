@@ -3,7 +3,7 @@ from typing import Literal, Dict, Optional
 from zone import Zone
 from connection import Connection
 from graph import Graph
-
+from collections import deque
 
 
 class ZoneMetadata(BaseModel):
@@ -202,8 +202,12 @@ class Validate:
 
 class FlyInOrganizer:
     def __init__(self, zones, connections):
-        self.zones = []
+        self.zones       = []
         self.connections = []
+        self.paths       = []
+        self.start_zone  = None
+        self.end_zone    = None
+
 
         for zone in zones:
             name        = zone['name']
@@ -232,6 +236,7 @@ class FlyInOrganizer:
                 )
             )
         
+
         for conn in connections:
             name                = conn['name']
             max_link_capacity   = conn['metadata']['max_link_capacity']
@@ -244,6 +249,12 @@ class FlyInOrganizer:
             )
 
 
+        for z in self.zones:
+            if z.type == 'start_hub': self.start_zone = z
+            if z.type == 'end_hub': self.end_zone = z
+
+
+
     def make_graph(self):
         Graph(self.connections, self.zones)
 
@@ -253,15 +264,60 @@ class FlyInOrganizer:
             print(zone)
 
 
+    @staticmethod
+    def find_zone_by_name(zones, name):
+        for zone in zones:
+            if zone.name == name:
+                return zone
+        return None
+
+
+    def find_path(self):
+        visited = set()
+        parent = {}
+
+        queue = deque([self.start_zone])
+        visited.add(self.start_zone)
+
+        path = []
+
+        while queue:
+            neighbors = queue[0].neighbors
+
+            for nbr in neighbors:
+                if nbr not in visited:
+                    queue.append(nbr)
+                    parent[nbr] = queue[0]
+                    visited.add(nbr)
+
+                    if nbr == self.end_zone:
+                        current = nbr
+                        while current != self.start_zone:
+                            path.append(current)
+                            current = parent[current]
+
+                        path.append(self.start_zone)
+                        return path[::-1]
+                        
+            queue.popleft()
+
+        return None
+
+
 
 def main():
-    parser = Parser('maps/medium/03_priority_puzzle.txt')
+    parser = Parser('maps/hard/02_capacity_hell.txt')
     parser.parse()
     _map = parser.get_map()
 
 
+    # DEB
+    parser.print_zones()
+    # DEB
+
+
     # try:
-    #     parser = Parser('maps/medium/03_priority_puzzle.txt')
+    #     parser = Parser('maps/hard/02_capacity_hell.txt')
     #     parser.parse()
     # except ValueError as e:
     #     print(e)
@@ -276,7 +332,17 @@ def main():
 
     flyin = FlyInOrganizer(parser.zones, parser.connections)
     flyin.make_graph()
-    flyin.display_zones()
+    for zone in flyin.zones:
+        print(zone)
+
+
+    path = flyin.find_path()
+
+
+    # DEB
+    print('\nPATH: ', end='')
+    if path:
+        print(' -> '.join([z.name for z in path]))
 
 
 
