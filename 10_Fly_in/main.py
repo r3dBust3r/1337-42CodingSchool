@@ -1,11 +1,15 @@
 from pydantic import BaseModel, ValidationError, Field
 from typing import Literal, Dict, Optional
+from zone import Zone
+from connection import Connection
+from graph import Graph
 
 
 
 class ZoneMetadata(BaseModel):
     color: Optional[str] = None
     max_drones: Optional[int] = None
+    zone: Literal['normal', 'blocked', 'restricted', 'priority'] = 'normal'
 
 
 class ZoneModel(BaseModel):
@@ -35,8 +39,15 @@ class Parser:
         try:
             with open(path, 'r') as file:
                 self.maps = file.readlines()
+
+        except FileNotFoundError:
+            raise ValueError(f'No such file: {path}')
+        
+        except PermissionError:
+            raise ValueError(f'You have no permission access to: {path}')
+
         except Exception as e:
-            print(e)
+            raise ValueError(e)
 
 
     def extract_metadata(self, metadata):
@@ -49,7 +60,7 @@ class Parser:
 
             key, value = pair.split('=')
 
-            if key not in ['max_link_capacity', 'max_drones', 'color']:
+            if key not in ['max_link_capacity', 'max_drones', 'color', 'zone']:
                 raise ValueError(f'Invalid key: {key}')
 
             extracted[key] = int(value) if key in ['max_link_capacity', 'max_drones'] else value
@@ -189,15 +200,68 @@ class Validate:
             raise ValueError('nb_drones must be positive!')
 
 
+class FlyInOrganizer:
+    def __init__(self, zones, connections):
+        self.zones = []
+        self.connections = []
+
+        for zone in zones:
+            name        = zone['name']
+            x           = zone['x']
+            y           = zone['y']
+            type        = zone['type']
+
+            try: color      = zone['metadata']['color']
+            except KeyError: color = 'none'
+            
+            try: max_drones = zone['metadata']['max_drones']
+            except KeyError: max_drones = 1
+
+            try: zone_type  = zone['metadata']['zone']
+            except KeyError: zone_type = 'normal'
+
+            self.zones.append(
+                Zone(
+                    name=name,
+                    x=x,
+                    y=y,
+                    type=type,
+                    color=color,
+                    max_drones=max_drones,
+                    zone=zone_type
+                )
+            )
+        
+        for conn in connections:
+            name                = conn['name']
+            max_link_capacity   = conn['metadata']['max_link_capacity']
+
+            self.connections.append(
+                Connection(
+                    name=name,
+                    max_link_capacity=max_link_capacity
+                )
+            )
+
+
+    def make_graph(self):
+        Graph(self.connections, self.zones)
+
+
+    def display_zones(self):
+        for zone in self.zones:
+            print(zone)
+
+
 
 def main():
-    parser = Parser('maps/easy/01_linear_path.txt')
+    parser = Parser('maps/medium/03_priority_puzzle.txt')
     parser.parse()
     _map = parser.get_map()
 
 
     # try:
-    #     parser = Parser('maps/easy/01_linear_path.txt')
+    #     parser = Parser('maps/medium/03_priority_puzzle.txt')
     #     parser.parse()
     # except ValueError as e:
     #     print(e)
@@ -210,9 +274,9 @@ def main():
         print(f"Pydantic error: {e.errors()[0]['msg']}")
 
 
-    parser.print_zones()
-    print()
-    parser.print_connections()
+    flyin = FlyInOrganizer(parser.zones, parser.connections)
+    flyin.make_graph()
+    flyin.display_zones()
 
 
 
