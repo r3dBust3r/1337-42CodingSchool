@@ -286,9 +286,9 @@ class FlyInOrganizer:
 
             for nbr in neighbors:
                 if nbr not in visited:
+                    visited.add(nbr)
                     queue.append(nbr)
                     parent[nbr] = queue[0]
-                    visited.add(nbr)
 
                     if nbr == self.end_zone:
                         current = nbr
@@ -301,23 +301,23 @@ class FlyInOrganizer:
                         
             queue.popleft()
 
-        return None
+        return None    
 
 
 
 def main():
-    parser = Parser('maps/hard/02_capacity_hell.txt')
+    parser = Parser('maps/medium/01_dead_end_trap.txt')
     parser.parse()
     _map = parser.get_map()
 
 
     # DEB
-    parser.print_zones()
+    # parser.print_zones()
     # DEB
 
 
     # try:
-    #     parser = Parser('maps/hard/02_capacity_hell.txt')
+    #     parser = Parser('maps/medium/01_dead_end_trap.txt')
     #     parser.parse()
     # except ValueError as e:
     #     print(e)
