@@ -4,6 +4,9 @@ from zone import Zone
 from connection import Connection
 from graph import Graph
 from collections import deque
+from itertools import count
+import heapq
+
 
 
 class ZoneMetadata(BaseModel):
@@ -305,8 +308,74 @@ class FlyInOrganizer:
 
 
 
+    def find_path(self):
+        start = self.start_zone
+        queue  = [start]
+        visited = set()
+        visited.add(start)
+
+        path = []
+        parent = {}
+
+        while queue:
+            current = queue[0]
+            visited.add(current)
+
+            neighbors = current.neighbors
+            for nbr in neighbors:
+                if nbr not in visited:
+                    queue.append(nbr)
+                    parent[nbr] = queue[0]
+                    if nbr == self.end_zone:
+                        while nbr != self.start_zone:
+                            path.append(nbr)
+                            nbr = parent[nbr]
+                        path.append(start)
+                        return path[::-1]
+
+            queue.pop(0)
+        return None
+
+
+
+    def dijkstra_path_finder(self) -> list[Zone] | None:
+        dist: dict[Zone, float] = {self.start_zone: 0}
+        parent: dict[Zone, Zone] = {}
+
+        counter = count()
+        heap: list[tuple[float, int, Zone]] = [(0, next(counter), self.start_zone)]
+
+        path: list[Zone] = []
+
+        while heap:
+            current_cost = heap[0][0]
+            current_zone = heap[0][2]
+
+            for nbr in current_zone.neighbors:
+                new_cost = current_cost + nbr.move_cost
+
+                if new_cost < dist.get(nbr, float('inf')):
+                    dist[nbr] = new_cost
+                    heapq.heappush(heap, (new_cost, next(counter), nbr))
+                    parent[nbr] = current_zone
+
+                    if nbr == self.end_zone:
+                        current = nbr
+                        while current != self.start_zone:
+                            path.append(current)
+                            current = parent[current]
+
+                        path.append(self.start_zone)
+                        return path[::-1]
+
+            heapq.heappop(heap)
+
+        return None
+
+
+
 def main():
-    parser = Parser('maps/medium/01_dead_end_trap.txt')
+    parser = Parser('maps/medium/03_priority_puzzle.txt')
     parser.parse()
     _map = parser.get_map()
 
@@ -317,7 +386,7 @@ def main():
 
 
     # try:
-    #     parser = Parser('maps/medium/01_dead_end_trap.txt')
+    #     parser = Parser('maps/medium/03_priority_puzzle.txt')
     #     parser.parse()
     # except ValueError as e:
     #     print(e)
@@ -332,11 +401,13 @@ def main():
 
     flyin = FlyInOrganizer(parser.zones, parser.connections)
     flyin.make_graph()
+
+
     for zone in flyin.zones:
         print(zone)
 
 
-    path = flyin.find_path()
+    path = flyin.dijkstra_path_finder()
 
 
     # DEB
