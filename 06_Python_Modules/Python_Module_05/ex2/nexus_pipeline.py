@@ -9,7 +9,7 @@ class ProcessingStage(Protocol):
 
 class InputStage:
     def process(self, data: Any) -> Any:
-        return "Stage 1: Input validation and parsing"
+        """Stage 1: Input validation and parsing"""
         if data is None:
             raise ValueError("Invalid data")
         return data
@@ -17,13 +17,13 @@ class InputStage:
 
 class TransformStage:
     def process(self, data: Any) -> Any:
-        return "Stage 2: Data transformation and enrichment"
+        """Stage 2: Data transformation and enrichment"""
         return data
 
 
 class OutputStage:
     def process(self, data: Any) -> Any:
-        return "Stage 3: Output formatting and delivery"
+        """Stage 3: Output formatting and delivery"""
         return data
 
 
