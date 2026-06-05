@@ -2,10 +2,7 @@ from pydantic import BaseModel, ValidationError, Field
 from typing import Literal, Dict, Optional
 from zone import Zone
 from connection import Connection
-from graph import Graph
-from collections import deque
-from itertools import count
-import heapq
+from drone import Drone
 
 
 
@@ -16,7 +13,7 @@ class ZoneMetadata(BaseModel):
 
 
 class ZoneModel(BaseModel):
-    type: Literal['start_hub', 'hub', 'end_hub']
+    hub_type: Literal['start_hub', 'hub', 'end_hub']
     name: str = Field(min_length=1, max_length=250)
     x: int
     y: int
@@ -71,16 +68,6 @@ class Parser:
         return extracted
 
 
-    def print_zones(self):
-        for z in self.zones:
-            print(z)
-
-
-    def print_connections(self):
-        for c in self.connections:
-            print(c)
-
-
     def parse(self):
         for line in self.maps:
             line = line.strip()
@@ -130,7 +117,7 @@ class Parser:
 
 
                 self.zones.append({
-                    'type': key,
+                    'hub_type': key,
                     'name': zone_name,
                     'x': zone_x,
                     'y': zone_y,
@@ -175,7 +162,7 @@ class Parser:
         }
 
 
-class Validate:
+class Validator:
     def __init__(self, _map):
         self._map = _map
         self.validated_zones = []
@@ -203,20 +190,20 @@ class Validate:
             raise ValueError('nb_drones must be positive!')
 
 
-class FlyInOrganizer:
-    def __init__(self, zones, connections):
+class Graph:
+    def __init__(self, zones, connections, nb_drones):
         self.zones       = []
         self.connections = []
-        self.paths       = []
         self.start_zone  = None
         self.end_zone    = None
+        self.drones      = []
 
 
         for zone in zones:
             name        = zone['name']
             x           = zone['x']
             y           = zone['y']
-            type        = zone['type']
+            hub_type    = zone['hub_type']
 
             try: color      = zone['metadata']['color']
             except KeyError: color = 'none'
@@ -232,7 +219,7 @@ class FlyInOrganizer:
                     name=name,
                     x=x,
                     y=y,
-                    type=type,
+                    hub_type=hub_type,
                     color=color,
                     max_drones=max_drones,
                     zone=zone_type
@@ -253,168 +240,90 @@ class FlyInOrganizer:
 
 
         for z in self.zones:
-            if z.type == 'start_hub': self.start_zone = z
-            if z.type == 'end_hub': self.end_zone = z
+            if z.hub_type == 'start_hub': self.start_zone = z
+            if z.hub_type == 'end_hub': self.end_zone = z
+
+        self.drones = [Drone(self.end_zone) for _ in range(nb_drones)]
 
 
+    def create_graph(self):
+        for d in self.drones:
+            d.current_zone = self.start_zone
+            self.start_zone.current_drones.append(d)
 
-    def make_graph(self):
-        Graph(self.connections, self.zones)
+        for conn in self.connections:
+            if '-' not in conn.name:
+                raise ValueError('Invalid connection name!')
+
+            start, end = conn.name.split('-')
+
+            start = self._find_zone_by_name(start)
+            end   = self._find_zone_by_name(end)
+
+            if not start or not end:
+                raise ValueError(f'Invalid connection between ({start} <-> {end})')
+
+            start.add_neighbor(end)
+            end.add_neighbor(start)
 
 
-    def display_zones(self):
+    def _find_zone_by_name(self, name):
         for zone in self.zones:
-            print(zone)
-
-
-    @staticmethod
-    def find_zone_by_name(zones, name):
-        for zone in zones:
             if zone.name == name:
                 return zone
         return None
 
 
-    def find_path(self):
-        visited = set()
-        parent = {}
-
-        queue = deque([self.start_zone])
-        visited.add(self.start_zone)
-
-        path = []
-
-        while queue:
-            neighbors = queue[0].neighbors
-
-            for nbr in neighbors:
-                if nbr not in visited:
-                    visited.add(nbr)
-                    queue.append(nbr)
-                    parent[nbr] = queue[0]
-
-                    if nbr == self.end_zone:
-                        current = nbr
-                        while current != self.start_zone:
-                            path.append(current)
-                            current = parent[current]
-
-                        path.append(self.start_zone)
-                        return path[::-1]
-                        
-            queue.popleft()
-
-        return None    
-
-
-
-    def find_path(self):
-        start = self.start_zone
-        queue  = [start]
-        visited = set()
-        visited.add(start)
-
-        path = []
-        parent = {}
-
-        while queue:
-            current = queue[0]
-            visited.add(current)
-
-            neighbors = current.neighbors
-            for nbr in neighbors:
-                if nbr not in visited:
-                    queue.append(nbr)
-                    parent[nbr] = queue[0]
-                    if nbr == self.end_zone:
-                        while nbr != self.start_zone:
-                            path.append(nbr)
-                            nbr = parent[nbr]
-                        path.append(start)
-                        return path[::-1]
-
-            queue.pop(0)
-        return None
-
-
-
-    def dijkstra_path_finder(self) -> list[Zone] | None:
-        dist: dict[Zone, float] = {self.start_zone: 0}
-        parent: dict[Zone, Zone] = {}
-
-        counter = count()
-        heap: list[tuple[float, int, Zone]] = [(0, next(counter), self.start_zone)]
-
-        path: list[Zone] = []
-
-        while heap:
-            current_cost = heap[0][0]
-            current_zone = heap[0][2]
-
-            for nbr in current_zone.neighbors:
-                new_cost = current_cost + nbr.move_cost
-
-                if new_cost < dist.get(nbr, float('inf')):
-                    dist[nbr] = new_cost
-                    heapq.heappush(heap, (new_cost, next(counter), nbr))
-                    parent[nbr] = current_zone
-
-                    if nbr == self.end_zone:
-                        current = nbr
-                        while current != self.start_zone:
-                            path.append(current)
-                            current = parent[current]
-
-                        path.append(self.start_zone)
-                        return path[::-1]
-
-            heapq.heappop(heap)
-
-        return None
-
-
 
 def main():
-    parser = Parser('maps/medium/03_priority_puzzle.txt')
-    parser.parse()
-    _map = parser.get_map()
-
-
-    # DEB
-    # parser.print_zones()
-    # DEB
-
-
-    # try:
-    #     parser = Parser('maps/medium/03_priority_puzzle.txt')
-    #     parser.parse()
-    # except ValueError as e:
-    #     print(e)
-
+    try:
+        parser = Parser('maps/medium/03_priority_puzzle.txt')
+        parser.parse()
+        _map = parser.get_map()
+    except ValueError as e:
+        print(e)
+        exit(1)
 
     try:
-        validator = Validate(_map)
+        validator = Validator(_map)
         validator.validate()
     except ValidationError as e:
         print(f"Pydantic error: {e.errors()[0]['msg']}")
+        exit(1)
 
 
-    flyin = FlyInOrganizer(parser.zones, parser.connections)
-    flyin.make_graph()
+    graph = Graph(
+        parser.zones,
+        parser.connections,
+        parser.nb_drones
+    )
+
+    try: graph.create_graph()
+    except ValueError as e:
+        print(e)
+        exit(1)
 
 
-    for zone in flyin.zones:
-        print(zone)
 
+    for z in graph.zones: print(z)
+    print()
 
-    path = flyin.dijkstra_path_finder()
+    for c in graph.connections: print(c)
+    print()
 
+    print(graph.start_zone)
+    print(graph.end_zone)
 
-    # DEB
-    print('\nPATH: ', end='')
-    if path:
-        print(' -> '.join([z.name for z in path]))
+    print()
+    for d in graph.drones:
+        print(
+            f'Drone ({d.id}) in: {d.current_zone.name},'
+            f' destination: {d.end_zone.name}, deliverd: {d.delivered}'
+        )
+    print()
 
+    for z in graph.zones:
+        print(f'zone: {z.name} has ({", ".join([n.name for n in z.neighbors])}) neighbors')
 
 
 if __name__ == "__main__":

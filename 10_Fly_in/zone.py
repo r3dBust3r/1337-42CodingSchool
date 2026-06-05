@@ -1,14 +1,15 @@
 class Zone:
-    def __init__(self, name, x, y, color='none', max_drones=1, type='hub', zone='normal'):
+    def __init__(self, name, x, y, color='none', max_drones=1, hub_type='hub', zone='normal'):
         self.name       = name
         self.x          = x
         self.y          = y
         self.color      = color
         self.max_drones = max_drones
-        self.type       = type
+        self.hub_type   = hub_type
         self.zone       = zone
         self.neighbors  = []
         self.move_cost  = 0
+        self.current_drones = []
         
         if   zone in ['normal', 'priority']:    self.move_cost = 1
         elif zone == 'restricted':              self.move_cost = 2
@@ -27,3 +28,8 @@ class Zone:
     def add_neighbor(self, neighbor):
         if neighbor not in self.neighbors:
             self.neighbors.append(neighbor)
+
+
+    def move_drone(self, drone, dest):
+        self.current_drones.remove(drone)
+        dest.current_drones.append(drone)
