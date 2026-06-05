@@ -1,8 +1,9 @@
-from pydantic import BaseModel, ValidationError, Field
+from pydantic import BaseModel, ValidationError, Field  # type: ignore
 from typing import Literal, Dict, Optional
 from zone import Zone
 from connection import Connection
 from drone import Drone
+from collections import deque
 
 
 
@@ -274,6 +275,47 @@ class Graph:
         return None
 
 
+    def bfs_fastest_path(self):
+        queue = deque()
+        visited = set()
+        parent = {self.start_zone: None}
+
+        queue.append(self.start_zone)
+        visited.add(self.start_zone)
+
+        path = []
+
+        while queue:
+            current = queue[0]
+
+            neighbors = current.neighbors
+
+            for neighbor in neighbors:
+                if neighbor in visited:
+                    continue
+
+                if neighbor.zone == 'blocked':
+                    continue
+
+                parent[neighbor] = current
+
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+                if neighbor == self.end_zone:
+                    current = neighbor
+                    while current:
+                        path.append(current)
+                        current = parent[current]
+
+                    return path[::-1]
+
+            queue.popleft()
+
+        return None
+
+
+
 
 def main():
     try:
@@ -304,26 +346,33 @@ def main():
         exit(1)
 
 
+    fastest_path = graph.bfs_fastest_path()
+    print(' -> '.join( [z.name for z in fastest_path] ))
 
-    for z in graph.zones: print(z)
-    print()
 
-    for c in graph.connections: print(c)
-    print()
 
-    print(graph.start_zone)
-    print(graph.end_zone)
+    # ---
 
-    print()
-    for d in graph.drones:
-        print(
-            f'Drone ({d.id}) in: {d.current_zone.name},'
-            f' destination: {d.end_zone.name}, deliverd: {d.delivered}'
-        )
-    print()
+    # for z in graph.zones: print(z)
+    # print()
 
-    for z in graph.zones:
-        print(f'zone: {z.name} has ({", ".join([n.name for n in z.neighbors])}) neighbors')
+    # for c in graph.connections: print(c)
+    # print()
+
+    # print(graph.start_zone)
+    # print(graph.end_zone)
+
+    # print()
+    # for d in graph.drones:
+    #     print(
+    #         f'Drone ({d.id}) in: {d.current_zone.name},'
+    #         f' destination: {d.end_zone.name}, deliverd: {d.delivered}'
+    #     )
+    # print()
+
+    # for z in graph.zones: print(f'zone: {z.name} has ({", ".join([n.name for n in z.neighbors])}) neighbors')
+
+    # ---
 
 
 if __name__ == "__main__":
