@@ -318,7 +318,7 @@ class Graph:
         return None
 
 
-    def dijkstra_fastest_path(self):
+    def dijkstra_fastest_path(self, remaining_capacity):
         heap = []
         counter = count()
 
@@ -348,6 +348,10 @@ class Graph:
                 if neighbor.zone == 'blocked':
                     continue
 
+                if neighbor != self.end_zone:
+                    if remaining_capacity.get(neighbor, 0) <= 0:
+                        continue
+
                 new_cost = current_cost + neighbor.move_cost
 
                 if neighbor not in dist or new_cost < dist[neighbor]:
@@ -356,6 +360,20 @@ class Graph:
                     heapq.heappush(heap, (new_cost, next(counter), neighbor))
 
         return None
+
+
+    def find_multiple_paths(self):
+        remaining_capacity = {z: z.max_drones for z in self.zones}
+
+        for d in self.drones:
+            path = self.dijkstra_fastest_path(remaining_capacity)
+            if path:
+                d.path = path
+                for z in path:
+                    if z in [self.start_zone, self.end_zone]:
+                        continue
+
+                    remaining_capacity[z] -= 1
 
 
 
@@ -388,10 +406,13 @@ def main():
         exit(1)
 
 
-    fastest_path = graph.dijkstra_fastest_path()
-    print(' -> '.join( [z.name for z in fastest_path] ))
+    # fastest_path = graph.dijkstra_fastest_path()
+    # print(' -> '.join( [z.name for z in fastest_path] ))
 
+    graph.find_multiple_paths()
 
+    for d in graph.drones:
+        print(f'{d.id}: {" -> ".join([z.name for z in d.path])}')
 
     # ---
 
