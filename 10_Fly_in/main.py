@@ -4,6 +4,8 @@ from zone import Zone
 from connection import Connection
 from drone import Drone
 from collections import deque
+from itertools import count
+import heapq
 
 
 
@@ -276,12 +278,13 @@ class Graph:
 
 
     def bfs_fastest_path(self):
-        queue = deque()
+        queue   = deque()
         visited = set()
-        parent = {self.start_zone: None}
+        parent  = dict()
 
         queue.append(self.start_zone)
         visited.add(self.start_zone)
+        parent[self.start_zone] = None
 
         path = []
 
@@ -315,6 +318,45 @@ class Graph:
         return None
 
 
+    def dijkstra_fastest_path(self):
+        heap = []
+        counter = count()
+
+        visited = set()
+        parent = {self.start_zone: None}
+        dist = {self.start_zone: 0}
+
+        heapq.heappush(heap, (0, next(counter), self.start_zone))
+
+        while heap:
+            current_cost, _, current = heapq.heappop(heap)
+
+            if current in visited:
+                continue
+
+            visited.add(current)
+
+            if current == self.end_zone:
+                path = []
+                while current:
+                    path.append(current)
+                    current = parent[current]
+                return path[::-1]
+
+            for neighbor in current.neighbors:
+
+                if neighbor.zone == 'blocked':
+                    continue
+
+                new_cost = current_cost + neighbor.move_cost
+
+                if neighbor not in dist or new_cost < dist[neighbor]:
+                    dist[neighbor] = new_cost
+                    parent[neighbor] = current
+                    heapq.heappush(heap, (new_cost, next(counter), neighbor))
+
+        return None
+
 
 
 def main():
@@ -346,7 +388,7 @@ def main():
         exit(1)
 
 
-    fastest_path = graph.bfs_fastest_path()
+    fastest_path = graph.dijkstra_fastest_path()
     print(' -> '.join( [z.name for z in fastest_path] ))
 
 
