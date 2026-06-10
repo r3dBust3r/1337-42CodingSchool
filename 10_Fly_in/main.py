@@ -377,6 +377,74 @@ class Graph:
 
 
 
+class Simulator:
+    def __init__(self, graph):
+        self.graph = graph
+        self.turn  = 0
+
+
+    def run(self):
+        while not self._all_delivered():
+            self.turn += 1
+            movements = []
+            moving_out = []
+
+
+            for drone in self.graph.drones:
+                if drone.delivered:
+                    continue
+
+
+                next_zone = self._get_next_zone(drone)
+
+
+                if next_zone is None:
+                    continue
+
+                if self._can_move(next_zone, moving_out):
+                    moving_out.append(drone)
+
+            for drone in moving_out:
+                if drone.current_zone == self.graph.end_zone:
+                    continue
+
+                curr_zone = drone.current_zone
+                next_zone = self._get_next_zone(drone)
+
+                drone.current_zone = next_zone
+                drone.path_index += 1
+
+                curr_zone.current_drones.remove(drone)
+                next_zone.current_drones.append(drone)
+
+                movements.append(f'{drone.id}-{next_zone.name}')
+
+            if movements:
+                print(' '.join(movements))
+
+
+        print(f'\nTotal turns: {self.turn}') # DEB
+
+
+    def _get_next_zone(self, drone):
+        if drone.path_index + 1 >= len(drone.path):
+            return None
+        return drone.path[drone.path_index + 1]
+
+
+    def _can_move(self, next_zone, moving_out):
+        drones_leaving = len([d for d in next_zone.current_drones if d in moving_out])
+        available = next_zone.max_drones - len(next_zone.current_drones) + drones_leaving
+        return available > 0
+
+
+    def _all_delivered(self):
+        for d in self.graph.drones:
+            if not d.delivered: return False
+        return True
+
+
+
 def main():
     try:
         parser = Parser('maps/medium/03_priority_puzzle.txt')
@@ -406,11 +474,12 @@ def main():
         exit(1)
 
 
-    # fastest_path = graph.dijkstra_fastest_path()
-    # print(' -> '.join( [z.name for z in fastest_path] ))
-
     graph.find_multiple_paths()
+    simulator = Simulator(graph)
+    simulator.run()
 
+
+    print('\nDrones paths:')
     for d in graph.drones:
         print(f'{d.id}: {" -> ".join([z.name for z in d.path])}')
 
