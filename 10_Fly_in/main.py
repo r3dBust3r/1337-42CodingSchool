@@ -376,6 +376,14 @@ class Graph:
                     remaining_capacity[z] -= 1
 
 
+    def find_path_for_drone(self):
+        remaining_capacity = {}
+        for z in self.zones:
+            remaining_capacity[z] = z.max_drones - len(z.current_drones)
+
+        return self.dijkstra_fastest_path(remaining_capacity)
+
+
 
 class Simulator:
     def __init__(self, graph):
@@ -388,11 +396,17 @@ class Simulator:
             self.turn += 1
             movements = []
             moving_out = []
-
+            moving_in  = []
 
             for drone in self.graph.drones:
                 if drone.delivered:
                     continue
+
+                if not drone.path:
+                    path = self.graph.find_path_for_drone()
+                    if path:
+                        drone.path = path
+                        drone.path_index = 0
 
 
                 next_zone = self._get_next_zone(drone)
@@ -401,8 +415,12 @@ class Simulator:
                 if next_zone is None:
                     continue
 
+                already_entering = moving_in.count(next_zone)
+
                 if self._can_move(next_zone, moving_out):
-                    moving_out.append(drone)
+                    if already_entering < next_zone.max_drones:
+                                moving_out.append(drone)
+                                moving_in.append(next_zone)
 
             for drone in moving_out:
                 if drone.current_zone == self.graph.end_zone:
