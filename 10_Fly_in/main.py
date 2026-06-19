@@ -6,6 +6,7 @@ from drone import Drone
 from collections import deque
 from itertools import count
 import heapq
+from sys import argv
 
 
 
@@ -402,6 +403,26 @@ class Simulator:
                 if drone.delivered:
                     continue
 
+                if drone.in_transit:
+                    drone.transit_turns_left -= 1
+
+                    if drone.transit_turns_left == 0:
+                        next_zone = self._get_next_zone(drone)
+
+                        connection = self._find_connection(drone.current_zone.name, next_zone.name)
+                        connection.current_drones.remove(drone)
+                        next_zone.incoming_drones.remove(drone)
+                        next_zone.current_drones.append(drone)
+
+                        drone.in_transit = False
+                        drone.current_zone = next_zone
+                        drone.path_index += 1
+
+                        movements.append(f'{drone.id}-{next_zone.name}')
+
+                    continue
+
+
                 if not drone.path:
                     path = self.graph.find_path_for_drone()
                     if path:
@@ -429,19 +450,40 @@ class Simulator:
                 curr_zone = drone.current_zone
                 next_zone = self._get_next_zone(drone)
 
-                drone.current_zone = next_zone
-                drone.path_index += 1
+                if next_zone.zone == 'restricted':
+                    connection = self._find_connection(curr_zone.name, next_zone.name)
 
-                curr_zone.current_drones.remove(drone)
-                next_zone.current_drones.append(drone)
+                    if len(connection.current_drones) < connection.max_link_capacity:
+                        curr_zone.current_drones.remove(drone)
+                        next_zone.incoming_drones.append(drone)
+                        connection.current_drones.append(drone)
 
-                movements.append(f'{drone.id}-{next_zone.name}')
+                        drone.in_transit = True
+                        drone.transit_turns_left = 1
+                        movements.append(f'{drone.id}-{connection.name}')
+
+                else:
+                    curr_zone.current_drones.remove(drone)
+                    next_zone.current_drones.append(drone)
+
+                    drone.current_zone = next_zone
+                    drone.path_index += 1
+
+
+                    movements.append(f'{drone.id}-{next_zone.name}')
 
             if movements:
                 print(' '.join(movements))
 
 
         print(f'\nTotal turns: {self.turn}') # DEB
+
+
+    def _find_connection(self, z1, z2):
+        for c in self.graph.connections:
+            if c.name == f'{z1}-{z2}' or c.name == f'{z2}-{z1}':
+                return c
+        return None
 
 
     def _get_next_zone(self, drone):
@@ -452,7 +494,8 @@ class Simulator:
 
     def _can_move(self, next_zone, moving_out):
         drones_leaving = len([d for d in next_zone.current_drones if d in moving_out])
-        available = next_zone.max_drones - len(next_zone.current_drones) + drones_leaving
+        occupied = len(next_zone.current_drones) + len(next_zone.incoming_drones)
+        available = next_zone.max_drones - occupied + drones_leaving
         return available > 0
 
 
@@ -465,7 +508,8 @@ class Simulator:
 
 def main():
     try:
-        parser = Parser('maps/medium/03_priority_puzzle.txt')
+        # parser = Parser('maps/medium/03_priority_puzzle.txt')
+        parser = Parser(argv[1])
         parser.parse()
         _map = parser.get_map()
     except ValueError as e:
@@ -497,9 +541,9 @@ def main():
     simulator.run()
 
 
-    print('\nDrones paths:')
-    for d in graph.drones:
-        print(f'{d.id}: {" -> ".join([z.name for z in d.path])}')
+    # print('\nDrones paths:')
+    # for d in graph.drones:
+    #     print(f'{d.id}: {" -> ".join([z.name for z in d.path])}')
 
     # ---
 

@@ -10,6 +10,7 @@ class Zone:
         self.neighbors  = []
         self.move_cost  = 0
         self.current_drones = []
+        self.incoming_drones = []
         
         if   zone in ['normal', 'priority']:    self.move_cost = 1
         elif zone == 'restricted':              self.move_cost = 2

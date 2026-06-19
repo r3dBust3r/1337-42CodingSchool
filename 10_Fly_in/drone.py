@@ -6,6 +6,8 @@ class Drone:
         self.path = []
         self.path_index = 0
         self.end_zone = end_zone
+        self.in_transit = False
+        self.transit_turns_left = 0
 
         Drone.d_id += 1
 
