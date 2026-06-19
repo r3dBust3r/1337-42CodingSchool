@@ -393,11 +393,20 @@ class Simulator:
 
 
     def run(self):
+        stuck_counter = 0
+        STUCK_LIMIT = 10000
+
         while not self._all_delivered():
             self.turn += 1
             movements = []
             moving_out = []
             moving_in  = []
+
+            if not movements: stuck_counter += 1
+            else: stuck_counter = 0
+
+            if stuck_counter >= STUCK_LIMIT:
+                raise ValueError('Invalid map!')
 
             for drone in self.graph.drones:
                 if drone.delivered:
@@ -538,7 +547,10 @@ def main():
 
     graph.find_multiple_paths()
     simulator = Simulator(graph)
-    simulator.run()
+    try: simulator.run()
+    except ValueError as e:
+        print(e)
+        exit(1)
 
 
     # print('\nDrones paths:')
