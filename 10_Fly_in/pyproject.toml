@@ -5,6 +5,7 @@ description = "Drone routing system that navigates multiple drones through conne
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "arcade>=3.3.3",
     "flake8>=7.3.0",
     "mypy>=1.20.0",
     "pydantic>=2.13.3",
