@@ -12,9 +12,10 @@ class Zone:
         self.current_drones = []
         self.incoming_drones = []
         
-        if   zone in ['normal', 'priority']:    self.move_cost = 1
-        elif zone == 'restricted':              self.move_cost = 2
-        elif zone == 'blocked':                 self.move_cost = 9e9
+        if zone == 'normal': self.move_cost = 1.0
+        elif zone == 'priority': self.move_cost = 0.999
+        elif zone == 'restricted': self.move_cost = 2.0
+        elif zone == 'blocked': self.move_cost = float('INF')
 
 
     def __str__(self):
