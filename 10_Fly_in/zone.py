@@ -30,8 +30,3 @@ class Zone:
     def add_neighbor(self, neighbor):
         if neighbor not in self.neighbors:
             self.neighbors.append(neighbor)
-
-
-    def move_drone(self, drone, dest):
-        self.current_drones.remove(drone)
-        dest.current_drones.append(drone)

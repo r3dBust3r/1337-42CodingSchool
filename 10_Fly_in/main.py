@@ -306,6 +306,68 @@ class Graph:
         return all_paths
 
 
+class Simulator:
+    def __init__(self, graph, paths):
+        self.graph = graph
+        self.paths = paths
+        self.turns = []
+
+        for d in self.graph.drones:
+            d_id = int(d.id.replace('D', ''))
+            d.path = paths[d_id % len(paths)]
+
+
+    def run(self):
+        while not self._all_delivered():
+            turns = ''
+
+            for d in self.graph.drones:
+
+                if d.delivered:
+                    continue
+
+                cur_zone = d.path[1][d.path_index]
+                nxt_zone = d.path[1][d.path_index + 1]
+
+                if len(nxt_zone.current_drones) == nxt_zone.max_drones:
+                    continue
+
+                self._move_drone(d, cur_zone, nxt_zone)
+                turns += f'{d.id}-{nxt_zone.name} '
+
+            self.turns.append(turns)
+
+
+        self._print_turns()
+
+
+    def _all_delivered(self):
+        return len(self.graph.drones) == len(self.graph.end_zone.current_drones)
+
+
+    def _move_drone(self, d, cur, nxt):
+        d.path_index += 1
+        d.current_zone = nxt
+
+        cur.current_drones.remove(d)
+        nxt.current_drones.append(d)
+
+
+    def _get_conn(self, z1, z2):
+        for conn in self.graph.connections:
+            if conn.name == f'{z1.name}-{z2.name}' or conn.name == f'{z2.name}-{z1.name}':
+                return conn
+        return None
+
+
+    def _print_turns(self):
+        for t in self.turns:
+            print(t)
+
+        print(f'\nTotal turns: {len(self.turns)}')
+
+
+
 
 def main():
     try:
@@ -337,6 +399,9 @@ def main():
 
 
     paths = graph.find_multiple_paths()
+    simulator = Simulator(graph, paths)
+    simulator.run()
+
 
     # for p in paths:
     #     c, p = p
