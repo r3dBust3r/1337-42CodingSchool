@@ -7,6 +7,7 @@ from collections import deque
 from itertools import count
 import heapq
 from sys import argv
+import arcade # type: ignore
 
 
 
@@ -384,8 +385,6 @@ class Simulator:
             self.turns.append(turns)
 
 
-        self._print_turns()
-
 
     def _all_delivered(self):
         return len(self.graph.drones) == len(self.graph.end_zone.current_drones)
@@ -408,12 +407,79 @@ class Simulator:
         return None
 
 
-    def _print_turns(self):
+    def display_turns(self):
         for t in self.turns:
             print(t)
 
         print(f'\nTotal turns: {len(self.turns)}')
 
+
+class Visualizer(arcade.View):
+    def __init__(self, graph, turns):
+        self.graph = graph
+        self.turns = turns
+        self.scale = 300
+        self.zone_size = 25
+
+        super().__init__()
+        self.background_color = arcade.color.BURLYWOOD
+
+
+    def on_draw(self):
+        self.clear()
+
+        # Drawing Connections
+        for conn in self.graph.connections:
+            z1, z2 = conn.name.split('-')
+
+            z1 = self._get_zone(z1)
+            z2 = self._get_zone(z2)
+
+            z1_x = z1.x * self.scale + self.zone_size * 2
+            z1_y = z1.y * self.scale - self.zone_size * 2
+
+            z2_x = z2.x * self.scale + self.zone_size * 2
+            z2_y = z2.y * self.scale - self.zone_size * 2
+
+            arcade.draw_line(
+                z1_x + self.zone_size,
+                z1_y + 960 - self.zone_size,
+                z2_x + self.zone_size,
+                z2_y + 960 - self.zone_size,
+                arcade.color.BLACK,
+                4
+            )
+
+        # Drawing Zones
+        for z in self.graph.zones:
+            x = z.x * self.scale + self.zone_size * 2
+            y = z.y * self.scale - self.zone_size * 2
+
+            arcade.draw_circle_filled(
+                x + self.zone_size,
+                y + 960 - self.zone_size,
+                self.zone_size,
+                arcade.color.BLACK
+            )
+
+            arcade.draw_text(
+                    z.name.upper(),
+                    x + self.zone_size - len(z.name) * 5,
+                    y + 960 - self.zone_size * 2.8,
+                    arcade.color.BLACK,
+                    12
+            )
+
+
+    def on_update(self, delta_time):
+        self.delta_time = delta_time
+
+
+    def _get_zone(self, name):
+        for zone in self.graph.zones:
+            if zone.name == name:
+                return zone
+        return None
 
 
 
@@ -449,6 +515,13 @@ def main():
     paths = graph.find_multiple_paths()
     simulator = Simulator(graph, paths)
     simulator.run()
+    # simulator.display_turns()
+
+
+    window = arcade.Window(1920, 960, "Fly-in Simulation")
+    visualizer = Visualizer(graph, simulator.turns)
+    window.show_view(visualizer)
+    arcade.run()
 
 
     # for p in paths:
