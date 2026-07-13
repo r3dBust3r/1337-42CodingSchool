@@ -8,6 +8,7 @@ from itertools import count
 import heapq
 from sys import argv
 import arcade # type: ignore
+from time import sleep
 from warnings import filterwarnings
 
 filterwarnings('ignore')
@@ -426,6 +427,8 @@ class Visualizer(arcade.View):
         self.current_turn = 0
         self.current_pixel_position = {}
         self.target_pixel_position = {}
+        self.delay = 1
+        self.started = False
 
         self._init_drones_pos()
         self._load_turn_targets()
@@ -502,6 +505,12 @@ class Visualizer(arcade.View):
 
 
     def on_update(self, delta_time):
+        if not self.started:
+            self.delay -= delta_time
+            if self.delay <= 0:
+                self.started = True
+            return
+
         self.progress += delta_time
 
         if self.progress >= 1.0:
