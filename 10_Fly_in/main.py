@@ -382,7 +382,7 @@ class Simulator:
                         turns += f'{d.id}-{conn.name} '
 
 
-            self.turns.append(turns)
+            self.turns.append(turns.strip())
 
 
 
@@ -418,11 +418,24 @@ class Visualizer(arcade.View):
     def __init__(self, graph, turns):
         self.graph = graph
         self.turns = turns
-        self.scale = 300
-        self.zone_size = 25
+        self.scale = 400
+        self.zone_size = 50
+        self.progress = 0
+        self.current_turn = 0
+        self.current_pixel_position = {}
+        self.target_pixel_position = {}
+
+        self._init_drones_pos()
+        self._load_turn_targets()
 
         super().__init__()
-        self.background_color = arcade.color.BURLYWOOD
+        self.background_color = arcade.color.BEAU_BLUE
+
+
+    def _init_drones_pos(self):
+        for d in self.graph.drones:
+            self.current_pixel_position[d] = self._calc_zone_pos(self.graph.start_zone)
+            self.target_pixel_position[d] = self._calc_zone_pos(self.graph.start_zone)
 
 
     def on_draw(self):
@@ -435,44 +448,91 @@ class Visualizer(arcade.View):
             z1 = self._get_zone(z1)
             z2 = self._get_zone(z2)
 
-            z1_x = z1.x * self.scale + self.zone_size * 2
-            z1_y = z1.y * self.scale - self.zone_size * 2
-
-            z2_x = z2.x * self.scale + self.zone_size * 2
-            z2_y = z2.y * self.scale - self.zone_size * 2
+            z1_x, z1_y = self._calc_zone_pos(z1)
+            z2_x, z2_y = self._calc_zone_pos(z2)
 
             arcade.draw_line(
-                z1_x + self.zone_size,
-                z1_y + 960 - self.zone_size,
-                z2_x + self.zone_size,
-                z2_y + 960 - self.zone_size,
+                z1_x + 10,
+                z1_y + 960,
+                z2_x + 10,
+                z2_y + 960,
                 arcade.color.BLACK,
-                4
+                1
             )
 
         # Drawing Zones
         for z in self.graph.zones:
-            x = z.x * self.scale + self.zone_size * 2
-            y = z.y * self.scale - self.zone_size * 2
+            x, y = self._calc_zone_pos(z)
 
             arcade.draw_circle_filled(
-                x + self.zone_size,
-                y + 960 - self.zone_size,
+                x + 10,
+                y + 960,
                 self.zone_size,
+                arcade.color.BRICK_RED
+            )
+
+            arcade.draw_text(
+                z.name.upper(),
+                x + 10 - len(z.name) * 5,
+                y + 960 - self.zone_size * 1.5,
+                arcade.color.BLACK,
+                12
+            )
+
+        # Drawing drones
+        for d in self.graph.drones:
+            x, y = self.current_pixel_position[d]
+
+            arcade.draw_circle_filled(
+                x + 10,
+                y + 960,
+                20,
                 arcade.color.BLACK
             )
 
             arcade.draw_text(
-                    z.name.upper(),
-                    x + self.zone_size - len(z.name) * 5,
-                    y + 960 - self.zone_size * 2.8,
-                    arcade.color.BLACK,
-                    12
+                d.id,
+                x,
+                y + 954,
+                arcade.color.WHITE,
+                12
             )
 
 
     def on_update(self, delta_time):
-        self.delta_time = delta_time
+        self.progress += delta_time
+
+        if self.progress >= 1.0:
+            for d in self.graph.drones:
+                self.current_pixel_position[d] = self.target_pixel_position[d]
+
+            self.progress = 0
+
+            if self.current_turn < len(self.turns) - 1:
+                self.current_turn += 1
+                self._load_turn_targets()
+
+        for d in self.graph.drones:
+            sx, sy = self.current_pixel_position[d]
+            ex, ey = self.target_pixel_position[d]
+            lx = sx + (ex - sx) * self.progress
+            ly = sy + (ey - sy) * self.progress
+            self.current_pixel_position[d] = (lx, ly)
+
+
+    def _load_turn_targets(self):
+        current_turn = self.turns[self.current_turn].split(' ')
+        for move in current_turn:
+            if move.count('-') == 1:
+                drone, target = move.split('-')
+                drone = self._get_drone(drone)
+                target = self._get_zone(target)
+                self.target_pixel_position[drone] = self._calc_zone_pos(target)
+            else:
+                drone, z1, z2 = move.split('-')
+                drone = self._get_drone(drone)
+                conn_name = self._get_connection(z1, z2)
+                self.target_pixel_position[drone] = self._calc_conn_pos(conn_name)
 
 
     def _get_zone(self, name):
@@ -480,6 +540,35 @@ class Visualizer(arcade.View):
             if zone.name == name:
                 return zone
         return None
+
+
+    def _get_connection(self, z1, z2):
+        for conn in self.graph.connections:
+            if conn.name in [f'{z1}-{z2}', f'{z2}-{z1}']:
+                return conn
+        return None
+
+
+    def _get_drone(self, drone_id):
+        for drone in self.graph.drones:
+            if drone.id == drone_id:
+                return drone
+        return None
+
+
+    def _calc_zone_pos(self, zone):
+        x = zone.x * self.scale + self.zone_size * 2
+        y = zone.y * self.scale - self.zone_size * 2
+        return x, y
+
+
+    def _calc_conn_pos(self, conn):
+        z1, z2 = conn.name.split('-')
+        z1 = self._get_zone(z1)
+        z2 = self._get_zone(z2)
+        x1, y1 = self._calc_zone_pos(z1)
+        x2, y2 = self._calc_zone_pos(z2)
+        return (x1 + x2) / 2, (y1 + y2) / 2
 
 
 
@@ -515,7 +604,7 @@ def main():
     paths = graph.find_multiple_paths()
     simulator = Simulator(graph, paths)
     simulator.run()
-    # simulator.display_turns()
+    simulator.display_turns()
 
 
     window = arcade.Window(1920, 960, "Fly-in Simulation")
