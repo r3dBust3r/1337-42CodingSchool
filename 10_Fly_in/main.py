@@ -8,7 +8,9 @@ from itertools import count
 import heapq
 from sys import argv
 import arcade # type: ignore
+from warnings import filterwarnings
 
+filterwarnings('ignore')
 
 
 class ZoneMetadata(BaseModel):
