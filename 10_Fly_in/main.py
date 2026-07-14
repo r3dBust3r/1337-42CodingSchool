@@ -429,6 +429,8 @@ class Visualizer(arcade.View):
         self.target_pixel_position = {}
         self.delay = 1
         self.started = False
+        self.pause = False
+        self.key_pressed = ''
 
         self._init_drones_pos()
         self._load_turn_targets()
@@ -503,8 +505,46 @@ class Visualizer(arcade.View):
                 12
             )
 
+        # Drawing control
+        self._draw_controls()
+
+
+    def _draw_controls(self):
+        arcade.draw_text("CONTROLS", 20, 100, arcade.color.BLACK, 16)
+        arcade.draw_text("__________", 20, 90, arcade.color.BLACK, 16)
+        arcade.draw_text("[SPACE]", 20, 60, arcade.color.BLACK, 12)
+        arcade.draw_text("[R]", 20, 40, arcade.color.BLACK, 12)
+        arcade.draw_text("[Q] or [ESC]", 20, 20, arcade.color.BLACK, 12)
+
+        arcade.draw_text("." * 21, 90, 60, arcade.color.BLACK, 12)
+        arcade.draw_text("." * 29, 50, 40, arcade.color.BLACK, 12)
+        arcade.draw_text("." * 15, 120, 20, arcade.color.BLACK, 12)
+
+        arcade.draw_text("Pause Animation", 200, 60, arcade.color.BLACK, 12)
+        arcade.draw_text("Reset Animation", 200, 40, arcade.color.BLACK, 12)
+        arcade.draw_text("Quit", 200, 20, arcade.color.BLACK, 12)
+
+        arcade.draw_text(self.key_pressed, 500, 20, arcade.color.BLACK, 20)
+
+
+    def on_key_press(self, key, modifiers):
+        if key in [arcade.key.Q, arcade.key.ESCAPE]:
+            arcade.exit()
+
+        if key == arcade.key.SPACE:
+            self.pause = not self.pause
+            self.key_pressed = 'SPACE'
+
+        if key == arcade.key.R:
+            self._init_drones_pos()
+            self.current_turn = -1
+            self.key_pressed = 'R'
+
 
     def on_update(self, delta_time):
+        if self.pause:
+            return
+
         if not self.started:
             self.delay -= delta_time
             if self.delay <= 0:
