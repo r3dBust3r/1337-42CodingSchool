@@ -8,6 +8,7 @@ from itertools import count
 import heapq
 from sys import argv
 import arcade # type: ignore
+from arcade.camera import Camera2D # type: ignore
 from time import sleep
 from warnings import filterwarnings
 
@@ -431,6 +432,7 @@ class Visualizer(arcade.View):
         self.started = False
         self.pause = False
         self.key_pressed = ''
+        self.camera = Camera2D()
 
         self._init_drones_pos()
         self._load_turn_targets()
@@ -447,6 +449,8 @@ class Visualizer(arcade.View):
 
     def on_draw(self):
         self.clear()
+
+        self.camera.use()
 
         # Drawing Connections
         for conn in self.graph.connections:
@@ -539,6 +543,11 @@ class Visualizer(arcade.View):
             self._init_drones_pos()
             self.current_turn = -1
             self.key_pressed = 'R'
+
+    
+    def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
+        self.camera.zoom += scroll_y * 0.1
+        self.camera.zoom = max(0.2, min(self.camera.zoom, 4.0))
 
 
     def on_update(self, delta_time):
