@@ -546,8 +546,8 @@ class Visualizer(arcade.View):
             arcade.draw_text(f"(SIMULATION FINISHED!)", dx + 120, dy, arcade.color.BLACK, 12)
 
         if self.pause:
-            arcade.draw_lbwh_rectangle_filled(10, 132, 336, 40, arcade.color.AMBER)
-            arcade.draw_text("PAUSED: Press SPACE to Continue", 20, 144, arcade.color.BLACK, 14)
+            arcade.draw_lbwh_rectangle_filled(10, 160, 420, 40, arcade.color.AMBER)
+            arcade.draw_text("PAUSED: Press SPACE to Continue", 30, 172, arcade.color.BLACK, 14)
 
 
     def on_key_press(self, key, modifiers):
