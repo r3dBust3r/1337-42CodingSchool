@@ -8,7 +8,6 @@ from itertools import count
 import heapq
 from sys import argv
 import arcade # type: ignore
-from arcade.camera import Camera2D # type: ignore
 from time import sleep
 from warnings import filterwarnings
 
@@ -431,8 +430,11 @@ class Visualizer(arcade.View):
         self.delay = 1
         self.started = False
         self.pause = False
-        self.key_pressed = ''
-        self.camera = Camera2D()
+        self.WIN_W = 1920
+        self.WIN_H = 960
+        self.is_dragging = False
+        self.camera = arcade.Camera2D()
+        self.fixed_camera = arcade.Camera2D()
 
         self._init_drones_pos()
         self._load_turn_targets()
@@ -464,11 +466,11 @@ class Visualizer(arcade.View):
 
             arcade.draw_line(
                 z1_x + 10,
-                z1_y + 960,
+                z1_y + self.WIN_H,
                 z2_x + 10,
-                z2_y + 960,
+                z2_y + self.WIN_H,
                 arcade.color.BLACK,
-                1
+                3
             )
 
         # Drawing Zones
@@ -477,7 +479,7 @@ class Visualizer(arcade.View):
 
             arcade.draw_circle_filled(
                 x + 10,
-                y + 960,
+                y + self.WIN_H,
                 self.zone_size,
                 arcade.color.BRICK_RED
             )
@@ -485,7 +487,7 @@ class Visualizer(arcade.View):
             arcade.draw_text(
                 z.name.upper(),
                 x + 10 - len(z.name) * 5,
-                y + 960 - self.zone_size * 1.5,
+                y + self.WIN_H - self.zone_size * 1.5,
                 arcade.color.BLACK,
                 12
             )
@@ -496,7 +498,7 @@ class Visualizer(arcade.View):
 
             arcade.draw_circle_filled(
                 x + 10,
-                y + 960,
+                y + self.WIN_H,
                 20,
                 arcade.color.BLACK
             )
@@ -509,26 +511,43 @@ class Visualizer(arcade.View):
                 12
             )
 
-        # Drawing control
-        self._draw_controls()
+        # Drawing text
+        self.fixed_camera.use()
+        self._draw_text()
 
 
-    def _draw_controls(self):
-        arcade.draw_text("CONTROLS", 20, 100, arcade.color.BLACK, 16)
-        arcade.draw_text("__________", 20, 90, arcade.color.BLACK, 16)
-        arcade.draw_text("[SPACE]", 20, 60, arcade.color.BLACK, 12)
-        arcade.draw_text("[R]", 20, 40, arcade.color.BLACK, 12)
-        arcade.draw_text("[Q] or [ESC]", 20, 20, arcade.color.BLACK, 12)
+    def _draw_text(self):
+        arcade.draw_lbwh_rectangle_filled(10, 10, 420, 110, arcade.color.ASH_GREY)
+        arcade.draw_lbwh_rectangle_filled(10, 120, 420, 40, arcade.color.BLACK)
+        arcade.draw_text("CONTROLS", 30, 130, arcade.color.ASH_GREY, 16)
+        arcade.draw_text("SPACE", 30, 90, arcade.color.BLACK, 12)
+        arcade.draw_text("R", 30, 70, arcade.color.BLACK, 12)
+        arcade.draw_text("F / F11", 30, 50, arcade.color.BLACK, 12)
+        arcade.draw_text("Q / ESC", 30, 30, arcade.color.BLACK, 12)
 
-        arcade.draw_text("." * 21, 90, 60, arcade.color.BLACK, 12)
-        arcade.draw_text("." * 29, 50, 40, arcade.color.BLACK, 12)
-        arcade.draw_text("." * 15, 120, 20, arcade.color.BLACK, 12)
+        arcade.draw_text("." * 30, 100, 90, arcade.color.BLACK, 12)
+        arcade.draw_text("." * 30, 100, 70, arcade.color.BLACK, 12)
+        arcade.draw_text("." * 30, 100, 50, arcade.color.BLACK, 12)
+        arcade.draw_text("." * 30, 100, 30, arcade.color.BLACK, 12)
 
-        arcade.draw_text("Pause Animation", 200, 60, arcade.color.BLACK, 12)
-        arcade.draw_text("Reset Animation", 200, 40, arcade.color.BLACK, 12)
-        arcade.draw_text("Quit", 200, 20, arcade.color.BLACK, 12)
+        arcade.draw_text("Pause Animation", 264, 90, arcade.color.BLACK, 12)
+        arcade.draw_text("Reset Animation", 264, 70, arcade.color.BLACK, 12)
+        arcade.draw_text("Full Screen", 264, 50, arcade.color.BLACK, 12)
+        arcade.draw_text("Quit", 264, 30, arcade.color.BLACK, 12)
 
-        arcade.draw_text(self.key_pressed, 500, 20, arcade.color.BLACK, 20)
+        full_screen = {
+            False: (10, 936),
+            True: (10, 1060)
+        }
+        dx, dy = full_screen[self.window.fullscreen]
+
+        arcade.draw_text(f"Turns: {self.current_turn + 1}/{len(self.turns)}", dx, dy, arcade.color.BLACK, 16)
+        if self.current_turn == len(self.turns) - 1:
+            arcade.draw_text(f"(SIMULATION FINISHED!)", dx + 120, dy, arcade.color.BLACK, 12)
+
+        if self.pause:
+            arcade.draw_lbwh_rectangle_filled(10, 132, 336, 40, arcade.color.AMBER)
+            arcade.draw_text("PAUSED: Press SPACE to Continue", 20, 144, arcade.color.BLACK, 14)
 
 
     def on_key_press(self, key, modifiers):
@@ -537,17 +556,36 @@ class Visualizer(arcade.View):
 
         if key == arcade.key.SPACE:
             self.pause = not self.pause
-            self.key_pressed = 'SPACE'
 
         if key == arcade.key.R:
             self._init_drones_pos()
             self.current_turn = -1
-            self.key_pressed = 'R'
+
+        if key == arcade.key.F or key == arcade.key.F11:
+            self.window.set_fullscreen(not self.window.fullscreen)
+
 
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         self.camera.zoom += scroll_y * 0.1
         self.camera.zoom = max(0.2, min(self.camera.zoom, 4.0))
+
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.is_dragging = True
+
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.is_dragging = False
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        if self.is_dragging:
+            self.camera.position = (
+                self.camera.position[0] - (dx / self.camera.zoom),
+                self.camera.position[1] - (dy / self.camera.zoom)
+            )
 
 
     def on_update(self, delta_time):
@@ -667,7 +705,9 @@ def main():
     simulator.display_turns()
 
 
-    window = arcade.Window(1920, 960, "Fly-in Simulation")
+    WINDOW_WIDTH = 1920
+    WINDOW_HEIGHT = 960
+    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, "Fly-in Simulation", fullscreen=True)
     visualizer = Visualizer(graph, simulator.turns)
     window.show_view(visualizer)
     arcade.run()
