@@ -54,14 +54,14 @@ class Visualizer(arcade.View):
         super().__init__()
         self.background_color = arcade.color.BEAU_BLUE
 
-
     def _init_drones_pos(self) -> None:
         assert self.graph.start_zone is not None
 
         for d in self.graph.drones:
-            self.current_pixel_position[d] = self._calc_zone_pos(self.graph.start_zone)
-            self.target_pixel_position[d] = self._calc_zone_pos(self.graph.start_zone)
-
+            self.current_pixel_position[d] = \
+                self._calc_zone_pos(self.graph.start_zone)
+            self.target_pixel_position[d] = \
+                self._calc_zone_pos(self.graph.start_zone)
 
     def on_draw(self) -> None:
         self.clear()
@@ -125,7 +125,6 @@ class Visualizer(arcade.View):
                     10
                 )
 
-
         # Drawing drones
         for d in self.graph.drones:
             x, y = self.current_pixel_position[d]
@@ -152,10 +151,13 @@ class Visualizer(arcade.View):
         self.fixed_camera.use()
         self._draw_text()
 
-
     def _draw_text(self) -> None:
-        arcade.draw_lbwh_rectangle_filled(10, 10, 420, 110, arcade.color.ASH_GREY)
-        arcade.draw_lbwh_rectangle_filled(10, 120, 420, 40, arcade.color.BLACK)
+        arcade.draw_lbwh_rectangle_filled(
+            10, 10, 420, 110, arcade.color.ASH_GREY
+        )
+        arcade.draw_lbwh_rectangle_filled(
+            10, 120, 420, 40, arcade.color.BLACK
+        )
         arcade.draw_text("CONTROLS", 30, 130, arcade.color.ASH_GREY, 16)
         arcade.draw_text("SPACE", 30, 90, arcade.color.BLACK, 12)
         arcade.draw_text("R", 30, 70, arcade.color.BLACK, 12)
@@ -178,14 +180,37 @@ class Visualizer(arcade.View):
         }
         dx, dy = full_screen[self.window.fullscreen]
 
-        arcade.draw_text(f"Turns: {self.current_turn + 1}/{len(self.turns)}", dx, dy, arcade.color.BLACK, 16)
+        arcade.draw_text(
+            f"Turns: {self.current_turn + 1}/{len(self.turns)}",
+            dx,
+            dy,
+            arcade.color.BLACK,
+            16
+        )
         if self.current_turn == len(self.turns) - 1:
-            arcade.draw_text(f"(SIMULATION FINISHED!)", dx + 140, dy, arcade.color.BLACK, 12)
+            arcade.draw_text(
+                "(SIMULATION FINISHED!)",
+                dx + 140,
+                dy,
+                arcade.color.BLACK,
+                12
+            )
 
         if self.pause:
-            arcade.draw_lbwh_rectangle_filled(10, 160, 420, 40, arcade.color.AMBER)
-            arcade.draw_text("PAUSED: Press SPACE to Continue", 30, 172, arcade.color.BLACK, 14)
-
+            arcade.draw_lbwh_rectangle_filled(
+                10,
+                160,
+                420,
+                40,
+                arcade.color.AMBER
+            )
+            arcade.draw_text(
+                "PAUSED: Press SPACE to Continue",
+                30,
+                172,
+                arcade.color.BLACK,
+                14
+            )
 
     def on_key_press(self, key: int, modifiers: int) -> None:
         if key in [arcade.key.Q, arcade.key.ESCAPE]:
@@ -201,19 +226,33 @@ class Visualizer(arcade.View):
         if key == arcade.key.F or key == arcade.key.F11:
             self.window.set_fullscreen(not self.window.fullscreen)
 
-
-    
-    def on_mouse_scroll(self, x: int, y: int, scroll_x: float, scroll_y: float) -> None:
+    def on_mouse_scroll(
+            self,
+            x: int,
+            y: int,
+            scroll_x: float,
+            scroll_y: float
+    ) -> None:
         self.camera.zoom += scroll_y * 0.1
         self.camera.zoom = max(0.2, min(self.camera.zoom, 4.0))
 
-
-    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int) -> None:
+    def on_mouse_press(
+            self,
+            x: int,
+            y: int,
+            button: int,
+            modifiers: int
+    ) -> None:
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.is_dragging = True
 
-
-    def on_mouse_release(self, x: int, y: int, button: int, modifiers: int) -> None:
+    def on_mouse_release(
+            self,
+            x: int,
+            y: int,
+            button: int,
+            modifiers: int
+    ) -> None:
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.is_dragging = False
 
@@ -223,7 +262,6 @@ class Visualizer(arcade.View):
                 self.camera.position[0] - (dx / self.camera.zoom),
                 self.camera.position[1] - (dy / self.camera.zoom)
             )
-
 
     def on_update(self, delta_time: float) -> None:
         if self.pause:
@@ -254,7 +292,6 @@ class Visualizer(arcade.View):
             ly = sy + (ey - sy) * self.progress
             self.current_pixel_position[d] = (lx, ly)
 
-
     def _load_turn_targets(self) -> None:
         current_turn = self.turns[self.current_turn].split(' ')
         for move in current_turn:
@@ -267,8 +304,8 @@ class Visualizer(arcade.View):
                 drone_id, z1, z2 = move.split('-')
                 drone = self._get_drone(drone_id)
                 conn_name = self._get_connection(z1, z2)
-                self.target_pixel_position[drone] = self._calc_conn_pos(conn_name)
-
+                self.target_pixel_position[drone] = \
+                    self._calc_conn_pos(conn_name)
 
     def _get_zone(self, name: str) -> Zone:
         for zone in self.graph.zones:
@@ -276,13 +313,11 @@ class Visualizer(arcade.View):
                 return zone
         raise ValueError("Zone not found!")
 
-
     def _get_connection(self, z1: str, z2: str) -> Connection:
         for conn in self.graph.connections:
             if conn.name in [f'{z1}-{z2}', f'{z2}-{z1}']:
                 return conn
         raise ValueError("Connection not found")
-
 
     def _get_drone(self, drone_id: str) -> Drone:
         for drone in self.graph.drones:
@@ -290,12 +325,10 @@ class Visualizer(arcade.View):
                 return drone
         raise ValueError("Drone not found")
 
-
     def _calc_zone_pos(self, zone: Zone) -> Tuple[int, int]:
         x = zone.x * self.scale + self.zone_size * 2
         y = zone.y * self.scale - self.zone_size * 2
         return x, y
-
 
     def _calc_conn_pos(self, conn: Connection) -> Tuple[float, float]:
         z1_name, z2_name = conn.name.split('-')

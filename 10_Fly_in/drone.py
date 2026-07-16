@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 class Drone:
     d_id: int = 1
+
     def __init__(self, end_zone: 'Zone') -> None:
         self.id: str = f'D{Drone.d_id}'
         self.current_zone: 'Zone' | 'Connection'

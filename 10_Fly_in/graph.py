@@ -7,28 +7,37 @@ from typing import List, Dict, Any, Tuple
 
 
 class Graph:
-    def __init__(self, zones: List[Dict[str, Any]], connections: List[Dict[str, Any]], nb_drones: int) -> None:
+    def __init__(
+            self, zones: List[Dict[str, Any]],
+            connections: List[Dict[str, Any]],
+            nb_drones: int
+    ) -> None:
         self.zones: List[Zone] = []
         self.connections: List[Connection] = []
         self.start_zone: Zone
         self.end_zone: Zone
         self.drones: List[Drone] = []
 
-
         for zone in zones:
-            name        = zone['name']
-            x           = zone['x']
-            y           = zone['y']
-            hub_type    = zone['hub_type']
+            name = zone['name']
+            x = zone['x']
+            y = zone['y']
+            hub_type = zone['hub_type']
 
-            try: color      = zone['metadata']['color']
-            except KeyError: color = 'none'
-            
-            try: max_drones = zone['metadata']['max_drones']
-            except KeyError: max_drones = 1
+            try:
+                color = zone['metadata']['color']
+            except KeyError:
+                color = 'none'
 
-            try: zone_type  = zone['metadata']['zone']
-            except KeyError: zone_type = 'normal'
+            try:
+                max_drones = zone['metadata']['max_drones']
+            except KeyError:
+                max_drones = 1
+
+            try:
+                zone_type = zone['metadata']['zone']
+            except KeyError:
+                zone_type = 'normal'
 
             self.zones.append(
                 Zone(
@@ -41,11 +50,10 @@ class Graph:
                     zone=zone_type
                 )
             )
-        
 
         for conn in connections:
-            name                = conn['name']
-            max_link_capacity   = conn['metadata']['max_link_capacity']
+            name = conn['name']
+            max_link_capacity = conn['metadata']['max_link_capacity']
 
             self.connections.append(
                 Connection(
@@ -54,10 +62,11 @@ class Graph:
                 )
             )
 
-
         for z in self.zones:
-            if z.hub_type == 'start_hub': self.start_zone = z
-            if z.hub_type == 'end_hub': self.end_zone = z
+            if z.hub_type == 'start_hub':
+                self.start_zone = z
+            if z.hub_type == 'end_hub':
+                self.end_zone = z
 
         assert self.end_zone is not None
         self.drones = [Drone(self.end_zone) for _ in range(nb_drones)]
@@ -67,7 +76,6 @@ class Graph:
 
         self.start_zone.max_drones = len(self.drones)
         self.end_zone.max_drones = len(self.drones)
-
 
     def create_graph(self) -> None:
         for d in self.drones:
@@ -83,21 +91,21 @@ class Graph:
             start_name, end_name = conn.name.split('-')
 
             start = self._find_zone_by_name(start_name)
-            end   = self._find_zone_by_name(end_name)
+            end = self._find_zone_by_name(end_name)
 
             if not start or not end:
-                raise ValueError(f'Invalid connection between ({start} <-> {end})')
+                raise ValueError(
+                    f'Invalid connection between ({start} <-> {end})'
+                )
 
             start.add_neighbor(end)
             end.add_neighbor(start)
-
 
     def _find_zone_by_name(self, name: str) -> Zone:
         for zone in self.zones:
             if zone.name == name:
                 return zone
         raise ValueError("Zone not found")
-
 
     def find_multiple_paths(self) -> List[Tuple[float, List[Zone]]]:
         all_paths: List[Tuple[float, List[Zone]]] = []
@@ -106,7 +114,9 @@ class Graph:
 
         assert self.start_zone is not None
 
-        heap: List[Tuple[float, int, List[Zone]]] = [(0, next(counter), [self.start_zone])]
+        heap: List[Tuple[float, int, List[Zone]]] = [
+            (0, next(counter), [self.start_zone])
+        ]
 
         while heap and len(all_paths) < max_paths:
             path_cost, _, current_path = heapq.heappop(heap)
@@ -123,7 +133,7 @@ class Graph:
                     continue
 
                 new_path_cost: float = path_cost + neighbor.move_cost
-                new_path: List [Zone] = current_path + [neighbor]
+                new_path: List[Zone] = current_path + [neighbor]
                 heapq.heappush(heap, (new_path_cost, next(counter), new_path))
 
         return all_paths

@@ -14,13 +14,12 @@ class Parser:
 
         except FileNotFoundError:
             raise ValueError(f'No such file: {path}')
-        
+
         except PermissionError:
             raise ValueError(f'You have no permission access to: {path}')
 
         except Exception as e:
             raise ValueError(e)
-
 
     def extract_metadata(self, raw_metadata: str) -> Dict:
         metadata = raw_metadata[1:-1].split(' ')
@@ -32,20 +31,24 @@ class Parser:
 
             key, value = pair.split('=')
 
-            if key not in ['max_link_capacity', 'max_drones', 'color', 'zone']:
+            if key not in [
+                'max_link_capacity',
+                'max_drones',
+                'color',
+                'zone'
+            ]:
                 raise ValueError(f'Invalid key: {key}')
 
-            extracted[key] = int(value) if key in ['max_link_capacity', 'max_drones'] else value
+            extracted[key] = int(value) if key in \
+                ['max_link_capacity', 'max_drones'] else value
 
         return extracted
-
 
     def parse(self) -> None:
         for line in self.maps:
             line = line.strip()
             if line.startswith('#') or line == '':
                 continue
-
 
             try:
                 key, value = line.split(':')
@@ -57,7 +60,7 @@ class Parser:
             if key == 'nb_drones':
                 if self.nb_drones:
                     raise ValueError('Two entries for nb_drones')
-                
+
                 if self.zones or self.connections:
                     raise ValueError('The first line must be: nb_drones')
 
@@ -66,9 +69,7 @@ class Parser:
                 except ValueError:
                     raise ValueError('nb_drones must be a number!')
 
-
             elif key in ['start_hub', 'hub', 'end_hub']:
-
                 if '[' not in value:
                     value += '[color=default]'
 
@@ -87,7 +88,6 @@ class Parser:
                 except ValueError:
                     raise ValueError('(X, Y) must be numbers!')
 
-
                 self.zones.append({
                     'hub_type': key,
                     'name': zone_name,
@@ -95,7 +95,6 @@ class Parser:
                     'y': zone_y,
                     'metadata': self.extract_metadata(metadata),
                 })
-
 
             elif key == 'connection':
                 splt_value = value.split(' ')
@@ -115,7 +114,6 @@ class Parser:
             else:
                 raise ValueError(f'Invalid key detected: {key}')
 
-
         if not self.nb_drones:
             raise ValueError('No nb_drones entry specified!')
 
@@ -124,7 +122,6 @@ class Parser:
 
         if not self.connections:
             raise ValueError('No connections entries specified!')
-
 
     def get_map(self) -> Dict[str, Any]:
         return {

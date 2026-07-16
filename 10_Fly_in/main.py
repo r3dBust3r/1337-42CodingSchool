@@ -27,28 +27,31 @@ def main() -> None:
         print(f"Pydantic error: {e.errors()[0]['msg']}")
         exit(1)
 
-
     graph = Graph(
         parser.zones,
         parser.connections,
         parser.nb_drones
     )
 
-    try: graph.create_graph()
+    try:
+        graph.create_graph()
     except ValueError as e:
         print(e)
         exit(1)
-
 
     paths = graph.find_multiple_paths()
     simulator = Simulator(graph, paths)
     simulator.run()
     simulator.display_turns()
 
-
     WINDOW_WIDTH = 1920
     WINDOW_HEIGHT = 960
-    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, "Fly-in Simulation", fullscreen=True)
+    window = arcade.Window(
+        WINDOW_WIDTH,
+        WINDOW_HEIGHT,
+        "Fly-in Simulation",
+        fullscreen=True
+    )
     visualizer = Visualizer(graph, simulator.turns)
     window.show_view(visualizer)
     arcade.run()

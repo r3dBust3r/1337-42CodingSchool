@@ -8,7 +8,10 @@ if TYPE_CHECKING:
 
 
 class Simulator:
-    def __init__(self, graph: 'Graph', paths: List[Tuple[float, List['Zone']]]) -> None:
+    def __init__(
+            self, graph: 'Graph',
+            paths: List[Tuple[float, List['Zone']]]
+    ) -> None:
         self.graph: 'Graph' = graph
         self.paths: List[Tuple[float, List['Zone']]] = paths
         self.using_conns: Dict[str, int] = {}
@@ -17,17 +20,14 @@ class Simulator:
         self.assign_paths_to_drones()
         self.init_conns()
 
-
     def assign_paths_to_drones(self) -> None:
         for d in self.graph.drones:
             d_id = int(d.id.replace('D', ''))
             d.path = self.paths[d_id % len(self.paths)]
 
-
     def init_conns(self) -> None:
         for conn in self.graph.connections:
             self.using_conns[conn.name] = 0
-
 
     def run(self) -> None:
         while not self._all_delivered():
@@ -78,31 +78,34 @@ class Simulator:
 
                         turns += f'{d.id}-{conn.name} '
 
-
             self.turns.append(turns.strip())
 
-
-
     def _all_delivered(self) -> bool:
-        return len(self.graph.drones) == len(self.graph.end_zone.current_drones)
+        end_drones = len(self.graph.end_zone.current_drones)
+        return len(self.graph.drones) == end_drones
 
-
-    def _move_drone(self, d: 'Drone', cur: 'Zone', nxt: Union['Zone', 'Connection'], to_zone: bool=True) -> None:
+    def _move_drone(
+            self,
+            d: 'Drone',
+            cur: 'Zone',
+            nxt: Union['Zone', 'Connection'],
+            to_zone: bool = True
+    ) -> None:
         if to_zone:
             d.path_index += 1
 
         d.current_zone = nxt
 
-        if d in cur.current_drones: cur.current_drones.remove(d)
+        if d in cur.current_drones:
+            cur.current_drones.remove(d)
         nxt.current_drones.append(d)
-
 
     def _get_conn(self, z1: 'Zone', z2: 'Zone') -> 'Connection':
         for conn in self.graph.connections:
-            if conn.name == f'{z1.name}-{z2.name}' or conn.name == f'{z2.name}-{z1.name}':
+            if conn.name == f'{z1.name}-{z2.name}' or \
+               conn.name == f'{z2.name}-{z1.name}':
                 return conn
         raise ValueError("Connection not found")
-
 
     def display_turns(self) -> None:
         for t in self.turns:
