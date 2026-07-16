@@ -435,6 +435,29 @@ class Visualizer(arcade.View):
         self.is_dragging = False
         self.camera = arcade.Camera2D()
         self.fixed_camera = arcade.Camera2D()
+        self.colors = {
+            "default": arcade.color.DIM_GRAY,
+            "black": arcade.color.BLACK,
+            "white": arcade.color.GLITTER,
+            "red": arcade.color.AMARANTH,
+            "green": arcade.color.BUD_GREEN,
+            "blue": arcade.color.BLUEBERRY,
+            "yellow": arcade.color.BANANA_YELLOW,
+            "orange": arcade.color.CADMIUM_ORANGE,
+            "purple": arcade.color.DARK_PASTEL_PURPLE,
+            "pink": arcade.color.DARK_PINK,
+            "brown": arcade.color.WOOD_BROWN,
+            "gray": arcade.color.GRAY,
+            "cyan": arcade.color.ELECTRIC_CYAN,
+            "magenta": arcade.color.PALE_MAGENTA,
+            "lime": arcade.color.FRENCH_LIME,
+            "silver": arcade.color.SILVER,
+            "gold": arcade.color.GOLDENROD,
+            "beige": arcade.color.BEIGE,
+            "violet": arcade.color.AFRICAN_VIOLET,
+            "mint": arcade.color.MAGIC_MINT,
+            "peach": arcade.color.PEACH_ORANGE
+        }
 
         self._init_drones_pos()
         self._load_turn_targets()
@@ -461,6 +484,10 @@ class Visualizer(arcade.View):
             z1 = self._get_zone(z1)
             z2 = self._get_zone(z2)
 
+            conn_color = z2.color
+            if conn_color not in self.colors:
+                conn_color = 'default'
+
             z1_x, z1_y = self._calc_zone_pos(z1)
             z2_x, z2_y = self._calc_zone_pos(z2)
 
@@ -469,19 +496,22 @@ class Visualizer(arcade.View):
                 z1_y + self.WIN_H,
                 z2_x + 10,
                 z2_y + self.WIN_H,
-                arcade.color.BLACK,
+                self.colors[conn_color],
                 3
             )
 
         # Drawing Zones
         for z in self.graph.zones:
             x, y = self._calc_zone_pos(z)
+            color = z.color
+            if color not in self.colors:
+                color = "default"
 
             arcade.draw_circle_filled(
                 x + 10,
                 y + self.WIN_H,
                 self.zone_size,
-                arcade.color.BRICK_RED
+                self.colors[color]
             )
 
             arcade.draw_text(
@@ -492,9 +522,22 @@ class Visualizer(arcade.View):
                 12
             )
 
+            if z.zone == 'restricted':
+                arcade.draw_text(
+                    f'( {z.zone.upper()} )',
+                    x + 10 - len(z.zone) * 4.5,
+                    y + self.WIN_H - self.zone_size * 1.9,
+                    self.colors['red'],
+                    10
+                )
+
+
         # Drawing drones
         for d in self.graph.drones:
             x, y = self.current_pixel_position[d]
+            txt_x = x
+            if len(d.id) == 3:
+                txt_x -= 5
 
             arcade.draw_circle_filled(
                 x + 10,
@@ -505,7 +548,7 @@ class Visualizer(arcade.View):
 
             arcade.draw_text(
                 d.id,
-                x,
+                txt_x,
                 y + 954,
                 arcade.color.WHITE,
                 12
