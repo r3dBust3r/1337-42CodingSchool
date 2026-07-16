@@ -1,26 +1,35 @@
+from typing import List, Dict, Tuple, Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from graph import Graph
+    from zone import Zone
+    from drone import Drone
+    from connection import Connection
+
+
 class Simulator:
-    def __init__(self, graph, paths):
-        self.graph = graph
-        self.paths = paths
-        self.using_conns = {}
-        self.turns = []
+    def __init__(self, graph: 'Graph', paths: List[Tuple[float, List['Zone']]]) -> None:
+        self.graph: 'Graph' = graph
+        self.paths: List[Tuple[float, List['Zone']]] = paths
+        self.using_conns: Dict[str, int] = {}
+        self.turns: List[str] = []
 
         self.assign_paths_to_drones()
         self.init_conns()
 
 
-    def assign_paths_to_drones(self):
+    def assign_paths_to_drones(self) -> None:
         for d in self.graph.drones:
             d_id = int(d.id.replace('D', ''))
             d.path = self.paths[d_id % len(self.paths)]
 
 
-    def init_conns(self):
+    def init_conns(self) -> None:
         for conn in self.graph.connections:
             self.using_conns[conn.name] = 0
 
 
-    def run(self):
+    def run(self) -> None:
         while not self._all_delivered():
             turns = ''
 
@@ -29,10 +38,10 @@ class Simulator:
                 if d.delivered:
                     continue
 
-                cur_zone = d.path[1][d.path_index]
-                nxt_zone = d.path[1][d.path_index + 1]
+                cur_zone: 'Zone' = d.path[1][d.path_index]
+                nxt_zone: 'Zone' = d.path[1][d.path_index + 1]
 
-                conn = self._get_conn(cur_zone, nxt_zone)
+                conn: 'Connection' = self._get_conn(cur_zone, nxt_zone)
 
                 if nxt_zone.zone in ['normal', 'priority']:
 
@@ -74,11 +83,11 @@ class Simulator:
 
 
 
-    def _all_delivered(self):
+    def _all_delivered(self) -> bool:
         return len(self.graph.drones) == len(self.graph.end_zone.current_drones)
 
 
-    def _move_drone(self, d, cur, nxt, to_zone=True):
+    def _move_drone(self, d: 'Drone', cur: 'Zone', nxt: Union['Zone', 'Connection'], to_zone: bool=True) -> None:
         if to_zone:
             d.path_index += 1
 
@@ -88,14 +97,14 @@ class Simulator:
         nxt.current_drones.append(d)
 
 
-    def _get_conn(self, z1, z2):
+    def _get_conn(self, z1: 'Zone', z2: 'Zone') -> 'Connection':
         for conn in self.graph.connections:
             if conn.name == f'{z1.name}-{z2.name}' or conn.name == f'{z2.name}-{z1.name}':
                 return conn
-        return None
+        raise ValueError("Connection not found")
 
 
-    def display_turns(self):
+    def display_turns(self) -> None:
         for t in self.turns:
             print(t)
 

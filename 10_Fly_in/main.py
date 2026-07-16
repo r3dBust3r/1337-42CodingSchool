@@ -1,17 +1,17 @@
-from pydantic import ValidationError  # type: ignore
+from pydantic import ValidationError
 from parser import Parser
 from validator import Validator
 from graph import Graph
 from simulator import Simulator
 from visualizer import Visualizer
-import arcade # type: ignore
+import arcade
 from sys import argv
 
 from warnings import filterwarnings
 filterwarnings('ignore')
 
 
-def main():
+def main() -> None:
     try:
         parser = Parser(argv[1])
         parser.parse()

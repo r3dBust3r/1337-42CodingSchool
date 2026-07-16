@@ -1,9 +1,12 @@
+from typing import List, Dict, Any
+
+
 class Parser:
-    def __init__(self, path):
-        self.maps = []
-        self.nb_drones = 0
-        self.zones = []
-        self.connections = []
+    def __init__(self, path: str) -> None:
+        self.maps: List[str] = []
+        self.nb_drones: int = 0
+        self.zones: List[Dict[str, Any]] = []
+        self.connections: List[Dict[str, Any]] = []
 
         try:
             with open(path, 'r') as file:
@@ -19,8 +22,8 @@ class Parser:
             raise ValueError(e)
 
 
-    def extract_metadata(self, metadata):
-        metadata = metadata[1:-1].split(' ')
+    def extract_metadata(self, raw_metadata: str) -> Dict:
+        metadata = raw_metadata[1:-1].split(' ')
 
         extracted = {}
         for pair in metadata:
@@ -37,7 +40,7 @@ class Parser:
         return extracted
 
 
-    def parse(self):
+    def parse(self) -> None:
         for line in self.maps:
             line = line.strip()
             if line.startswith('#') or line == '':
@@ -95,12 +98,12 @@ class Parser:
 
 
             elif key == 'connection':
-                value = value.split(' ')
-                if len(value) == 1:
-                    value.append('[max_link_capacity=1]')
+                splt_value = value.split(' ')
+                if len(splt_value) == 1:
+                    splt_value.append('[max_link_capacity=1]')
 
                 try:
-                    name, max_link_capacity = value
+                    name, max_link_capacity = splt_value
                 except ValueError:
                     raise ValueError('Invalid connection structure!')
 
@@ -123,7 +126,7 @@ class Parser:
             raise ValueError('No connections entries specified!')
 
 
-    def get_map(self):
+    def get_map(self) -> Dict[str, Any]:
         return {
             'nb_drones': self.nb_drones,
             'zones': self.zones,

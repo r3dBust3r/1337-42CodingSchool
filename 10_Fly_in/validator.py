@@ -1,5 +1,8 @@
-from pydantic import BaseModel, Field  # type: ignore
+from pydantic import BaseModel, Field
 from typing import Literal, Optional
+from typing import List, Dict, Any
+from zone import Zone
+from connection import Connection
 
 
 class ZoneMetadata(BaseModel):
@@ -26,12 +29,12 @@ class ConnectionModel(BaseModel):
 
 
 class Validator:
-    def __init__(self, _map):
+    def __init__(self, _map: Dict[str, Any]) -> None:
         self._map = _map
-        self.validated_zones = []
-        self.validated_connections = []
+        self.validated_zones: List[ZoneModel] = []
+        self.validated_connections: List[ConnectionModel] = []
 
-    def validate(self):
+    def validate(self) -> None:
         nb_drones   = self._map['nb_drones']
         zones       = self._map['zones']
         connections = self._map['connections']
