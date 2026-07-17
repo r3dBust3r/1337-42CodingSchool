@@ -34,6 +34,8 @@ def main() -> None:
     simulator.run()
     simulator.display_turns()
 
+    # exit() # DEB
+
     WINDOW_WIDTH = 1920
     WINDOW_HEIGHT = 960
     window = arcade.Window(
