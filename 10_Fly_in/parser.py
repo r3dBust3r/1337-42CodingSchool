@@ -3,32 +3,51 @@ from typing import List, Dict, Any
 
 class Parser:
     def __init__(self, path: str) -> None:
-        self.maps: List[str] = []
+        self.map: List[str] = []
         self.nb_drones: int = 0
         self.zones: List[Dict[str, Any]] = []
         self.connections: List[Dict[str, Any]] = []
+        self.start_zone: str = ''
+        self.end_zone: str = ''
 
         try:
             with open(path, 'r') as file:
-                self.maps = file.readlines()
+                self.map = file.readlines()
 
         except FileNotFoundError:
-            raise ValueError(f'No such file: {path}')
+            raise ValueError(f'> No such file: {path}')
 
         except PermissionError:
-            raise ValueError(f'You have no permission access to: {path}')
+            raise ValueError(f'> You have no permission access to: {path}')
 
         except Exception as e:
             raise ValueError(e)
 
-    def extract_metadata(self, raw_metadata: str) -> Dict:
+    def extract_metadata(
+            self,
+            raw_metadata: str,
+            zone_type: str,
+            line_nbr: str
+    ) -> Dict:
+        if raw_metadata.count('[') != 1 or raw_metadata.count(']') != 1:
+            raise ValueError(
+                f'{line_nbr}Invalid metadata format!\n'
+                'Valid format: [key1=value1 key2=value2]'
+            )
         metadata = raw_metadata[1:-1].split(' ')
 
         extracted = {}
         for pair in metadata:
-            if '=' not in pair:
-                raise ValueError('Invalid metadata!')
+            if not pair:
+                continue
 
+            if pair.count('=') != 1:
+                raise ValueError(
+                    f'{line_nbr}Invalid metadata format!\n'
+                    'Valid format: [key1=value1 key2=value2]'
+                )
+
+            value: str | int
             key, value = pair.split('=')
 
             if key not in [
@@ -37,91 +56,216 @@ class Parser:
                 'color',
                 'zone'
             ]:
-                raise ValueError(f'Invalid key: {key}')
+                raise ValueError(f'{line_nbr}Invalid metadata key: {key}')
 
-            extracted[key] = int(value) if key in \
-                ['max_link_capacity', 'max_drones'] else value
+            if key == 'zone' and value not in [
+                'normal',
+                'blocked',
+                'restricted',
+                'priority'
+            ]:
+                raise ValueError(
+                    f'{line_nbr}Zone type must be one of: '
+                    'normal, blocked, restricted or priority'
+                )
+
+            if key in ['max_link_capacity', 'max_drones']:
+                try:
+                    value = int(value)
+                except ValueError:
+                    raise ValueError(
+                        f'{line_nbr}max_link_capacity & max_drones '
+                        'must be valid numbers'
+                    )
+
+                if zone_type in ['start_hub', 'end_hub']:
+                    value = self.nb_drones
+                else:
+                    if value < 1:
+                        raise ValueError(
+                            f'{line_nbr}max_link_capacity & max_drones '
+                            'must be strictly positive numbers'
+                        )
+
+            extracted[key] = value
 
         return extracted
 
     def parse(self) -> None:
-        for line in self.maps:
-            line = line.strip()
+        line_nbr: int | str
+
+        for line_nbr, line in enumerate(self.map):
+            line_nbr = f'Error in line: {line_nbr + 1}\n> '
+            line = line.strip().lower()
             if line.startswith('#') or line == '':
                 continue
 
+            if '#' in line:
+                line = line[:line.find('#')]
+
             try:
-                key, value = line.split(':')
+                key, value = line.split(':', 1)
                 key = key.strip()
                 value = value.strip()
             except ValueError:
-                raise ValueError('Invalid map structure!')
+                raise ValueError(f'{line_nbr}Invalid map structure!')
 
             if key == 'nb_drones':
                 if self.nb_drones:
-                    raise ValueError('Two entries for nb_drones')
+                    raise ValueError(f'{line_nbr}Two entries for nb_drones')
 
                 if self.zones or self.connections:
-                    raise ValueError('The first line must be: nb_drones')
+                    raise ValueError(
+                        f'{line_nbr}The first line must be: nb_drones'
+                    )
 
                 try:
                     self.nb_drones = int(value)
                 except ValueError:
-                    raise ValueError('nb_drones must be a number!')
+                    raise ValueError(
+                        f'{line_nbr}nb_drones must be a valid number!'
+                    )
+
+                if self.nb_drones < 1:
+                    raise ValueError(
+                        f'{line_nbr}nb_drones must be strictly positive!'
+                    )
 
             elif key in ['start_hub', 'hub', 'end_hub']:
                 if '[' not in value:
-                    value += '[color=default]'
+                    value += '[zone=normal color=default max_drones=1]'
 
                 bracket_index = value.index('[')
 
                 name_and_coords = value[:bracket_index].strip().split(' ')
                 metadata = value[bracket_index:].strip()
 
+                name_and_coords = [a for a in name_and_coords if a]
+
                 if len(name_and_coords) != 3:
-                    raise ValueError('Invalid zone structure!')
+                    raise ValueError(
+                        f'{line_nbr}Invalid zone structure!\n'
+                        'Valid format: <name> <x> <y> [<metadata>]'
+                    )
 
                 try:
-                    zone_name = name_and_coords[0]
-                    zone_x = int(name_and_coords[1])
-                    zone_y = int(name_and_coords[2])
+                    zone_x: str | int
+                    zone_y: str | int
+
+                    zone_name, zone_x, zone_y = name_and_coords
+
+                    zone_x = int(zone_x)
+                    zone_y = int(zone_y)
+
                 except ValueError:
-                    raise ValueError('(X, Y) must be numbers!')
+                    raise ValueError(
+                        f'{line_nbr}coordinates (x, y) '
+                        f'must be valid integers!'
+                    )
+
+                if zone_name in [z['name'] for z in self.zones]:
+                    raise ValueError(
+                        f'{line_nbr}Found a duplicated zone: {zone_name}'
+                    )
+
+                if (zone_x, zone_y) in [(z['x'], z['y']) for z in self.zones]:
+                    raise ValueError(
+                        f'{line_nbr}Found duplicated coodrinates: '
+                        f'{(zone_x, zone_y)}'
+                    )
+
+                if key == 'start_hub' and self.start_zone:
+                    raise ValueError(f'{line_nbr}start_zone is duplicated!')
+
+                if key == 'end_hub' and self.end_zone:
+                    raise ValueError(f'{line_nbr}end_zone is duplicated!')
+
+                if key == 'start_hub':
+                    self.start_zone = zone_name
+
+                if key == 'end_hub':
+                    self.end_zone = zone_name
+
+                if '-' in zone_name or ']' in zone_name:
+                    raise ValueError(
+                        f'{line_nbr}Name cannot contain a '
+                        'HASH, DASH, SPACE or BRACKETS'
+                    )
 
                 self.zones.append({
                     'hub_type': key,
                     'name': zone_name,
                     'x': zone_x,
                     'y': zone_y,
-                    'metadata': self.extract_metadata(metadata),
+                    'metadata': self.extract_metadata(metadata, key, line_nbr),
                 })
 
             elif key == 'connection':
-                splt_value = value.split(' ')
+                splt_value = value.split(' ', 1)
+                splt_value = [a for a in splt_value if a]
+
                 if len(splt_value) == 1:
                     splt_value.append('[max_link_capacity=1]')
 
                 try:
                     name, max_link_capacity = splt_value
+                    max_link_capacity = max_link_capacity.strip()
                 except ValueError:
-                    raise ValueError('Invalid connection structure!')
+                    raise ValueError(
+                        f'{line_nbr}Invalid connection structure!\n'
+                        'Valid format: <zone1>-<zone2> [<metadata>]'
+                    )
+
+                if name.count('-') != 1:
+                    raise ValueError(
+                        f'{line_nbr}Invalid connection name\n'
+                        'Valid format: <zone1>-<zone2>'
+                    )
+
+                z1_name, z2_name = name.split('-')
+
+                if z1_name not in [z['name'] for z in self.zones]:
+                    raise ValueError(
+                        f'{line_nbr}{z1_name} zone does not exist'
+                    )
+
+                if z2_name not in [z['name'] for z in self.zones]:
+                    raise ValueError(
+                        f'{line_nbr}{z2_name} zone does not exist'
+                    )
+
+                con_names = [c['name'] for c in self.connections]
+                if name in con_names or f'{z2_name}-{z1_name}' in con_names:
+                    raise ValueError(
+                        f'{line_nbr}Found a duplicated connection: {name}'
+                    )
 
                 self.connections.append({
                     'name': name,
-                    'metadata': self.extract_metadata(max_link_capacity),
+                    'metadata': self.extract_metadata(
+                        max_link_capacity,
+                        '',
+                        line_nbr
+                    ),
                 })
 
             else:
-                raise ValueError(f'Invalid key detected: {key}')
+                raise ValueError(f'{line_nbr}Invalid key detected: {key}')
 
         if not self.nb_drones:
-            raise ValueError('No nb_drones entry specified!')
+            raise ValueError('> No nb_drones entry specified!')
 
         if not self.zones:
-            raise ValueError('No zones entries specified!')
+            raise ValueError('> No zones entries specified!')
 
         if not self.connections:
-            raise ValueError('No connections entries specified!')
+            raise ValueError('> No connections entries specified!')
+
+        if not self.start_zone:
+            raise ValueError('> No start zone specified!')
+
+        if not self.end_zone:
+            raise ValueError('> No end zone specified!')
 
     def get_map(self) -> Dict[str, Any]:
         return {

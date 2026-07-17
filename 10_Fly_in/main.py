@@ -12,32 +12,22 @@ filterwarnings('ignore')
 
 
 def main() -> None:
-    try:
-        parser = Parser(argv[1])
-        parser.parse()
-        _map = parser.get_map()
-    except ValueError as e:
-        print(e)
-        exit(1)
+    if len(argv) == 1:
+        raise ValueError("Usage: python main.py <path/to/map>")
 
-    try:
-        validator = Validator(_map)
-        validator.validate()
-    except ValidationError as e:
-        print(f"Pydantic error: {e.errors()[0]['msg']}")
-        exit(1)
+    parser = Parser(argv[1])
+    parser.parse()
+    parsed_map = parser.get_map()
+
+    validator = Validator(parsed_map)
+    validator.validate()
 
     graph = Graph(
         parser.zones,
         parser.connections,
         parser.nb_drones
     )
-
-    try:
-        graph.create_graph()
-    except ValueError as e:
-        print(e)
-        exit(1)
+    graph.create_graph()
 
     paths = graph.find_multiple_paths()
     simulator = Simulator(graph, paths)
@@ -58,4 +48,17 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+
+    except ValueError as e:
+        print(e)
+        exit(1)
+
+    except ValidationError as e:
+        print(f"Pydantic error: {e.errors()[0]['msg']}")
+        exit(1)
+
+    except Exception as e:
+        print(e)
+        exit(1)
