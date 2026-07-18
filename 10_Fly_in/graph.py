@@ -7,11 +7,15 @@ from typing import List, Dict, Any, Tuple
 
 
 class Graph:
+    """Builds and analyzes the drone routing graph."""
+
     def __init__(
-            self, zones: List[Dict[str, Any]],
+            self,
+            zones: List[Dict[str, Any]],
             connections: List[Dict[str, Any]],
             nb_drones: int
     ) -> None:
+        """Initialize zones, connections, and drones from raw input data."""
         self.zones: List[Zone] = []
         self.connections: List[Connection] = []
         self.start_zone: Zone
@@ -78,6 +82,7 @@ class Graph:
         self.end_zone.max_drones = len(self.drones)
 
     def create_graph(self) -> None:
+        """Link zones together and place drones at the start zone."""
         for d in self.drones:
             d.current_zone = self.start_zone
 
@@ -102,12 +107,14 @@ class Graph:
             end.add_neighbor(start)
 
     def _find_zone_by_name(self, name: str) -> Zone:
+        """Return the zone with the given name."""
         for zone in self.zones:
             if zone.name == name:
                 return zone
         raise ValueError("Zone not found")
 
     def find_multiple_paths(self) -> List[Tuple[float, List[Zone]]]:
+        """Return up to the lowest-cost paths from the start zone to the end zone."""
         all_paths: List[Tuple[float, List[Zone]]] = []
         max_paths = 2
         counter = count()

@@ -3,10 +3,13 @@ from drone import Drone
 
 
 class Zone:
+    """Represent a zone in the Fly-in map."""
+
     def __init__(
             self, name: str, x: int, y: int, color: str = 'none',
             max_drones: int = 1, hub_type: str = 'hub', zone: str = 'normal'
     ) -> None:
+        """Initialize a zone with coordinates, type, capacity, and color."""
         self.name: str = name
         self.x: int = x
         self.y: int = y
@@ -28,6 +31,7 @@ class Zone:
             self.move_cost = float('INF')
 
     def __str__(self) -> str:
+        """Return a human-readable description of the zone."""
         return (
             f"{self.name.capitalize()} ({self.zone}): ({self.x}, {self.y})"
             f", Color={self.color}, MAX={self.max_drones}"
@@ -36,5 +40,6 @@ class Zone:
         )
 
     def add_neighbor(self, neighbor: 'Zone') -> None:
+        """Add a neighboring zone if it is not already linked."""
         if neighbor not in self.neighbors:
             self.neighbors.append(neighbor)

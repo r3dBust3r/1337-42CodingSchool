@@ -9,10 +9,13 @@ if TYPE_CHECKING:
 
 
 class Simulator:
+    """Simulate drone movement along the computed paths."""
+
     def __init__(
             self, graph: 'Graph',
             paths: List[Tuple[float, List['Zone']]]
     ) -> None:
+        """Create a simulator for a graph and a set of candidate paths."""
         self.graph: 'Graph' = graph
         self.paths: List[Tuple[float, List['Zone']]] = paths
         self.turns: List[str] = []
@@ -21,6 +24,7 @@ class Simulator:
         self._assign_paths_to_drones()
 
     def _assign_paths_to_drones(self) -> None:
+        """Assign one of the available paths to each drone."""
         if not self.paths:
             raise ValueError(
                 f'> No available paths to: {self.graph.end_zone.name}'
@@ -31,6 +35,7 @@ class Simulator:
             d.path = self.paths[d_id % len(self.paths)]
 
     def _check_disconnected_graph(self) -> None:
+        """Ensure every zone is reachable from the start zone."""
         start = self.graph.start_zone
 
         if not start:
@@ -51,6 +56,7 @@ class Simulator:
             raise ValueError("> Graph contains unreachable zones")
 
     def run(self) -> None:
+        """Execute the simulation turn by turn until all drones are delivered."""
         STOP_ON = 10_000
         keep_running = STOP_ON
 
@@ -118,6 +124,7 @@ class Simulator:
             raise ValueError(f'Warning: Hit {STOP_ON} loop, had to exit!')
 
     def _all_delivered(self) -> bool:
+        """Return whether every drone has reached the end zone."""
         end_drones = len(self.graph.end_zone.current_drones)
         return len(self.graph.drones) == end_drones
 
@@ -128,6 +135,7 @@ class Simulator:
             nxt: Union['Zone', 'Connection'],
             to_zone: bool = True
     ) -> None:
+        """Move a drone from one node to another and update tracking lists."""
         if to_zone:
             d.path_index += 1
 
@@ -138,6 +146,7 @@ class Simulator:
         nxt.current_drones.append(d)
 
     def _get_conn(self, z1: 'Zone', z2: 'Zone') -> 'Connection':
+        """Return the connection linking two zones."""
         for conn in self.graph.connections:
             if conn.name == f'{z1.name}-{z2.name}' or \
                conn.name == f'{z2.name}-{z1.name}':
@@ -145,6 +154,7 @@ class Simulator:
         raise ValueError("Connection not found")
 
     def display_turns(self) -> None:
+        """Print the recorded turns and the total number of turns."""
         for t in self.turns:
             print(t)
 

@@ -7,7 +7,10 @@ import arcade
 
 
 class Visualizer(arcade.View):
+    """Render the graph and animate drone movement turn by turn."""
+
     def __init__(self, graph: Graph, turns: List[str]) -> None:
+        """Set up the view state, cameras, and visual styling."""
         self.graph: Graph = graph
         self.turns: List[str] = turns
         self.scale: int = 400
@@ -56,6 +59,7 @@ class Visualizer(arcade.View):
         self.background_color = arcade.color.BEAU_BLUE
 
     def _init_drones_pos(self) -> None:
+        """Place every drone at the start zone in pixel space."""
         assert self.graph.start_zone is not None
 
         for d in self.graph.drones:
@@ -65,6 +69,7 @@ class Visualizer(arcade.View):
                 self._calc_zone_pos(self.graph.start_zone)
 
     def on_draw(self) -> None:
+        """Draw the map, drones, and UI overlays."""
         self.clear()
 
         self.camera.use()
@@ -187,6 +192,7 @@ class Visualizer(arcade.View):
         self._draw_text()
 
     def _draw_text(self) -> None:
+        """Draw the control legend and map description panel."""
         arcade.draw_lbwh_rectangle_filled(
             10, 10, 420, 110, arcade.color.ASH_GREY
         )
@@ -353,6 +359,7 @@ class Visualizer(arcade.View):
         )
 
     def on_key_press(self, key: int, modifiers: int) -> None:
+        """Handle keyboard shortcuts for quitting, pausing, reset, and fullscreen."""
         if key in [arcade.key.Q, arcade.key.ESCAPE]:
             arcade.exit()
 
@@ -373,6 +380,7 @@ class Visualizer(arcade.View):
             scroll_x: float,
             scroll_y: float
     ) -> None:
+        """Zoom the camera with the mouse wheel."""
         self.camera.zoom += scroll_y * 0.1
         self.camera.zoom = max(0.2, min(self.camera.zoom, 4.0))
 
@@ -383,6 +391,7 @@ class Visualizer(arcade.View):
             button: int,
             modifiers: int
     ) -> None:
+        """Start panning when the left mouse button is pressed."""
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.is_dragging = True
 
@@ -393,10 +402,12 @@ class Visualizer(arcade.View):
             button: int,
             modifiers: int
     ) -> None:
+        """Stop panning when the left mouse button is released."""
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.is_dragging = False
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int) -> None:
+        """Pan the camera while dragging the mouse."""
         if self.is_dragging:
             self.camera.position = (
                 self.camera.position[0] - (dx / self.camera.zoom),
@@ -404,6 +415,7 @@ class Visualizer(arcade.View):
             )
 
     def on_update(self, delta_time: float) -> None:
+        """Advance the animation state over time."""
         if self.pause:
             return
 
@@ -433,6 +445,7 @@ class Visualizer(arcade.View):
             self.current_pixel_position[d] = (lx, ly)
 
     def _load_turn_targets(self) -> None:
+        """Load the target pixel positions for the current turn."""
         current_turn = self.turns[self.current_turn].split(' ')
         for move in current_turn:
             if move.count('-') == 1:
@@ -448,29 +461,34 @@ class Visualizer(arcade.View):
                     self._calc_conn_pos(conn_name)
 
     def _get_zone(self, name: str) -> Zone:
+        """Return the zone with the given name."""
         for zone in self.graph.zones:
             if zone.name == name:
                 return zone
         raise ValueError("Zone not found!")
 
     def _get_connection(self, z1: str, z2: str) -> Connection:
+        """Return the connection between two zones by name."""
         for conn in self.graph.connections:
             if conn.name in [f'{z1}-{z2}', f'{z2}-{z1}']:
                 return conn
         raise ValueError("Connection not found")
 
     def _get_drone(self, drone_id: str) -> Drone:
+        """Return the drone with the given identifier."""
         for drone in self.graph.drones:
             if drone.id == drone_id:
                 return drone
         raise ValueError("Drone not found")
 
     def _calc_zone_pos(self, zone: Zone) -> Tuple[int, int]:
+        """Convert a zone's grid coordinates into pixel coordinates."""
         x = zone.x * self.scale + self.zone_size * 2
         y = zone.y * self.scale - self.zone_size * 2
         return x, y
 
     def _calc_conn_pos(self, conn: Connection) -> Tuple[float, float]:
+        """Return the midpoint pixel position of a connection."""
         z1_name, z2_name = conn.name.split('-')
         z1 = self._get_zone(z1_name)
         z2 = self._get_zone(z2_name)

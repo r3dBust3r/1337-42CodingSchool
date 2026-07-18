@@ -12,6 +12,7 @@ filterwarnings('ignore')
 
 
 def main() -> None:
+    """Run the full Fly-in pipeline: parse, validate, simulate, and visualize."""
     if len(argv) == 1:
         raise ValueError("Usage: python main.py <path/to/map>")
 

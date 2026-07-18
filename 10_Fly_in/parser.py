@@ -2,7 +2,14 @@ from typing import List, Dict, Any
 
 
 class Parser:
+    """Parse and validate a Fly-in map file into structured data."""
+
     def __init__(self, path: str) -> None:
+        """Load the raw map file from disk.
+
+        Args:
+            path: Path to the map file.
+        """
         self.map: List[str] = []
         self.nb_drones: int = 0
         self.zones: List[Dict[str, Any]] = []
@@ -30,6 +37,7 @@ class Parser:
             line_nbr: str,
             zone: bool
     ) -> Dict:
+        """Parse a metadata block into a dictionary."""
         if raw_metadata.count('[') != 1 or raw_metadata.count(']') != 1:
             raise ValueError(
                 f'{line_nbr}Invalid metadata format!\n'
@@ -102,6 +110,7 @@ class Parser:
         return extracted
 
     def parse(self) -> None:
+        """Validate and convert the raw map lines into parser state."""
         line_nbr: int | str
 
         for line_nbr, line in enumerate(self.map):
@@ -284,6 +293,7 @@ class Parser:
             raise ValueError('> No end zone specified!')
 
     def get_map(self) -> Dict[str, Any]:
+        """Return the parsed map structure."""
         return {
             'nb_drones': self.nb_drones,
             'zones': self.zones,
