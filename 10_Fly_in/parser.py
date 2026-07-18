@@ -27,7 +27,8 @@ class Parser:
             self,
             raw_metadata: str,
             zone_type: str,
-            line_nbr: str
+            line_nbr: str,
+            zone: bool
     ) -> Dict:
         if raw_metadata.count('[') != 1 or raw_metadata.count(']') != 1:
             raise ValueError(
@@ -50,13 +51,22 @@ class Parser:
             value: str | int
             key, value = pair.split('=')
 
-            if key not in [
-                'max_link_capacity',
-                'max_drones',
-                'color',
-                'zone'
-            ]:
-                raise ValueError(f'{line_nbr}Invalid metadata key: {key}')
+            if key in extracted:
+                raise ValueError(f'{line_nbr}Duplicated metadata key: {key}')
+
+            if zone and key not in ['max_drones', 'color', 'zone']:
+                raise ValueError(
+                    f'{line_nbr}Invalid metadata key ({key}) for a zone'
+                )
+
+            elif not zone and key != 'max_link_capacity':
+                raise ValueError(
+                    f'{line_nbr}Invalid metadata key ({key}) for a connection'
+                )
+
+            if key == 'color':
+                if not value.isalpha():
+                    raise ValueError(f'{line_nbr}Color must be one valid word')
 
             if key == 'zone' and value not in [
                 'normal',
@@ -197,7 +207,12 @@ class Parser:
                     'name': zone_name,
                     'x': zone_x,
                     'y': zone_y,
-                    'metadata': self.extract_metadata(metadata, key, line_nbr),
+                    'metadata': self.extract_metadata(
+                        metadata,
+                        key,
+                        line_nbr,
+                        True
+                    )
                 })
 
             elif key == 'connection':
@@ -245,7 +260,8 @@ class Parser:
                     'metadata': self.extract_metadata(
                         max_link_capacity,
                         '',
-                        line_nbr
+                        line_nbr,
+                        False
                     ),
                 })
 

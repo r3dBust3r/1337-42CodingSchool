@@ -1,4 +1,5 @@
 from typing import List, Tuple, Union, TYPE_CHECKING
+from collections import deque
 
 if TYPE_CHECKING:
     from graph import Graph
@@ -16,12 +17,38 @@ class Simulator:
         self.paths: List[Tuple[float, List['Zone']]] = paths
         self.turns: List[str] = []
 
-        self.assign_paths_to_drones()
+        self._check_disconnected_graph()
+        self._assign_paths_to_drones()
 
-    def assign_paths_to_drones(self) -> None:
+    def _assign_paths_to_drones(self) -> None:
+        if not self.paths:
+            raise ValueError(
+                f'> No available paths to: {self.graph.end_zone.name}'
+            )
+
         for d in self.graph.drones:
             d_id = int(d.id.replace('D', ''))
             d.path = self.paths[d_id % len(self.paths)]
+
+    def _check_disconnected_graph(self) -> None:
+        start = self.graph.start_zone
+
+        if not start:
+            raise ValueError("> Graph has no start zone")
+
+        dq = deque([start])
+        checked = {start}
+
+        while dq:
+            current = dq.popleft()
+
+            for nbr in current.neighbors:
+                if nbr not in checked:
+                    checked.add(nbr)
+                    dq.append(nbr)
+
+        if len(checked) != len(self.graph.zones):
+            raise ValueError("> Graph contains unreachable zones")
 
     def run(self) -> None:
         STOP_ON = 10_000
