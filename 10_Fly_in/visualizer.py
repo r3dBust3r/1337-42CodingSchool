@@ -256,7 +256,10 @@ class Visualizer(arcade.View):
         arcade.draw_lbwh_rectangle_filled(
             440, 120, 420, 40, arcade.color.BLACK
         )
-        arcade.draw_text("Map Description", 460, 130, arcade.color.ASH_GREY, 16)
+        arcade.draw_text(
+            "Map Description", 460, 130,
+            arcade.color.ASH_GREY, 16
+        )
 
         # Restricted Zone
         arcade.draw_text(

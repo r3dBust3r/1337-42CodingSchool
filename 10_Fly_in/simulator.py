@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Union, TYPE_CHECKING
+from typing import List, Tuple, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from graph import Graph
@@ -29,8 +29,9 @@ class Simulator:
 
         while not self._all_delivered() and keep_running:
             turns = ''
-            conns_tracker = {}
-
+            conns_tracker = {
+                c: len(c.current_drones) for c in self.graph.connections
+            }
             for d in self.graph.drones:
 
                 if d.delivered:
@@ -44,9 +45,6 @@ class Simulator:
 
                 conn: 'Connection' = self._get_conn(cur_zone, nxt_zone)
 
-                if conn not in conns_tracker:
-                    conns_tracker[conn] = conn.max_link_capacity
-
                 if nxt_zone.zone in ['normal', 'priority']:
 
                     # next zone has no space
@@ -54,30 +52,32 @@ class Simulator:
                         continue
 
                     # connection has no space
-                    if not conns_tracker[conn]:
+                    if conns_tracker[conn] == conn.max_link_capacity:
                         continue
 
-                    conns_tracker[conn] -= 1
+                    conns_tracker[conn] += 1
 
                     self._move_drone(d, cur_zone, nxt_zone)
                     turns += f'{d.id}-{nxt_zone.name} '
 
-
                 elif nxt_zone.zone == 'restricted':
                     if d.in_transit:
-                        self._move_drone(d, cur_zone, nxt_zone)
+                        self._move_drone(d, conn, nxt_zone)
                         turns += f'{d.id}-{nxt_zone.name} '
                         d.in_transit = False
 
                     else:
                         # next zone has no space
-                        if len(nxt_zone.current_drones) == nxt_zone.max_drones:
+                        crr_ds = conn.current_drones
+                        nxt_ds = nxt_zone.current_drones
+                        if (len(crr_ds) + len(nxt_ds)) == nxt_zone.max_drones:
                             continue
 
-                        # if len(conn.current_drones) == nxt_zone.max_drones:
-                        #     continue
+                        # connection has no space
+                        if conns_tracker[conn] == conn.max_link_capacity:
+                            continue
 
-                        conns_tracker[conn] -= 1
+                        conns_tracker[conn] += 1
 
                         self._move_drone(d, cur_zone, conn, False)
                         d.in_transit = True
@@ -97,7 +97,7 @@ class Simulator:
     def _move_drone(
             self,
             d: 'Drone',
-            cur: 'Zone',
+            cur: Union['Zone', 'Connection'],
             nxt: Union['Zone', 'Connection'],
             to_zone: bool = True
     ) -> None:
