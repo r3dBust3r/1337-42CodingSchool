@@ -45,7 +45,8 @@ class Visualizer(arcade.View):
             "beige": arcade.color.BEIGE,
             "violet": arcade.color.AFRICAN_VIOLET,
             "mint": arcade.color.MAGIC_MINT,
-            "peach": arcade.color.PEACH_ORANGE
+            "peach": arcade.color.PEACH_ORANGE,
+            "bg": arcade.color.BEAU_BLUE
         }
 
         self._init_drones_pos()
@@ -134,13 +135,29 @@ class Visualizer(arcade.View):
                 12
             )
 
+            arcade.draw_text(
+                f'MAX={z.max_drones}',
+                x + 10 - (len(str(z.max_drones)) + 4) * 5,
+                y + self.WIN_H - self.zone_size * 1.9,
+                arcade.color.BLACK,
+                12
+            )
+
             if z.zone == 'restricted':
-                arcade.draw_text(
-                    f'( {z.zone.upper()} )',
-                    x + 10 - len(z.zone) * 6,
-                    y + self.WIN_H - self.zone_size * 1.9,
-                    self.colors['red'],
+                arcade.draw_circle_outline(
+                    x + 10,
+                    y + self.WIN_H,
+                    self.zone_size,
+                    self.colors['bg'],
                     12
+                )
+
+                arcade.draw_circle_outline(
+                    x + 10,
+                    y + self.WIN_H,
+                    self.zone_size,
+                    self.colors['red'],
+                    6
                 )
 
         # Drawing drones
@@ -229,6 +246,108 @@ class Visualizer(arcade.View):
                 arcade.color.BLACK,
                 14
             )
+
+        # Drawing Map Description
+
+        # Header and Background
+        arcade.draw_lbwh_rectangle_filled(
+            440, 10, 420, 110, arcade.color.ASH_GREY
+        )
+        arcade.draw_lbwh_rectangle_filled(
+            440, 120, 420, 40, arcade.color.BLACK
+        )
+        arcade.draw_text("Map Description", 460, 130, arcade.color.ASH_GREY, 16)
+
+        # Restricted Zone
+        arcade.draw_text(
+            "Restricted Zone",
+            460,
+            70,
+            arcade.color.BLACK,
+            12
+        )
+        arcade.draw_circle_filled(
+            475,
+            35,
+            18,
+            self.colors['default'],
+            12
+        )
+
+        arcade.draw_circle_outline(
+            475,
+            35,
+            18,
+            arcade.color.ASH_GREY,
+            8
+        )
+
+        arcade.draw_circle_outline(
+            475,
+            35,
+            18,
+            self.colors['red'],
+            4
+        )
+
+        # Max Link Capacity
+        arcade.draw_text(
+            "Max Link Capacity",
+            614,
+            70,
+            arcade.color.BLACK,
+            12
+        )
+
+        arcade.draw_line(
+            614,
+            30,
+            714,
+            30,
+            self.colors["red"],
+            3
+        )
+
+        arcade.draw_lbwh_rectangle_filled(
+            651,
+            17,
+            26,
+            26,
+            self.colors["red"]
+        )
+
+        arcade.draw_text(
+            "N",
+            658,
+            24,
+            self.colors["white"],
+            12
+        )
+
+        # Drone
+        arcade.draw_text(
+            "Drone",
+            780,
+            70,
+            arcade.color.BLACK,
+            12
+        )
+
+        arcade.draw_circle_filled(
+            800,
+            35,
+            18,
+            self.colors['black'],
+            12
+        )
+
+        arcade.draw_text(
+            "N",
+            794,
+            28,
+            self.colors["white"],
+            12
+        )
 
     def on_key_press(self, key: int, modifiers: int) -> None:
         if key in [arcade.key.Q, arcade.key.ESCAPE]:
