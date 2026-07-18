@@ -94,6 +94,24 @@ class Visualizer(arcade.View):
                 3
             )
 
+            mlc_x, mlc_y = self._calc_conn_pos(conn)
+
+            arcade.draw_lbwh_rectangle_filled(
+                mlc_x - 4,
+                mlc_y + self.WIN_H - 13,
+                26,
+                26,
+                self.colors[conn_color]
+            )
+
+            arcade.draw_text(
+                conn.max_link_capacity,
+                mlc_x + 5,
+                mlc_y + self.WIN_H - 5,
+                arcade.color.WHITE,
+                12
+            )
+
         # Drawing Zones
         for z in self.graph.zones:
             x, y = self._calc_zone_pos(z)
@@ -119,10 +137,10 @@ class Visualizer(arcade.View):
             if z.zone == 'restricted':
                 arcade.draw_text(
                     f'( {z.zone.upper()} )',
-                    x + 10 - len(z.zone) * 4.5,
+                    x + 10 - len(z.zone) * 6,
                     y + self.WIN_H - self.zone_size * 1.9,
                     self.colors['red'],
-                    10
+                    12
                 )
 
         # Drawing drones
