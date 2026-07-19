@@ -56,12 +56,16 @@ class Simulator:
             raise ValueError("> Graph contains unreachable zones")
 
     def run(self) -> None:
-        """Execute the simulation turn by turn until all drones are delivered."""
-        STOP_ON = 10_000
+        """
+            Execute the simulation turn by turn
+            until all drones are delivered.
+        """
+        # safety limit for inifite loops
+        STOP_ON = 1_000_000
         keep_running = STOP_ON
 
         while not self._all_delivered() and keep_running:
-            turns = ''
+            curr_moves = ''
             conns_tracker = {
                 c: len(c.current_drones) for c in self.graph.connections
             }
@@ -91,15 +95,16 @@ class Simulator:
                     conns_tracker[conn] += 1
 
                     self._move_drone(d, cur_zone, nxt_zone)
-                    turns += f'{d.id}-{nxt_zone.name} '
+                    curr_moves += f'{d.id}-{nxt_zone.name} '
 
                 elif nxt_zone.zone == 'restricted':
-                    if d.in_transit:
+                    if d.in_transit:  # drone on a conn
                         self._move_drone(d, conn, nxt_zone)
-                        turns += f'{d.id}-{nxt_zone.name} '
+                        curr_moves += f'{d.id}-{nxt_zone.name} '
                         d.in_transit = False
 
-                    else:
+                    else:  # drone on a zone
+
                         # next zone has no space
                         crr_ds = conn.current_drones
                         nxt_ds = nxt_zone.current_drones
@@ -115,9 +120,9 @@ class Simulator:
                         self._move_drone(d, cur_zone, conn, False)
                         d.in_transit = True
 
-                        turns += f'{d.id}-{conn.name} '
+                        curr_moves += f'{d.id}-{conn.name} '
 
-            self.turns.append(turns.strip())
+            self.turns.append(curr_moves.strip())
             keep_running -= 1
 
         if len(self.turns) == STOP_ON:
@@ -136,6 +141,7 @@ class Simulator:
             to_zone: bool = True
     ) -> None:
         """Move a drone from one node to another and update tracking lists."""
+        # increase pos index in case next is a zone
         if to_zone:
             d.path_index += 1
 

@@ -12,7 +12,10 @@ filterwarnings('ignore')
 
 
 def main() -> None:
-    """Run the full Fly-in pipeline: parse, validate, simulate, and visualize."""
+    """
+        Run the full Fly-in pipeline:
+        parse, validate, simulate, and visualize.
+    """
     if len(argv) == 1:
         raise ValueError("Usage: python main.py <path/to/map>")
 
@@ -34,8 +37,6 @@ def main() -> None:
     simulator = Simulator(graph, paths)
     simulator.run()
     simulator.display_turns()
-
-    # exit() # DEB
 
     WINDOW_WIDTH = 1920
     WINDOW_HEIGHT = 960

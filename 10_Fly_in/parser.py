@@ -116,12 +116,16 @@ class Parser:
         for line_nbr, line in enumerate(self.map):
             line_nbr = f'Error in line: {line_nbr + 1}\n> '
             line = line.strip().lower()
+
+            # full line comments
             if line.startswith('#') or line == '':
                 continue
 
+            # inline comments
             if '#' in line:
                 line = line[:line.find('#')]
 
+            # a line with no key: value
             try:
                 key, value = line.split(':', 1)
                 key = key.strip()
@@ -130,6 +134,12 @@ class Parser:
                 raise ValueError(f'{line_nbr}Invalid map structure!')
 
             if key == 'nb_drones':
+                # number of drones might be:
+                # duplicated
+                # not the first line
+                # not a number
+                # negative
+
                 if self.nb_drones:
                     raise ValueError(f'{line_nbr}Two entries for nb_drones')
 
@@ -151,6 +161,8 @@ class Parser:
                     )
 
             elif key in ['start_hub', 'hub', 'end_hub']:
+                # checking if metadata was presented
+                # if not: add the defalut values
                 if '[' not in value:
                     value += '[zone=normal color=default max_drones=1]'
 
@@ -205,12 +217,14 @@ class Parser:
                 if key == 'end_hub':
                     self.end_zone = zone_name
 
+                # invalid zone name
                 if '-' in zone_name or ']' in zone_name:
                     raise ValueError(
                         f'{line_nbr}Name cannot contain a '
                         'HASH, DASH, SPACE or BRACKETS'
                     )
 
+                # all checks passed
                 self.zones.append({
                     'hub_type': key,
                     'name': zone_name,
@@ -228,6 +242,7 @@ class Parser:
                 splt_value = value.split(' ', 1)
                 splt_value = [a for a in splt_value if a]
 
+                # no metadata: add the default
                 if len(splt_value) == 1:
                     splt_value.append('[max_link_capacity=1]')
 
@@ -240,6 +255,7 @@ class Parser:
                         'Valid format: <zone1>-<zone2> [<metadata>]'
                     )
 
+                # invalid conn name
                 if name.count('-') != 1:
                     raise ValueError(
                         f'{line_nbr}Invalid connection name\n'
@@ -247,6 +263,11 @@ class Parser:
                     )
 
                 z1_name, z2_name = name.split('-')
+
+                if z1_name == z2_name:
+                    raise ValueError(
+                        f'{line_nbr}{z1_name} self connection'
+                    )
 
                 if z1_name not in [z['name'] for z in self.zones]:
                     raise ValueError(
@@ -258,12 +279,14 @@ class Parser:
                         f'{line_nbr}{z2_name} zone does not exist'
                     )
 
+                # conn is duplicated
                 con_names = [c['name'] for c in self.connections]
                 if name in con_names or f'{z2_name}-{z1_name}' in con_names:
                     raise ValueError(
                         f'{line_nbr}Found a duplicated connection: {name}'
                     )
 
+                # conn checks passed
                 self.connections.append({
                     'name': name,
                     'metadata': self.extract_metadata(

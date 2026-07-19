@@ -72,6 +72,7 @@ class Visualizer(arcade.View):
         """Draw the map, drones, and UI overlays."""
         self.clear()
 
+        # camera that will be moved
         self.camera.use()
 
         # Drawing Connections
@@ -187,7 +188,7 @@ class Visualizer(arcade.View):
                 12
             )
 
-        # Drawing text
+        # Drawing text with a fixed camera
         self.fixed_camera.use()
         self._draw_text()
 
@@ -359,7 +360,10 @@ class Visualizer(arcade.View):
         )
 
     def on_key_press(self, key: int, modifiers: int) -> None:
-        """Handle keyboard shortcuts for quitting, pausing, reset, and fullscreen."""
+        """
+            Handle keyboard shortcuts for:
+            quitting, pausing, reset, and fullscreen.
+        """
         if key in [arcade.key.Q, arcade.key.ESCAPE]:
             arcade.exit()
 
@@ -419,6 +423,7 @@ class Visualizer(arcade.View):
         if self.pause:
             return
 
+        # waiting 1s before starting
         if not self.started:
             self.delay -= delta_time
             if self.delay <= 0:
@@ -427,12 +432,14 @@ class Visualizer(arcade.View):
 
         self.progress += delta_time
 
+        # turn animation has been completed
         if self.progress >= 1.0:
             for d in self.graph.drones:
                 self.current_pixel_position[d] = self.target_pixel_position[d]
 
             self.progress = 0
 
+            # animation finished
             if self.current_turn < len(self.turns) - 1:
                 self.current_turn += 1
                 self._load_turn_targets()
@@ -448,11 +455,14 @@ class Visualizer(arcade.View):
         """Load the target pixel positions for the current turn."""
         current_turn = self.turns[self.current_turn].split(' ')
         for move in current_turn:
+            # drone on a zone
             if move.count('-') == 1:
                 drone_id, target_name = move.split('-')
                 drone: Drone = self._get_drone(drone_id)
                 target: Zone = self._get_zone(target_name)
                 self.target_pixel_position[drone] = self._calc_zone_pos(target)
+
+            # drone on a connection
             else:
                 drone_id, z1, z2 = move.split('-')
                 drone = self._get_drone(drone_id)

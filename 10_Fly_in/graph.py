@@ -22,6 +22,7 @@ class Graph:
         self.end_zone: Zone
         self.drones: List[Drone] = []
 
+        # for each zone, create the Drone obj and store it in self.drones
         for zone in zones:
             name = zone['name']
             x = zone['x']
@@ -55,6 +56,8 @@ class Graph:
                 )
             )
 
+        # for each connection, create the Connection obj and
+        # store it in self.connections
         for conn in connections:
             name = conn['name']
             max_link_capacity = conn['metadata']['max_link_capacity']
@@ -66,6 +69,7 @@ class Graph:
                 )
             )
 
+        # define the start and end zones
         for z in self.zones:
             if z.hub_type == 'start_hub':
                 self.start_zone = z
@@ -73,6 +77,8 @@ class Graph:
                 self.end_zone = z
 
         assert self.end_zone is not None
+
+        # create Drones and store them in self.drones
         self.drones = [Drone(self.end_zone) for _ in range(nb_drones)]
 
         assert self.start_zone is not None
@@ -89,6 +95,7 @@ class Graph:
             assert self.start_zone is not None
             self.start_zone.current_drones.append(d)
 
+        # create the graph
         for conn in self.connections:
             if '-' not in conn.name:
                 raise ValueError('Invalid connection name!')
@@ -113,8 +120,12 @@ class Graph:
                 return zone
         raise ValueError("Zone not found")
 
+    # uniform-search cost algorithm to find multiple paths
     def find_multiple_paths(self) -> List[Tuple[float, List[Zone]]]:
-        """Return up to the lowest-cost paths from the start zone to the end zone."""
+        """
+            Return up to the lowest-cost paths
+            from the start zone to the end zone.
+        """
         all_paths: List[Tuple[float, List[Zone]]] = []
         max_paths = 2
         counter = count()
