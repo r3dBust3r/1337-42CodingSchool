@@ -10,7 +10,7 @@ class Parser:
         Args:
             path: Path to the map file.
         """
-        self.map: List[str] = []
+        self.__map: List[str] = []
         self.nb_drones: int = 0
         self.zones: List[Dict[str, Any]] = []
         self.connections: List[Dict[str, Any]] = []
@@ -19,7 +19,7 @@ class Parser:
 
         try:
             with open(path, 'r') as file:
-                self.map = file.readlines()
+                self.__map = file.readlines()
 
         except FileNotFoundError:
             raise ValueError(f'> No such file: {path}')
@@ -113,7 +113,7 @@ class Parser:
         """Validate and convert the raw map lines into parser state."""
         line_nbr: int | str
 
-        for line_nbr, line in enumerate(self.map):
+        for line_nbr, line in enumerate(self.__map):
             line_nbr = f'Error in line: {line_nbr + 1}\n> '
             line = line.strip().lower()
 

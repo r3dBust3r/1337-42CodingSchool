@@ -5,7 +5,7 @@ from graph import Graph
 from simulator import Simulator
 from visualizer import Visualizer
 import arcade
-from sys import argv
+import argparse
 
 from warnings import filterwarnings
 filterwarnings('ignore')
@@ -16,10 +16,16 @@ def main() -> None:
         Run the full Fly-in pipeline:
         parse, validate, simulate, and visualize.
     """
-    if len(argv) == 1:
-        raise ValueError("Usage: python main.py <path/to/map>")
 
-    parser = Parser(argv[1])
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument(
+        "map_file",
+        help="Path to the map file",
+    )
+
+    args = arg_parser.parse_args()
+
+    parser = Parser(args.map_file)
     parser.parse()
     parsed_map = parser.get_map()
 

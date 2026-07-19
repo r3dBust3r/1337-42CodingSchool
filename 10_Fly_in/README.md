@@ -140,6 +140,23 @@ Controls:
 - mouse wheel zooms
 - left mouse drag pans the camera
 
+## Example Input & Output
+
+### input
+```bash
+make map=maps/easy/01_linear_path.txt
+```
+
+### Output
+```
+D1-waypoint1
+D1-waypoint2 D2-waypoint1
+D1-goal D2-waypoint2
+D2-goal
+
+Total turns: 4
+```
+
 ## Project Structure
 
 - `main.py` orchestrates parsing, validation, graph creation, simulation, and visualization.
