@@ -32,7 +32,7 @@ class Simulator:
 
         for d in self.graph.drones:
             d_id = int(d.id.replace('D', ''))
-            d.path = self.paths[d_id % len(self.paths)]
+            d.path = self.paths[(d_id % len(self.paths)) - 1]
 
     def _check_disconnected_graph(self) -> None:
         """Ensure every zone is reachable from the start zone."""
