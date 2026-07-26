@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 21:28:50 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/26 22:11:24 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/26 23:08:57 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	print_usage(void)
 {
+	fprintf(stderr, "Error: something is wrong with your input\n\n");
 	fprintf(stderr, "Usage: ./codexion <coders> <burnout> <compile> <debug> <refactor> <compiles_req> <cooldown> <scheduler>\n\n");
 	fprintf(stderr, "Arguments:\n");
 	fprintf(stderr, "  <coders>       : Positive integer (Number of coders)\n");

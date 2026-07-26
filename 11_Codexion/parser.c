@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 18:15:09 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/26 22:06:55 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/26 23:06:50 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int parser(int c, char **av, t_config *config)
 
     if (strcmp(av[i], "fifo") != 0 && strcmp(av[i], "edf") != 0)
     {
-        fprintf(stderr, "Error: Scheduler is one of (fifo, edf)\n");
+        print_usage();
         return (clean_config(config));
     }
 
