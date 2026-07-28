@@ -39,7 +39,7 @@ Everything below is built around those four additions, since the core eat/think 
 
 ## Phase 2 — Skeleton, parsing, Makefile
 
-- [ ] Parse and validate all 8 arguments: `number_of_coders time_to_burnout time_to_compile time_to_debug time_to_refactor number_of_compiles_required dongle_cooldown scheduler`.
+- [ ] Parse and validate all 8 arguments: `number_of_coders time_to_burnout time_to_compile time_to_debug time_to_refactor required_compiles dongle_cooldown scheduler`.
 - [ ] Reject: negative numbers, non-integer strings, `number_of_coders == 0`, and any `scheduler` value that isn't exactly `fifo` or `edf`.
 - [ ] Write the Makefile: `NAME`, `all`, `clean`, `fclean`, `re`, flags `-Wall -Wextra -Werror -pthread`, no unnecessary relinking.
 - [ ] Build your `t_sim` context struct and confirm you can allocate/free it cleanly with zero coders touched yet.
@@ -75,7 +75,7 @@ Everything below is built around those four additions, since the core eat/think 
 ## Phase 6 — Full state machine + compile counting
 
 - [ ] Wire compiling → debugging → refactoring → immediately re-request dongles.
-- [ ] Track `num_compiles` per coder; stop the simulation once *every* coder has reached `number_of_compiles_required`.
+- [ ] Track `num_compiles` per coder; stop the simulation once *every* coder has reached `required_compiles`.
 - [ ] Confirm the two stop conditions (burnout vs. compiles-required) don't race each other — e.g. don't let a burnout log and a "simulation complete, clean exit" both try to fire.
 
 ---
