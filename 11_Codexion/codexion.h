@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 18:00:40 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/28 22:13:49 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/30 17:43:01 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_coder
 	long long		last_compile;
 	int				compiles_completed;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	print_mutex;
 }	t_coder;
 
 typedef struct s_simulator

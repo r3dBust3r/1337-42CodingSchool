@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 17:46:23 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/28 22:40:23 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/30 17:44:17 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,98 @@ void clean_up(t_simulator *simulator)
 	free(simulator->dongles);
 }
 
+void ms_sleep(long t)
+{
+	usleep(t * 1000);
+}
+
+void handle_single_coder() {}
+
+void print_action(t_coder *coder, char *action)
+{
+    pthread_mutex_lock(&coder->simulator->simulator_mutex);
+    if (!coder->simulator->is_running)
+    {
+        pthread_mutex_unlock(&coder->simulator->simulator_mutex);
+        return;
+    }
+    pthread_mutex_unlock(&coder->simulator->simulator_mutex);
+
+    long long action_time = get_time() - coder->simulator->start_time;
+    
+    pthread_mutex_lock(&coder->simulator->print_mutex);
+
+	if (coder->simulator->is_running)
+        printf("%lld %d %s\n", action_time, coder->id, action);
+
+    pthread_mutex_unlock(&coder->simulator->print_mutex);
+}
+
+
+void grab_dongles(t_coder *coder) {
+    pthread_mutex_lock(&coder->mutex);
+    coder->last_compile = get_time();
+    pthread_mutex_unlock(&coder->mutex);
+
+    print_action(coder, "has taken a dongle");
+    print_action(coder, "has taken a dongle");
+}
+
+
+void do_compile(t_coder *coder) {
+    pthread_mutex_lock(&coder->mutex);
+    coder->last_compile = get_time();
+    pthread_mutex_unlock(&coder->mutex);
+
+    print_action(coder, "is compiling");
+    ms_sleep(coder->simulator->config->time_to_compile);
+}
+
+
+void release_dongles(t_coder *coder) {
+}
+
+
+void do_debug(t_coder *coder) {
+    print_action(coder, "is debugging");
+    ms_sleep(coder->simulator->config->time_to_debug);
+}
+
+void do_refactor(t_coder *coder) {
+    print_action(coder, "is refactoring");
+    ms_sleep(coder->simulator->config->time_to_refactor);
+}
+
+
 void *coder_cycle(void *arg)
 {
 	t_coder *coder = (t_coder *)arg;
-	// CODER LIFE_CYCLE
+
+	if (coder->simulator->config->number_of_coders == 1)
+	{
+		// ONE CODER LOGIC
+		return NULL;
+	}
+
+	while (coder->compiles_completed < coder->simulator->config->required_compiles)
+	{
+		pthread_mutex_lock(&coder->simulator->simulator_mutex);
+		if (!coder->simulator->is_running)
+		{
+			pthread_mutex_unlock(&coder->simulator->simulator_mutex);
+			break;
+		}
+		pthread_mutex_unlock(&coder->simulator->simulator_mutex);
+
+		grab_dongles(coder);
+		do_compile(coder);
+		release_dongles(coder);
+		do_debug(coder);
+		do_refactor(coder);
+
+		coder->compiles_completed += 1;
+	}
+
 	return NULL;
 }
 
