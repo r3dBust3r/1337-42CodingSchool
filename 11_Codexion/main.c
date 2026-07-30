@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 17:46:23 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/30 17:44:17 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/30 22:40:19 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,12 @@ void clean_up(t_simulator *simulator)
 	free(simulator->dongles);
 }
 
-void ms_sleep(long t)
+void ms_sleep(long long time_in_ms)
 {
-	usleep(t * 1000);
+    long long start = get_time();
+    while (get_time() - start < time_in_ms)
+        usleep(100);
 }
-
-void handle_single_coder() {}
 
 void print_action(t_coder *coder, char *action)
 {
@@ -104,13 +104,110 @@ void print_action(t_coder *coder, char *action)
 }
 
 
-void grab_dongles(t_coder *coder) {
-    pthread_mutex_lock(&coder->mutex);
-    coder->last_compile = get_time();
-    pthread_mutex_unlock(&coder->mutex);
+void pq_push(t_dongle *dongle, t_request *request, int scheduler)
+{
+    dongle->requests[dongle->queue_size] = request;
+
+    if (dongle->queue_size == 1)
+    {
+        int swap = 0;
+
+        if (scheduler == 0) // FIFO
+        {
+            if (dongle->requests[0]->creation_time > dongle->requests[1]->creation_time)
+                swap = 1;
+        }
+        else // EDF
+        {
+            if (dongle->requests[0]->deadline > dongle->requests[1]->deadline)
+                swap = 1;
+        }
+
+        if (swap) // SWAP IF THE NEW REQUESTS IS LOWER
+        {
+            t_request *temp = dongle->requests[0];
+            dongle->requests[0] = dongle->requests[1];
+            dongle->requests[1] = temp;
+        }
+    }
+
+    dongle->queue_size++;
+}
+
+t_request *pq_pop(t_dongle *dongle)
+{
+    if (dongle->queue_size == 0)
+        return NULL;
+
+    t_request *popped = dongle->requests[0];
+
+    if (dongle->queue_size == 2)
+        dongle->requests[0] = dongle->requests[1];
+
+    dongle->queue_size--;
+    return popped;
+}
+
+void grab_one_dongle(t_coder *coder, t_dongle *dongle)
+{
+	long long burn_out_time = coder->simulator->config->time_to_burnout;
+	int scheduler = coder->simulator->config->scheduler;
+
+	// creating a new request
+    t_request req;
+    req.coder = coder;
+	req.creation_time = get_time();
+    req.deadline = coder->last_compile + burn_out_time;
+
+	pthread_mutex_lock(&dongle->mutex);
+	pq_push(dongle, &req, scheduler);
+
+	while (
+		(!dongle->is_available) ||
+		(get_time() < dongle->available_at) ||
+		(dongle->requests[0]->coder != coder)
+	)
+	{
+		pthread_cond_wait(&dongle->cond, &dongle->mutex);
+	}
+	
+	pq_pop(dongle);
+	dongle->is_available = 0;
+	pthread_mutex_unlock(&dongle->mutex);
 
     print_action(coder, "has taken a dongle");
-    print_action(coder, "has taken a dongle");
+}
+
+void grab_dongles(t_coder *coder) {
+	t_dongle *first_dongle;
+	t_dongle *second_dongle;
+
+	// (LOWEST ID FIRST) STRATEGY
+	if (coder->left_dongle->id < coder->right_dongle->id)
+	{
+		first_dongle = coder->left_dongle;
+		second_dongle = coder->right_dongle;
+	}
+	else
+	{
+		first_dongle = coder->right_dongle;
+		second_dongle = coder->left_dongle;
+	}
+
+	// (EVEN/ODD) STRATEGY
+	// if (coder->id % 2 != 0) // Odd
+    // {
+    //     first_dongle = coder->left_dongle;
+    //     second_dongle = coder->right_dongle;
+    // }
+    // else // Even
+    // {
+    //     first_dongle = coder->right_dongle;
+    //     second_dongle = coder->left_dongle;
+    // }
+
+	grab_one_dongle(coder, first_dongle);
+	grab_one_dongle(coder, second_dongle);
 }
 
 
@@ -125,6 +222,21 @@ void do_compile(t_coder *coder) {
 
 
 void release_dongles(t_coder *coder) {
+	int cooldown = coder->simulator->config->dongle_cooldown;
+	t_dongle *left_dongle = coder->left_dongle;
+	t_dongle *right_dongle = coder->right_dongle;
+
+	pthread_mutex_lock(&left_dongle->mutex);
+	left_dongle->is_available = 1;
+	left_dongle->available_at = get_time() + cooldown;
+	pthread_cond_broadcast(&left_dongle->cond);
+	pthread_mutex_unlock(&left_dongle->mutex);
+
+	pthread_mutex_lock(&right_dongle->mutex);
+	right_dongle->is_available = 1;
+	right_dongle->available_at = get_time() + cooldown;
+	pthread_cond_broadcast(&right_dongle->cond);
+	pthread_mutex_unlock(&right_dongle->mutex);
 }
 
 
@@ -138,6 +250,11 @@ void do_refactor(t_coder *coder) {
     ms_sleep(coder->simulator->config->time_to_refactor);
 }
 
+void handle_single_coder(t_coder *coder) {
+	if (coder->left_dongle == coder->right_dongle)
+	grab_dongles(coder);
+}
+
 
 void *coder_cycle(void *arg)
 {
@@ -145,9 +262,12 @@ void *coder_cycle(void *arg)
 
 	if (coder->simulator->config->number_of_coders == 1)
 	{
-		// ONE CODER LOGIC
+		handle_single_coder(coder);
 		return NULL;
 	}
+
+	if (coder->id % 2 == 0)
+        ms_sleep(10);
 
 	while (coder->compiles_completed < coder->simulator->config->required_compiles)
 	{
@@ -177,6 +297,7 @@ void run_simulation(t_simulator *simulator)
 	long long current_time;
 	int someone_burned_out = 0;
 
+
 	// 1. THE MONITOR LOOP
 	while (1) // Loop continuously until a break condition is met
 	{
@@ -191,24 +312,29 @@ void run_simulation(t_simulator *simulator)
 			
 			current_time = get_time();
 			
-			// Check for burnout
-			if (current_time - coder->last_compile >= simulator->config->time_to_burnout)
+			// Only check for burnout if the coder hasn't reached the required target
+			if ((coder->compiles_completed < simulator->config->required_compiles) && 
+				(current_time - coder->last_compile >= simulator->config->time_to_burnout))
 			{
-				// Lock simulator_mutex, set is_running = 0
-				pthread_mutex_lock(&simulator->simulator_mutex);
-				simulator->is_running = 0;
-				pthread_mutex_unlock(&simulator->simulator_mutex);
-				
-				// Print burnout log with relative timestamp
-				pthread_mutex_lock(&simulator->print_mutex);
-				printf("%lld %d burned out\n", current_time - simulator->start_time, coder->id);
-				pthread_mutex_unlock(&simulator->print_mutex);
-
-				someone_burned_out = 1;
-				
-				// UNLOCK BEFORE BREAKING TO PREVENT DEADLOCK
-				pthread_mutex_unlock(&coder->mutex); 
-				break;
+				// Check for burnout
+				if (current_time - coder->last_compile >= simulator->config->time_to_burnout)
+				{
+					// Lock simulator_mutex, set is_running = 0
+					pthread_mutex_lock(&simulator->simulator_mutex);
+					simulator->is_running = 0;
+					pthread_mutex_unlock(&simulator->simulator_mutex);
+					
+					// Print burnout log with relative timestamp
+					pthread_mutex_lock(&simulator->print_mutex);
+					printf("%lld %d burned out\n", current_time - simulator->start_time, coder->id);
+					pthread_mutex_unlock(&simulator->print_mutex);
+					
+					someone_burned_out = 1;
+					
+					// UNLOCK BEFORE BREAKING TO PREVENT DEADLOCK
+					pthread_mutex_unlock(&coder->mutex); 
+					break;
+				}
 			}
 
 			// Check if required_compiles is reached for this coder
@@ -277,6 +403,7 @@ int initializer(t_config *config, t_simulator *simulator)
 		dongles[i].id = i + 1;
 		dongles[i].is_available = 1;
 		dongles[i].available_at = simulator->start_time;
+		dongles[i].requests = malloc(sizeof(t_request *) * 2);
 
 		pthread_mutex_init(&dongles[i].mutex, NULL);
 		pthread_cond_init(&dongles[i].cond, NULL);

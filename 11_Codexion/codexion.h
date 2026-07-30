@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 18:00:40 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/30 17:43:01 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/30 20:13:45 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 typedef struct s_config t_config;
 typedef struct s_dongle t_dongle;
 typedef struct s_coder t_coder;
+typedef struct s_request t_request;
 typedef struct s_simulator t_simulator;
 
 
@@ -45,6 +46,8 @@ typedef struct s_dongle
 	int				id;
 	int				is_available;
 	long long		available_at;
+    int				queue_size;
+    t_request		**requests;
 	pthread_mutex_t	mutex;
 	pthread_cond_t	cond;
 }	t_dongle;
@@ -61,6 +64,13 @@ typedef struct s_coder
 	pthread_mutex_t	mutex;
 	pthread_mutex_t	print_mutex;
 }	t_coder;
+
+typedef struct s_request
+{
+    t_coder			*coder;
+    long long		creation_time;
+    long long		deadline;
+}	t_request;
 
 typedef struct s_simulator
 {
