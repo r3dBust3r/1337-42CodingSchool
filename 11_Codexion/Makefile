@@ -1,10 +1,10 @@
 NAME        = codexion
 HEADER      = $(NAME).h
 CC          = cc
-CFLAGS      = # -Wall -Wextra -Werror      [... UN_COMMENT LATER ...]
+CFLAGS      = -Wall -Wextra -Werror -pthread
 RM          = rm -f
 
-SRCS        = parser.c ft_atol.c print_usage.c main.c
+SRCS        = main.c
 OBJS        = $(SRCS:.c=.o)
 
 all: $(NAME)

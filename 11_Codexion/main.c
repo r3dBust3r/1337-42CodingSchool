@@ -6,50 +6,78 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 17:46:23 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/30 22:40:19 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/31 17:13:02 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-#include <pthread.h>
 
-static void print_coder(t_coder coder) // FOR DEB
+int print_usage(void)
 {
-	int l_id = -1;
-	int r_id = -1;
-
-	if (coder.left_dongle != NULL)
-		l_id = coder.left_dongle->id;
-
-	if (coder.right_dongle != NULL)
-		r_id = coder.right_dongle->id;
-
-	printf("Coder: %d\n", coder.id);
-	printf("  -- thread id: %ld\n", coder.thread_id);
-	printf("  -- last compile: %lld\n", coder.last_compile);
-	printf("  -- left dongle: %d\n", l_id);
-	printf("  -- right dongle: %d\n", r_id);
-	printf("  -- compiles completed: %d\n", coder.compiles_completed);
-	printf("------------------------\n");
+    fprintf(stderr, "Error: something is wrong with your input\n\n");
+    fprintf(stderr, "Usage: ./codexion <coders> <burnout> <compile> <debug> <refactor> <compiles_req> <cooldown> <scheduler>\n\n");
+    fprintf(stderr, "Arguments:\n");
+    fprintf(stderr, "  <coders>       : Positive integer (Number of coders)\n");
+    fprintf(stderr, "  <burnout>      : Positive integer (Time to burnout in ms)\n");
+    fprintf(stderr, "  <compile>      : Positive integer (Time to compile in ms)\n");
+    fprintf(stderr, "  <debug>        : Positive integer (Time to debug in ms)\n");
+    fprintf(stderr, "  <refactor>     : Positive integer (Time to refactor in ms)\n");
+    fprintf(stderr, "  <compiles_req> : Positive integer (Number of compiles required)\n");
+    fprintf(stderr, "  <cooldown>     : Positive integer (Dongle cooldown in ms)\n");
+    fprintf(stderr, "  <scheduler>    : 'fifo' or 'edf'  (Scheduling algorithm)\n");
+    return (1);
 }
 
-
-static void print_dongle(t_dongle dongle) // FOR BED
+long ft_atol(char *s)
 {
-	printf("Dongle: %d\n", dongle.id);
-	printf("  -- is available: %d\n", dongle.is_available);
-	printf("  -- available at: %lld\n", dongle.available_at);
-	printf("------------------------\n");
+	long r;
+	int i;
+
+	r = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] < '0' || s[i] > '9')
+			return (-1);
+		r = r * 10 + s[i] - '0';
+		if (r > 2147483647)
+			return (-1);
+		i++;
+	}
+	return (r);
 }
 
-
-static void print_simulation(t_simulator *simulator)
+int parser(int c, char **av, t_config *config)
 {
-	printf("Simulator\n");
-	printf("  -- start time: %lld\n", simulator->start_time);
-	printf("  -- running: %d\n", simulator->is_running);	
-}
+	int i;
+	int n;
 
+	n = 0;
+	i = 1;
+	while (i < c - 1)
+	{
+		n = ft_atol(av[i]);
+		if (n == -1)
+			return print_usage();
+
+		if (i == 1) config->number_of_coders = n;
+		if (i == 2) config->time_to_burnout = n;
+		if (i == 3) config->time_to_compile = n;
+		if (i == 4) config->time_to_debug = n;
+		if (i == 5) config->time_to_refactor = n;
+		if (i == 6) config->required_compiles = n;
+		if (i == 7) config->dongle_cooldown = n;
+
+		i++;
+	}
+
+	if (strcmp(av[i], "fifo") != 0 && strcmp(av[i], "edf") != 0)
+		return print_usage();
+
+	config->scheduler = (strcmp(av[i], "fifo") == 0) ? 0 : 1;
+
+	return (0);
+}
 
 long long get_time()
 {
@@ -66,86 +94,96 @@ void clean_up(t_simulator *simulator)
 		pthread_mutex_destroy(&simulator->coders[i].mutex);
 		pthread_mutex_destroy(&simulator->dongles[i].mutex);
 		pthread_cond_destroy(&simulator->dongles[i].cond);
+		free(simulator->dongles[i].requests); 
 		i++;
 	}
-	
+		
 	pthread_mutex_destroy(&simulator->print_mutex);
 	pthread_mutex_destroy(&simulator->simulator_mutex);
-	
+		
 	free(simulator->coders);
 	free(simulator->dongles);
 }
 
 void ms_sleep(long long time_in_ms)
 {
-    long long start = get_time();
-    while (get_time() - start < time_in_ms)
-        usleep(100);
+	long long start = get_time();
+	while (get_time() - start < time_in_ms)
+		usleep(100);
 }
 
 void print_action(t_coder *coder, char *action)
 {
-    pthread_mutex_lock(&coder->simulator->simulator_mutex);
-    if (!coder->simulator->is_running)
-    {
-        pthread_mutex_unlock(&coder->simulator->simulator_mutex);
-        return;
-    }
-    pthread_mutex_unlock(&coder->simulator->simulator_mutex);
+	pthread_mutex_lock(&coder->simulator->simulator_mutex);
+	if (!coder->simulator->is_running)
+	{
+		pthread_mutex_unlock(&coder->simulator->simulator_mutex);
+		return;
+	}
+	pthread_mutex_unlock(&coder->simulator->simulator_mutex);
 
-    long long action_time = get_time() - coder->simulator->start_time;
-    
-    pthread_mutex_lock(&coder->simulator->print_mutex);
+	long long action_time = get_time() - coder->simulator->start_time;
+		
+	pthread_mutex_lock(&coder->simulator->print_mutex);
 
-	if (coder->simulator->is_running)
-        printf("%lld %d %s\n", action_time, coder->id, action);
+	// Double-check is_running to prevent the Helgrind data race 
+	// when comparing the state against the monitor thread
+	pthread_mutex_lock(&coder->simulator->simulator_mutex);
+	int safe_to_print = coder->simulator->is_running;
+	pthread_mutex_unlock(&coder->simulator->simulator_mutex);
 
-    pthread_mutex_unlock(&coder->simulator->print_mutex);
+	if (safe_to_print)
+		printf("%lld %d %s\n", action_time, coder->id, action);
+
+	pthread_mutex_unlock(&coder->simulator->print_mutex);
 }
-
 
 void pq_push(t_dongle *dongle, t_request *request, int scheduler)
 {
-    dongle->requests[dongle->queue_size] = request;
+	dongle->requests[dongle->queue_size] = request;
 
-    if (dongle->queue_size == 1)
-    {
-        int swap = 0;
+	if (dongle->queue_size == 1)
+	{
+		int swap = 0;
 
-        if (scheduler == 0) // FIFO
-        {
-            if (dongle->requests[0]->creation_time > dongle->requests[1]->creation_time)
-                swap = 1;
-        }
-        else // EDF
-        {
-            if (dongle->requests[0]->deadline > dongle->requests[1]->deadline)
-                swap = 1;
-        }
+		if (scheduler == 0) // FIFO
+		{
+			// Currently: If the new request (1) is OLDER than the current root (0), swap them.
+			if (dongle->requests[0]->creation_time > dongle->requests[1]->creation_time)
+				swap = 1;
 
-        if (swap) // SWAP IF THE NEW REQUESTS IS LOWER
-        {
-            t_request *temp = dongle->requests[0];
-            dongle->requests[0] = dongle->requests[1];
-            dongle->requests[1] = temp;
-        }
-    }
+			if (dongle->requests[0]->creation_time > dongle->requests[1]->creation_time)
+				swap = 1;
+		}
+		else // EDF
+		{
+			if (dongle->requests[0]->deadline > dongle->requests[1]->deadline)
+				swap = 1;
+		}
 
-    dongle->queue_size++;
+		if (swap) 
+		{
+			t_request *temp = dongle->requests[0];
+			dongle->requests[0] = dongle->requests[1];
+			dongle->requests[1] = temp;
+		}
+	}
+
+	dongle->queue_size++;
 }
 
 t_request *pq_pop(t_dongle *dongle)
 {
-    if (dongle->queue_size == 0)
-        return NULL;
+	if (dongle->queue_size == 0)
+		return NULL;
 
-    t_request *popped = dongle->requests[0];
+	t_request *popped = dongle->requests[0];
 
-    if (dongle->queue_size == 2)
-        dongle->requests[0] = dongle->requests[1];
+	if (dongle->queue_size == 2)
+		dongle->requests[0] = dongle->requests[1];
 
-    dongle->queue_size--;
-    return popped;
+	dongle->queue_size--;
+	return popped;
 }
 
 void grab_one_dongle(t_coder *coder, t_dongle *dongle)
@@ -153,37 +191,38 @@ void grab_one_dongle(t_coder *coder, t_dongle *dongle)
 	long long burn_out_time = coder->simulator->config->time_to_burnout;
 	int scheduler = coder->simulator->config->scheduler;
 
-	// creating a new request
-    t_request req;
-    req.coder = coder;
+	t_request req;
+	req.coder = coder;
 	req.creation_time = get_time();
-    req.deadline = coder->last_compile + burn_out_time;
+		
+	pthread_mutex_lock(&coder->mutex);
+	req.deadline = coder->last_compile + burn_out_time;
+	pthread_mutex_unlock(&coder->mutex);
 
 	pthread_mutex_lock(&dongle->mutex);
 	pq_push(dongle, &req, scheduler);
 
-	while (
-		(!dongle->is_available) ||
-		(get_time() < dongle->available_at) ||
-		(dongle->requests[0]->coder != coder)
-	)
+	while ((!dongle->is_available) || (dongle->requests[0]->coder != coder))
 	{
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 	}
-	
+		
 	pq_pop(dongle);
 	dongle->is_available = 0;
 	pthread_mutex_unlock(&dongle->mutex);
 
-    print_action(coder, "has taken a dongle");
+	long long current = get_time();
+	if (current < dongle->available_at)
+		ms_sleep(dongle->available_at - current);
+
+	print_action(coder, "has taken a dongle");
 }
 
 void grab_dongles(t_coder *coder) {
 	t_dongle *first_dongle;
 	t_dongle *second_dongle;
 
-	// (LOWEST ID FIRST) STRATEGY
-	if (coder->left_dongle->id < coder->right_dongle->id)
+	if (coder->id % 2 != 0)
 	{
 		first_dongle = coder->left_dongle;
 		second_dongle = coder->right_dongle;
@@ -194,32 +233,20 @@ void grab_dongles(t_coder *coder) {
 		second_dongle = coder->left_dongle;
 	}
 
-	// (EVEN/ODD) STRATEGY
-	// if (coder->id % 2 != 0) // Odd
-    // {
-    //     first_dongle = coder->left_dongle;
-    //     second_dongle = coder->right_dongle;
-    // }
-    // else // Even
-    // {
-    //     first_dongle = coder->right_dongle;
-    //     second_dongle = coder->left_dongle;
-    // }
+
 
 	grab_one_dongle(coder, first_dongle);
 	grab_one_dongle(coder, second_dongle);
 }
 
-
 void do_compile(t_coder *coder) {
-    pthread_mutex_lock(&coder->mutex);
-    coder->last_compile = get_time();
-    pthread_mutex_unlock(&coder->mutex);
+	pthread_mutex_lock(&coder->mutex);
+	coder->last_compile = get_time();
+	pthread_mutex_unlock(&coder->mutex);
 
-    print_action(coder, "is compiling");
-    ms_sleep(coder->simulator->config->time_to_compile);
+	print_action(coder, "is compiling");
+	ms_sleep(coder->simulator->config->time_to_compile);
 }
-
 
 void release_dongles(t_coder *coder) {
 	int cooldown = coder->simulator->config->dongle_cooldown;
@@ -239,22 +266,22 @@ void release_dongles(t_coder *coder) {
 	pthread_mutex_unlock(&right_dongle->mutex);
 }
 
-
 void do_debug(t_coder *coder) {
-    print_action(coder, "is debugging");
-    ms_sleep(coder->simulator->config->time_to_debug);
+	print_action(coder, "is debugging");
+	ms_sleep(coder->simulator->config->time_to_debug);
 }
 
 void do_refactor(t_coder *coder) {
-    print_action(coder, "is refactoring");
-    ms_sleep(coder->simulator->config->time_to_refactor);
+	print_action(coder, "is refactoring");
+	ms_sleep(coder->simulator->config->time_to_refactor);
 }
 
 void handle_single_coder(t_coder *coder) {
-	if (coder->left_dongle == coder->right_dongle)
-	grab_dongles(coder);
+	pthread_mutex_lock(&coder->left_dongle->mutex);
+	print_action(coder, "has taken a dongle");
+	pthread_mutex_unlock(&coder->left_dongle->mutex);
+	ms_sleep(coder->simulator->config->time_to_burnout + 10); 
 }
-
 
 void *coder_cycle(void *arg)
 {
@@ -267,10 +294,18 @@ void *coder_cycle(void *arg)
 	}
 
 	if (coder->id % 2 == 0)
-        ms_sleep(10);
+		ms_sleep(10);
 
-	while (coder->compiles_completed < coder->simulator->config->required_compiles)
+	while (1)
 	{
+		// Safe check for completion status to prevent data races with the monitor
+		pthread_mutex_lock(&coder->mutex);
+		int current_compiles = coder->compiles_completed;
+		pthread_mutex_unlock(&coder->mutex);
+
+		if (coder->simulator->config->required_compiles != -1 && current_compiles >= coder->simulator->config->required_compiles)
+			break;
+
 		pthread_mutex_lock(&coder->simulator->simulator_mutex);
 		if (!coder->simulator->is_running)
 		{
@@ -285,61 +320,59 @@ void *coder_cycle(void *arg)
 		do_debug(coder);
 		do_refactor(coder);
 
+		// Safe increment to prevent data races with the monitor
+		pthread_mutex_lock(&coder->mutex);
 		coder->compiles_completed += 1;
+		pthread_mutex_unlock(&coder->mutex);
 	}
 
 	return NULL;
 }
 
-
 void run_simulation(t_simulator *simulator)
 {
+	simulator->start_time = get_time();
+	int i = 0;
+	while (i < simulator->config->number_of_coders)
+	{
+		simulator->coders[i].last_compile = simulator->start_time;
+		if (pthread_create(&simulator->coders[i].thread_id, NULL, coder_cycle, &simulator->coders[i]) != 0)
+			return;
+		i++;
+	}
+
 	long long current_time;
 	int someone_burned_out = 0;
 
-
-	// 1. THE MONITOR LOOP
-	while (1) // Loop continuously until a break condition is met
+	while (1)
 	{
-		int i = 0;
-		int finished_count = 0; // Reset this every single iter
+		i = 0;
+		int finished_count = 0;
 
 		while (i < simulator->config->number_of_coders)
 		{
 			t_coder *coder = &simulator->coders[i];
 
 			pthread_mutex_lock(&coder->mutex);
-			
 			current_time = get_time();
 			
-			// Only check for burnout if the coder hasn't reached the required target
-			if ((coder->compiles_completed < simulator->config->required_compiles) && 
+			if ((coder->compiles_completed < simulator->config->required_compiles || simulator->config->required_compiles == -1) && 
 				(current_time - coder->last_compile >= simulator->config->time_to_burnout))
 			{
-				// Check for burnout
-				if (current_time - coder->last_compile >= simulator->config->time_to_burnout)
-				{
-					// Lock simulator_mutex, set is_running = 0
-					pthread_mutex_lock(&simulator->simulator_mutex);
-					simulator->is_running = 0;
-					pthread_mutex_unlock(&simulator->simulator_mutex);
-					
-					// Print burnout log with relative timestamp
-					pthread_mutex_lock(&simulator->print_mutex);
-					printf("%lld %d burned out\n", current_time - simulator->start_time, coder->id);
-					pthread_mutex_unlock(&simulator->print_mutex);
-					
-					someone_burned_out = 1;
-					
-					// UNLOCK BEFORE BREAKING TO PREVENT DEADLOCK
-					pthread_mutex_unlock(&coder->mutex); 
-					break;
-				}
+				pthread_mutex_lock(&simulator->simulator_mutex);
+				simulator->is_running = 0;
+				pthread_mutex_unlock(&simulator->simulator_mutex);
+				
+				pthread_mutex_lock(&simulator->print_mutex);
+				printf("%lld %d burned out\n", current_time - simulator->start_time, coder->id);
+				pthread_mutex_unlock(&simulator->print_mutex);
+				
+				someone_burned_out = 1;
+				pthread_mutex_unlock(&coder->mutex); 
+				break;
 			}
 
-			// Check if required_compiles is reached for this coder
-			// (Assuming required_compiles is not -1, which often denotes "infinite" in these projects)
-			if (coder->compiles_completed >= simulator->config->required_compiles)
+			if (simulator->config->required_compiles != -1 && coder->compiles_completed >= simulator->config->required_compiles)
 			{
 				finished_count++;
 			}
@@ -348,33 +381,27 @@ void run_simulation(t_simulator *simulator)
 			i++;
 		}
 		
-		// If someone burned out, break the outer loop
-		if (someone_burned_out)
+		if (someone_burned_out || (simulator->config->required_compiles != -1 && finished_count == simulator->config->number_of_coders))
 		{
-			break;
-		}
-		
-		// If ALL coders have reached the required compiles, end the simulation
-		if (finished_count == simulator->config->number_of_coders)
-		{
-			pthread_mutex_lock(&simulator->simulator_mutex);
-			simulator->is_running = 0;
-			pthread_mutex_unlock(&simulator->simulator_mutex);
+			if (!someone_burned_out)
+			{
+				pthread_mutex_lock(&simulator->simulator_mutex);
+				simulator->is_running = 0;
+				pthread_mutex_unlock(&simulator->simulator_mutex);
+			}
 			break;
 		}
 
-		usleep(1000); // Tiny sleep so the monitor doesn't consume 100% CPU
+		usleep(1000); 
 	}
 
-	// 2. WAIT FOR THREADS TO EXIT
-	int i = 0;
+	i = 0;
 	while (i < simulator->config->number_of_coders)
 	{
 		pthread_join(simulator->coders[i].thread_id, NULL);
 		i++;
 	}
 }
-
 
 int initializer(t_config *config, t_simulator *simulator)
 {
@@ -388,7 +415,6 @@ int initializer(t_config *config, t_simulator *simulator)
 		return (1);
 	}
 
-	simulator->start_time = get_time();
 	simulator->is_running = 1;
 	simulator->coders = coders;
 	simulator->dongles = dongles;
@@ -396,13 +422,13 @@ int initializer(t_config *config, t_simulator *simulator)
 	pthread_mutex_init(&simulator->print_mutex, NULL);
 	pthread_mutex_init(&simulator->simulator_mutex, NULL);
 
-
 	int i = 0;
 	while (i < config->number_of_coders)
 	{
 		dongles[i].id = i + 1;
 		dongles[i].is_available = 1;
-		dongles[i].available_at = simulator->start_time;
+		dongles[i].available_at = get_time();
+		dongles[i].queue_size = 0;
 		dongles[i].requests = malloc(sizeof(t_request *) * 2);
 
 		pthread_mutex_init(&dongles[i].mutex, NULL);
@@ -414,7 +440,6 @@ int initializer(t_config *config, t_simulator *simulator)
 	while (i < config->number_of_coders)
 	{
 		coders[i].id = i + 1;
-		coders[i].last_compile = simulator->start_time;
 		coders[i].compiles_completed = 0;
 		
 		coders[i].left_dongle = &dongles[i];
@@ -425,26 +450,10 @@ int initializer(t_config *config, t_simulator *simulator)
 		i++;
 	}
 
-	i = 0;
-	while (i < config->number_of_coders)
-	{
-		if (pthread_create(
-			&coders[i].thread_id,
-			NULL,
-			coder_cycle,
-			&coders[i]
-		) != 0)
-		{
-			return (1);
-		}
-		i++;
-	}
-
 	return (0);
 }
 
-
-int	main(int c, char **av)
+int main(int c, char **av)
 {
 	if (c != 9)
 		return (print_usage());
@@ -455,15 +464,11 @@ int	main(int c, char **av)
 		return (1);
 
 	t_simulator simulator;
-	initializer(&config, &simulator);
+	if (initializer(&config, &simulator))
+		return (1);
+		
 	run_simulation(&simulator);
-
-
-
-	// for (int i = 0; i < config.number_of_coders; i++) print_dongle(simulator.dongles[i]);
-	// printf("\n\n\033[31m====================================\033[37m\n\n\n");
-	// for (int i = 0; i < config.number_of_coders; i++) print_coder(simulator.coders[i]);
-	
 	clean_up(&simulator);
+
 	return (0);
 }
