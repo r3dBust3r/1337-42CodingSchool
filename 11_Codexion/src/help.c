@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 21:28:50 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/31 18:04:03 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/31 18:57:28 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	print_usage(void)
 	p_err("Usage: ./codexion <coders> <burnout> <compile> ");
 	p_err("<debug> <refactor> <compiles_req> <cooldown> <scheduler>\n\n");
 	p_err("Arguments:\n");
-	p_err(" <coders>       : Positive integer (Number of coders)\n");
+	p_err(" <coders>       : Strictly positive integer (Number of coders)\n");
 	p_err(" <burnout>      : Positive integer (Time to burnout in ms)\n");
 	p_err(" <compile>      : Positive integer (Time to compile in ms)\n");
 	p_err(" <debug>        : Positive integer (Time to debug in ms)\n");

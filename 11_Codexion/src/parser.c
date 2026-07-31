@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 18:15:09 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/31 18:07:10 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/07/31 19:02:06 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	parser(int c, char **av, t_config *config)
 	{
 		n = ft_atol(av[i]);
 		if (n == -1)
+			return (print_usage());
+		if (i == 1 && n <= 0)
 			return (print_usage());
 		set_config_value(config, i, n);
 		i++;
