@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   single_coder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/26 17:46:23 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/31 18:18:11 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/07/31 18:16:17 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/07/31 18:16:27 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	main(int c, char **av)
+void	handle_single_coder(t_coder *coder)
 {
-	t_simulator	simulator;
-	t_config	config;
-
-	if (c != 9)
-		return (print_usage());
-	if (parser(c, av, &config))
-		return (1);
-	if (initializer(&config, &simulator))
-		return (1);
-	run_simulation(&simulator);
-	clean_up(&simulator);
-	return (0);
+	pthread_mutex_lock(&coder->left_dongle->mutex);
+	print_action(coder, "has taken a dongle");
+	pthread_mutex_unlock(&coder->left_dongle->mutex);
+	ms_sleep(coder->simulator->config->time_to_burnout + 10);
 }

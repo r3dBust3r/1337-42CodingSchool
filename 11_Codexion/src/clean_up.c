@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/26 18:37:59 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/26 22:05:42 by ottalhao         ###   ########.fr       */
+/*   Created: 2026/07/31 18:10:18 by ottalhao          #+#    #+#             */
+/*   Updated: 2026/07/31 18:10:25 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-long	ft_atol(char *s)
+void	clean_up(t_simulator *simulator)
 {
-	long	r;
-	int		i;
+	int	i;
 
-	r = 0;
 	i = 0;
-	while (s[i])
+	while (i < simulator->config->number_of_coders)
 	{
-		if (s[i] < '0' || s[i] > '9')
-			return (-1);
-		r = r * 10 + s[i] - '0';
-		if (r > 2147483647)
-			return (-1);
+		pthread_mutex_destroy(&simulator->coders[i].mutex);
+		pthread_mutex_destroy(&simulator->dongles[i].mutex);
+		pthread_cond_destroy(&simulator->dongles[i].cond);
+		free(simulator->dongles[i].requests);
 		i++;
 	}
-	return (r);
+	pthread_mutex_destroy(&simulator->print_mutex);
+	pthread_mutex_destroy(&simulator->simulator_mutex);
+	free(simulator->coders);
+	free(simulator->dongles);
 }
