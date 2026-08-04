@@ -1,0 +1,2 @@
+class PacmanError(Exception):
+    pass
