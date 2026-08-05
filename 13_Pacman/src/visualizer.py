@@ -16,8 +16,9 @@ class PacmanView(arcade.View):
         self.left_margin = 0
         self.bottom_margin = 0
 
-        # Stats & HUD
-        self.lives = 11
+        # Stats, Controls & HUD
+        self.lives = 1
+        self.pause = False
         arcade.load_font("assets/fonts/ByteBounce.ttf")
 
         # Pacman Animation State
@@ -298,7 +299,10 @@ class PacmanView(arcade.View):
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
             arcade.exit()
-            
+
+        if symbol == arcade.key.SPACE:
+            self.pause = not self.pause
+
         if symbol == arcade.key.UP or symbol == arcade.key.W:
             self.next_dir = "UP"
 
@@ -318,6 +322,9 @@ class PacmanView(arcade.View):
 
     def on_update(self, delta_time: float) -> None:
         if not self.lives:
+            return
+
+        if self.pause:
             return
 
         # Pacman Mouth Animation
@@ -426,51 +433,41 @@ class PacmanView(arcade.View):
             0, 0,
             self.window.width,
             self.window.height,
-            arcade.color.AIR_FORCE_BLUE
+            (0, 0, 0, 200)
         )
 
         arcade.draw_text(
-            "Game over",
+            "GAME OVER",
             self.window.width / 2,
             self.window.height / 2,
-            arcade.color.BLACK,
-            100,
+            arcade.color.WHITE,
+            120,
+            font_name="ByteBounce",
             anchor_x='center',
         )
 
         arcade.draw_text(
-            f"Your score: {self.score}",
+            f"YOUR SCORE: {self.score}",
             self.window.width / 2,
-            self.window.height / 2 - 100,
-            arcade.color.BLACK,
-            50,
+            self.window.height / 2 - 80,
+            arcade.color.WHITE,
+            60,
+            font_name="ByteBounce",
             anchor_x='center',
         )
 
 
-    def _button(self, content: str, left: float, bottom: float, panel_color: tuple) -> None:
-
-        base_width = 60
+    def _button(self, content: str, left: float, bottom: float, panel_color: tuple, width_mult: int = 1) -> None:
+        base_width = 60 * width_mult
         base_height = 60
 
-        if len(content) == 3:
-            base_width *= 2
-
-        elif len(content) == 5:
-            base_width *= 4
-
-
         arcade.draw_lbwh_rectangle_filled(
-            left,
-            bottom,
-            base_width,
-            base_height,
-            arcade.color.BLACK
+            left, bottom, base_width, base_height, arcade.color.BLACK
         )
 
         x_margin = 10
         bottom_margin = 20
-        top_margin = 5
+        top_margin = 3
         
         panel_width = base_width - (x_margin * 2)
         panel_height = base_height - bottom_margin - top_margin
@@ -483,13 +480,10 @@ class PacmanView(arcade.View):
             panel_color
         )
 
-        panel_center_x = left + x_margin + (panel_width / 2)
-        panel_center_y = bottom + bottom_margin + (panel_height / 2)
-
         arcade.draw_text(
             content,
-            panel_center_x,
-            panel_center_y,
+            left + x_margin + (panel_width / 2),
+            bottom + bottom_margin + (panel_height / 2),
             arcade.color.BLACK,
             font_size=28,
             font_name="ByteBounce",
@@ -498,62 +492,78 @@ class PacmanView(arcade.View):
         )
 
 
-    def _text(self, content, left, bottom, color, fsize):
+    def _text(self, content: str, left: float, bottom: float, color: tuple, fsize: int) -> None:
         arcade.draw_text(
-            content,
-            left,
-            bottom,
-            color,
+            content, left, bottom, color,
             font_size=fsize,
             font_name="ByteBounce",
             anchor_y="center"
         )
 
 
-    def _hud_panel(self):
-        panel_color = arcade.color.DARK_ELECTRIC_BLUE
-
+    def _hud_panel(self) -> None:
+        panel_color = arcade.color.DARK_CYAN
+        
         arcade.draw_lbwh_rectangle_filled(
-            0,
-            0,
-            self.window.width - self.maze_width - self.bottom_margin,
+            0, 0,
+            self.window.width - self.maze_width - self.bottom_margin - 20,
             self.window.height,
             panel_color
         )
 
         self._text("Controls", 30, self.window.height - 30, arcade.color.BLACK, 60)
 
-        button_size = 60
-        button_margin = 5
-        self._button("W", 30 + ((button_size + button_margin)), self.window.height - 150, panel_color)
-        self._button("A", 30 + ((button_size + button_margin) * 0), self.window.height - 150 - button_size - button_margin, panel_color)
-        self._button("S", 30 + ((button_size + button_margin) * 1), self.window.height - 150 - button_size - button_margin, panel_color)
-        self._button("D", 30 + ((button_size + button_margin) * 2), self.window.height - 150 - button_size - button_margin, panel_color)
+        def _draw_move_pad(start_x: float, top_y: float, keys: list[str]) -> None:
+            size = 60
+            margin = 5
+            offset = size + margin
+            
+            self._button(keys[0], start_x + offset, top_y, panel_color)
+            self._button(keys[1], start_x, top_y - offset, panel_color)
+            self._button(keys[2], start_x + offset, top_y - offset, panel_color)
+            self._button(keys[3], start_x + (offset * 2), top_y - offset, panel_color)
+
+        _draw_move_pad(30, self.window.height - 150, ["W", "A", "S", "D"])
+        _draw_move_pad(30, self.window.height - 300, ["↑", "←", "↓", "→"])
+
+        actions = [
+            ("R", "RESTART", 1),
+            ("M", "MUTE", 1),
+            ("ESC", "QUIT", 2),
+            ("SPACE", "PAUSE", 4)
+        ]
+
+        start_y = self.window.height - 450
+        y_spacing = 70
+
+        for index, (key_str, label, width_mult) in enumerate(actions):
+            current_y = start_y - (index * y_spacing)
+
+            self._text(label, 30, current_y + 12, arcade.color.BLACK, 35)
+            self._button(key_str, 180, current_y, panel_color, width_mult)
 
 
-        button_size = 60
-        button_margin = 5
-        self._button("↑", 30 + ((button_size + button_margin)), self.window.height - 320, panel_color)
-        self._button("←", 30 + ((button_size + button_margin) * 0), self.window.height - 320 - button_size - button_margin, panel_color)
-        self._button("↓", 30 + ((button_size + button_margin) * 1), self.window.height - 320 - button_size - button_margin, panel_color)
-        self._button("→", 30 + ((button_size + button_margin) * 2), self.window.height - 320 - button_size - button_margin, panel_color)
+    def _pause_overlay(self):
+        arcade.draw_lbwh_rectangle_filled(
+            0, 0,
+            self.window.width,
+            self.window.height,
+            (0, 0, 0, 200)
+        )
 
-
-        between_buttons = 10
-        self._button("R", 30, self.window.height - (500 + (between_buttons * 0)) - (button_size * 0) - button_margin, panel_color)
-        self._button("M", 30, self.window.height - (500 + (between_buttons * 1)) - (button_size * 1) - button_margin, panel_color)
-        self._button("ESC", 30, self.window.height - (500 + (between_buttons * 2)) - (button_size * 2) - button_margin, panel_color)
-        self._button("SPACE", 30, self.window.height - (500 + (between_buttons * 3)) - (button_size * 3) - button_margin, panel_color)
-
-
+        arcade.draw_text(
+            "PAUSE",
+            self.window.width / 2,
+            self.window.height / 2,
+            arcade.color.WHITE,
+            120,
+            font_name="ByteBounce",
+            anchor_x='center',
+        )
 
 
     def on_draw(self) -> None:
         self.clear()
-
-        if not self.lives:
-            self._gameover()
-            return
 
         # hud panel
         self._hud_panel()
@@ -572,6 +582,13 @@ class PacmanView(arcade.View):
         self.pacgum_list.draw()
         self._draw_pacman()
         self.ghost_list.draw()
+
+        if not self.lives:
+            self._gameover()
+            return
+
+        if self.pause:
+            self._pause_overlay()
 
 
     def _draw_pacman(self) -> None:
