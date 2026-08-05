@@ -9,7 +9,10 @@ class PacmanView(arcade.View):
         self.rows = len(self.maze_grid)
         self.cols = len(self.maze_grid[0]) if self.rows > 0 else 1
         self.cell_size = 0
-        
+
+        # Stats & HUD
+        self.lives = 3
+
         # Pacman Animation State
         self.pacman_mouth = 0.0
         self.pacman_opening = True
@@ -126,7 +129,34 @@ class PacmanView(arcade.View):
             self.ghost_list.append(ghost)
 
 
+    def _respawn_ghosts(self) -> None:
+        corners = [
+            (0, 0), # Top-Left
+            (0, self.cols - 1), # Top-Right
+            (self.rows - 1, 0), # Bottom-Left
+            (self.rows - 1, self.cols - 1) # Bottom-Right
+        ]
+
+        for ghost, (row, col) in zip(self.ghost_list, corners):
+            ghost.g_row = row
+            ghost.g_col = col
+            ghost.current_dir = "STOP"
+            
+            center_x, center_y = self._get_center_pixels(row, col)
+            ghost.center_x = center_x
+            ghost.center_y = center_y
+            ghost.target_x = center_x
+            ghost.target_y = center_y
+
+
+    def _eaten_by_ghost(self, ghost):
+        dist = arcade.math.get_distance(self.px, self.py, ghost.center_x, ghost.center_y)
+        return dist < (self.cell_size / 2)
+
+
     def _spawn_pacman(self) -> None:
+        self.current_dir = "STOP"
+
         center_row = self.rows // 2
         center_col = self.cols // 2
         
@@ -142,7 +172,7 @@ class PacmanView(arcade.View):
             available_cells, 
             key=lambda pos: abs(pos[0] - center_row) + abs(pos[1] - center_col)
         )
-        
+
         self.pac_row = closest_cell[0]
         self.pac_col = closest_cell[1]
                 
@@ -265,6 +295,9 @@ class PacmanView(arcade.View):
 
 
     def on_update(self, delta_time: float) -> None:
+        if not self.lives:
+            return
+
         # Pacman Mouth Animation
         animation_speed = 4.0 
 
@@ -321,6 +354,13 @@ class PacmanView(arcade.View):
         # Ghost movements
         ghost_speed = self.ghost_speed * delta_time
         for ghost in self.ghost_list:
+
+            if self._eaten_by_ghost(ghost):
+                self._spawn_pacman()
+                self._respawn_ghosts()
+                self.lives -= 1
+
+
             if ghost.current_dir == "STOP":
                 moves = self._get_valid_ghost_moves(ghost)
                 if moves:
@@ -349,8 +389,39 @@ class PacmanView(arcade.View):
                     elif ghost.current_dir == "RIGHT": ghost.center_x += ghost_speed
 
 
+    def _gameover_overlay(self):
+        arcade.draw_lbwh_rectangle_filled(
+            0, 0,
+            self.window.width,
+            self.window.height,
+            arcade.color.AIR_FORCE_BLUE
+        )
+
+        arcade.draw_text(
+            "Game over",
+            self.window.width / 2,
+            self.window.height / 2,
+            arcade.color.BLACK,
+            100,
+            anchor_x='center',
+        )
+
+        arcade.draw_text(
+            f"Your score: {self.score}",
+            self.window.width / 2,
+            self.window.height / 2 - 100,
+            arcade.color.BLACK,
+            50,
+            anchor_x='center',
+        )
+
+
     def on_draw(self) -> None:
         self.clear()
+
+        if not self.lives:
+            self._gameover_overlay()
+            return
 
         maze_width = self.cols * self.cell_size
         maze_height = self.rows * self.cell_size
