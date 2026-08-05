@@ -15,8 +15,8 @@ class PacmanView(arcade.View):
         self.pacman_opening = True
         
         # Pacman Movement State
-        self.pacman_speed = 350.0
-        self.ghost_speed = 300.0
+        self.pacman_speed = 250.0
+        self.ghost_speed = 200.0
         self.current_dir = "STOP"
         self.next_dir = "STOP"
         self.facing_angle = 0
@@ -42,6 +42,7 @@ class PacmanView(arcade.View):
         
         # Sprite Lists
         self.ghost_list = arcade.SpriteList()
+        self.pacgum_list = arcade.SpriteList()
 
 
     def on_show_view(self) -> None:
@@ -55,16 +56,56 @@ class PacmanView(arcade.View):
 
         self._spawn_pacman()
         self._spawn_ghosts()
+        self._setup_pacgums()
+
+
+    def _setup_pacgums(self):
+        # Setup Pacgum
+        fruit_i = 0
+        for r in range(self.rows):
+            for c in range(self.cols):
+                cell = self.maze_grid[r][c]
+
+                if cell.has_pacgum:
+                    if cell.super_pacgum:
+                        if r == 0 and c == 0:
+                            super_fruit = f"assets/super-pacgum-01.png"
+
+                        if r == 0 and c == self.cols - 1:
+                            super_fruit = f"assets/super-pacgum-02.png"
+
+                        if r == self.rows - 1 and c == 0:
+                            super_fruit = f"assets/super-pacgum-03.png"
+
+                        if r == self.rows - 1 and c == self.cols - 1:
+                            super_fruit = f"assets/super-pacgum-04.png"
+
+                        fruit = arcade.Sprite(super_fruit)
+                        fruit.width = self.cell_size
+
+                    else:
+                        fruit = arcade.Sprite(f"assets/pacgum-0{(fruit_i % 8) + 1}.png")
+                        fruit.width = self.cell_size * 0.5
+
+                    fruit.height = fruit.width 
+
+                    center_x, center_y = self._get_center_pixels(r, c)
+                    fruit.center_x = center_x
+                    fruit.center_y = center_y
+
+                    cell.fruit = fruit
+                    self.pacgum_list.append(fruit)
+
+                fruit_i += 1
 
 
     def _spawn_ghosts(self) -> None:
         # Setup Ghost Sprites in the corners
-        assets_dir = "assets"
         corners = [
-            (0, 0, f"{assets_dir}/ghost-01.png"), # Top-Left
-            (0, self.cols - 1, f"{assets_dir}/ghost-02.png"), # Top-Right
-            (self.rows - 1, 0, f"{assets_dir}/ghost-03.png"), # Bottom-Left
-            (self.rows - 1, self.cols - 1, f"{assets_dir}/ghost-04.png") # Bottom-Right
+            (0, 0, "assets/ghost-01.png"), # Top-Left
+            (0, self.cols - 1, "assets/ghost-02.png"), # Top-Right
+            (self.rows - 1, 0, "assets/ghost-03.png"), # Bottom-Left
+            (self.rows - 1, self.cols - 1, "assets/ghost-04.png") # Bottom-Right
         ]
 
         for row, col, ghost_filename in corners:
@@ -257,14 +298,17 @@ class PacmanView(arcade.View):
                 current_cell = self.maze_grid[self.pac_row][self.pac_col]
                 
                 if current_cell.has_pacgum:
-                    current_cell.has_pacgum = False  
+                    current_cell.has_pacgum = False
+
+                    if current_cell.fruit:
+                        current_cell.fruit.remove_from_sprite_lists()
                     
                     if current_cell.super_pacgum:
                         self.score += 50
 
                     else:
                         self.score += 10
-                
+
                 self._update_pacman_target()
                 
             else:
@@ -325,8 +369,9 @@ class PacmanView(arcade.View):
 
             from_bottom -= self.cell_size
 
-        self.ghost_list.draw()
+        self.pacgum_list.draw()
         self._draw_pacman()
+        self.ghost_list.draw()
 
 
     def _draw_pacman(self) -> None:
@@ -345,23 +390,6 @@ class PacmanView(arcade.View):
         cell_center_x = from_left + (self.cell_size / 2)
         cell_center_y = from_bottom + (self.cell_size / 2)
         cell_half = self.cell_size / 2
-
-        # Only draw if the cell actually has a pacgum
-        if cell.walls != 15 and cell.has_pacgum:
-            if cell.super_pacgum:
-                arcade.draw_circle_filled(
-                    cell_center_x, 
-                    cell_center_y, 
-                    12, 
-                    arcade.color.YELLOW
-                )
-            else:
-                arcade.draw_circle_outline(
-                    cell_center_x, 
-                    cell_center_y, 
-                    4, 
-                    arcade.color.YELLOW
-                )
 
         if cell.walls == 15:
             arcade.draw_lbwh_rectangle_filled(
