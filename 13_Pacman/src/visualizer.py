@@ -17,7 +17,8 @@ class PacmanView(arcade.View):
         self.bottom_margin = 0
 
         # Stats & HUD
-        self.lives = 1
+        self.lives = 11
+        arcade.load_font("assets/fonts/ByteBounce.ttf")
 
         # Pacman Animation State
         self.pacman_mouth = 0.0
@@ -447,12 +448,115 @@ class PacmanView(arcade.View):
         )
 
 
+    def _button(self, content: str, left: float, bottom: float, panel_color: tuple) -> None:
+
+        base_width = 60
+        base_height = 60
+
+        if len(content) == 3:
+            base_width *= 2
+
+        elif len(content) == 5:
+            base_width *= 4
+
+
+        arcade.draw_lbwh_rectangle_filled(
+            left,
+            bottom,
+            base_width,
+            base_height,
+            arcade.color.BLACK
+        )
+
+        x_margin = 10
+        bottom_margin = 20
+        top_margin = 5
+        
+        panel_width = base_width - (x_margin * 2)
+        panel_height = base_height - bottom_margin - top_margin
+
+        arcade.draw_lbwh_rectangle_filled(
+            left + x_margin,
+            bottom + bottom_margin,
+            panel_width,
+            panel_height,
+            panel_color
+        )
+
+        panel_center_x = left + x_margin + (panel_width / 2)
+        panel_center_y = bottom + bottom_margin + (panel_height / 2)
+
+        arcade.draw_text(
+            content,
+            panel_center_x,
+            panel_center_y,
+            arcade.color.BLACK,
+            font_size=28,
+            font_name="ByteBounce",
+            anchor_x="center",
+            anchor_y="center"
+        )
+
+
+    def _text(self, content, left, bottom, color, fsize):
+        arcade.draw_text(
+            content,
+            left,
+            bottom,
+            color,
+            font_size=fsize,
+            font_name="ByteBounce",
+            anchor_y="center"
+        )
+
+
+    def _hud_panel(self):
+        panel_color = arcade.color.DARK_ELECTRIC_BLUE
+
+        arcade.draw_lbwh_rectangle_filled(
+            0,
+            0,
+            self.window.width - self.maze_width - self.bottom_margin,
+            self.window.height,
+            panel_color
+        )
+
+        self._text("Controls", 30, self.window.height - 30, arcade.color.BLACK, 60)
+
+        button_size = 60
+        button_margin = 5
+        self._button("W", 30 + ((button_size + button_margin)), self.window.height - 150, panel_color)
+        self._button("A", 30 + ((button_size + button_margin) * 0), self.window.height - 150 - button_size - button_margin, panel_color)
+        self._button("S", 30 + ((button_size + button_margin) * 1), self.window.height - 150 - button_size - button_margin, panel_color)
+        self._button("D", 30 + ((button_size + button_margin) * 2), self.window.height - 150 - button_size - button_margin, panel_color)
+
+
+        button_size = 60
+        button_margin = 5
+        self._button("↑", 30 + ((button_size + button_margin)), self.window.height - 320, panel_color)
+        self._button("←", 30 + ((button_size + button_margin) * 0), self.window.height - 320 - button_size - button_margin, panel_color)
+        self._button("↓", 30 + ((button_size + button_margin) * 1), self.window.height - 320 - button_size - button_margin, panel_color)
+        self._button("→", 30 + ((button_size + button_margin) * 2), self.window.height - 320 - button_size - button_margin, panel_color)
+
+
+        between_buttons = 10
+        self._button("R", 30, self.window.height - (500 + (between_buttons * 0)) - (button_size * 0) - button_margin, panel_color)
+        self._button("M", 30, self.window.height - (500 + (between_buttons * 1)) - (button_size * 1) - button_margin, panel_color)
+        self._button("ESC", 30, self.window.height - (500 + (between_buttons * 2)) - (button_size * 2) - button_margin, panel_color)
+        self._button("SPACE", 30, self.window.height - (500 + (between_buttons * 3)) - (button_size * 3) - button_margin, panel_color)
+
+
+
+
     def on_draw(self) -> None:
         self.clear()
 
         if not self.lives:
             self._gameover()
             return
+
+        # hud panel
+        self._hud_panel()
 
         from_bottom = self.bottom_margin + self.maze_height - self.cell_size
 
