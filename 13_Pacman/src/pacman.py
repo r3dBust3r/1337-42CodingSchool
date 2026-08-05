@@ -1,14 +1,12 @@
 from mazegenerator import MazeGenerator
 from src.cell import Cell
 from arcade import run, Window, get_display_size
-from src.visualizer import TestView
+from src.visualizer import PacmanView
 
 
-class Initializer:
+class Pacman:
     def __init__(self, maze_w, maze_h):
         maze_gen = MazeGenerator((maze_w, maze_h), seed=1337)
-
-        # Nums
         maze_grid = maze_gen.maze
 
         # Cell objs
@@ -22,20 +20,19 @@ class Initializer:
 
                 if (i == 0 and j == 0):
                     cell.super_pacgum = True
-
                 elif (i == 0 and j == len(maze_grid[0]) - 1):
                     cell.super_pacgum = True
-
                 elif (i == len(maze_grid) - 1 and j == 0):
                     cell.super_pacgum = True
-
                 elif (i == len(maze_grid) - 1 and j == len(maze_grid[0]) - 1):
                     cell.super_pacgum = True
 
+                if cell.walls != 15:
+                    cell.has_pacgum = True
 
         screen_w, screen_h = get_display_size()
         window = Window(screen_w, screen_h, fullscreen=True)
 
-        test_view = TestView(maze)
-        window.show_view(test_view)
+        pacman_view = PacmanView(maze)
+        window.show_view(pacman_view)
         run()

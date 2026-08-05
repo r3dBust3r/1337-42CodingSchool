@@ -1,5 +1,5 @@
 from src.parser import Parser
-from src.init import Initializer
+from src.pacman import Pacman
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -10,8 +10,7 @@ def main():
     parser: Parser = Parser()
     config: ConfigModel = parser.get_config()
 
-    init = Initializer(20, 11)
-
+    Pacman(20, 11)
 
 
 if __name__ == "__main__": main()
