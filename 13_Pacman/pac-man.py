@@ -10,7 +10,7 @@ def main():
     parser: Parser = Parser()
     config: ConfigModel = parser.get_config()
 
-    Pacman(20, 11)
+    Pacman(13, 9)
 
 
 if __name__ == "__main__": main()
