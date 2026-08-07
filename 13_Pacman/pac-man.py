@@ -7,6 +7,9 @@ import arcade
 if TYPE_CHECKING:
     from models import ConfigModel
 
+from warnings import filterwarnings
+filterwarnings('ignore')
+
 
 def main():
     # Parser
