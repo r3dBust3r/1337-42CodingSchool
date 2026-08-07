@@ -1,16 +1,28 @@
 from src.parser import Parser
-from src.pacman import Pacman
+from src.main_view import MainView
 from typing import TYPE_CHECKING
+import arcade
+
 
 if TYPE_CHECKING:
     from models import ConfigModel
 
 
 def main():
+    # Parser
     parser: Parser = Parser()
     config: ConfigModel = parser.get_config()
 
-    Pacman(13, 9)
+    screen_w, screen_h = arcade.get_display_size()
+    window = arcade.Window(screen_w, screen_h, fullscreen=True)
+
+    # Main menu view
+    main_menu = MainView(config)
+    window.show_view(main_menu)
+
+
+    arcade.run()
+    # Pacman(13, 9)
 
 
 if __name__ == "__main__": main()
