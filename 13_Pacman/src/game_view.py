@@ -26,8 +26,15 @@ class PacmanView(arcade.View):
         self.playable_width = 0
         self.hud_width = 360
 
+        # Settings
+        self.volume = self.settings['volume']
+        self.mute = self.settings['mute']
+        self.invincibility = self.settings['invincibility']
+        self.speed = self.settings['speed']
+        self.ghost_freeze = self.settings['ghost-freeze']
+
         # Stats, Controls & HUD
-        self.lives = self.config.lives
+        self.lives = self.settings['lives']
         self.pause = False
         arcade.load_font("assets/fonts/ByteBounce.ttf")
 
@@ -36,8 +43,8 @@ class PacmanView(arcade.View):
         self.pacman_opening = True
         
         # Pacman Movement State
-        self.pacman_speed = 350.0
-        self.ghost_speed = 300.0
+        self.pacman_speed = self.speed
+        self.ghost_speed = self.speed * .85
         self.current_dir = "STOP"
         self.next_dir = "STOP"
         self.facing_angle = 0
@@ -92,7 +99,7 @@ class PacmanView(arcade.View):
         self.left_margin = self.hud_width + (self.playable_width - self.maze_width) / 2
 
         # Sound Effects
-        self.gameplay_music = arcade.play_sound(self.sounds['bg'], volume=0.25, loop=True)
+        self.gameplay_music = arcade.play_sound(self.sounds['bg'], volume=self.volume / 2, loop=True)
 
         # Spawn pacman, ghosts, pacgums
         self._spawn_pacman()
@@ -188,6 +195,8 @@ class PacmanView(arcade.View):
 
 
     def _eaten_by_ghost(self, ghost):
+        if self.invincibility:
+            return False
         dist = arcade.math.get_distance(self.px, self.py, ghost.center_x, ghost.center_y)
         return dist < (self.cell_size / 2)
 
@@ -338,6 +347,14 @@ class PacmanView(arcade.View):
 
 
     def on_update(self, delta_time: float) -> None:
+        # Settings
+        if self.mute:
+            self.volume = 0
+            self.gameplay_music.volume = self.volume
+        else:
+            self.gameplay_music.volume = self.volume / 2
+
+
         if self.lives <= 0 or self.remaining_time <= 0:
             arcade.stop_sound(self.gameplay_music)
             gameover = GameOverView(self.score, self.config, False)
@@ -388,7 +405,7 @@ class PacmanView(arcade.View):
                     self.pacgums -= 1
                     current_cell.has_pacgum = False
 
-                    arcade.play_sound(self.sounds['eat'])
+                    arcade.play_sound(self.sounds['eat'], volume=self.volume)
 
                     if current_cell.fruit:
                         current_cell.fruit.remove_from_sprite_lists()
@@ -415,11 +432,14 @@ class PacmanView(arcade.View):
 
 
         # Ghost movements
+        if self.ghost_freeze:
+            return
+
         ghost_speed = self.ghost_speed * delta_time
         for ghost in self.ghost_list:
 
             if self._eaten_by_ghost(ghost):
-                arcade.play_sound(self.sounds["die"])
+                arcade.play_sound(self.sounds["die"], volume=self.volume)
                 self._spawn_pacman()
                 self._respawn_ghosts()
                 self.lives -= 1
@@ -530,9 +550,29 @@ class PacmanView(arcade.View):
                 anchor_y='center',
             )
 
-        for i in range(self.lives):
+        if self.lives <= 5:
+            for i in range(self.lives):
+                arcade.draw_arc_filled(
+                    170 + 34 * i,
+                    self.window.height - fsize * 2 * 1.25,
+                    32,
+                    32,
+                    arcade.color.YELLOW,
+                    30,
+                    330
+                )
+        else:
+            arcade.draw_text(
+                f"x{self.lives}",
+                190,
+                self.window.height - (fsize * 2 * 1.25),
+                arcade.color.ANTIQUE_WHITE,
+                font_size=fsize * 1.3,
+                font_name="ByteBounce",
+                anchor_y='center',
+            )
             arcade.draw_arc_filled(
-                170 + 34 * i,
+                170,
                 self.window.height - fsize * 2 * 1.25,
                 32,
                 32,
