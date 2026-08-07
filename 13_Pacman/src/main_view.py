@@ -16,6 +16,16 @@ class MainView(arcade.View):
         self.setting_buffer_draw = False
         self.settings_buffer = ""
 
+        self.options = [
+            "QUIT",
+            "CREDITS",
+            "SETTINGS",
+            "INSTRUCTIONS",
+            "HIGH SCORES",
+            "NEW GAME"
+        ]
+        self.menu_indicator = len(self.options) - 1
+
         # Screens
         self.screens = {
             "main-menu": arcade.load_texture('assets/images/screens/screen-01.png'),
@@ -99,32 +109,44 @@ class MainView(arcade.View):
 
         # Main Menu
         if self.current_screen == self.screens["main-menu"]:
+            if symbol == arcade.key.UP:
+                self._click()
+                self.menu_indicator += 1
+
+            elif symbol == arcade.key.DOWN:
+                self._click()
+                self.menu_indicator -= 1
+
+
             if symbol == arcade.key.ENTER:
-                arcade.play_sound(self.sounds["enter"])
-                arcade.stop_sound(self.bg_sound)
-                maze_grid = self._build_maze(13, 9)
-                game_view = PacmanView(maze_grid, self.config, self.settings, self.pacgums)
-                self.window.show_view(game_view)
+                option = self.options[self.menu_indicator % len(self.options)]
 
+                if option == "NEW GAME":
+                    arcade.play_sound(self.sounds["enter"])
+                    arcade.stop_sound(self.bg_sound)
+                    maze_grid = self._build_maze(13, 9)
+                    game_view = PacmanView(maze_grid, self.config, self.settings, self.pacgums)
+                    self.window.show_view(game_view)
 
-            elif symbol == arcade.key.H:
-                self._click()
-                self.current_screen = self.screens["high-scores"]
+                elif option == "HIGH SCORES":
+                    self._click()
+                    self.current_screen = self.screens["high-scores"]
 
+                elif option == "INSTRUCTIONS":
+                    self._click()
+                    self.current_screen = self.screens["instructions"]
 
-            elif symbol == arcade.key.S:
-                self._click()
-                self.current_screen = self.screens["settings"]
+                elif option == "SETTINGS":
+                    self._click()
+                    self.current_screen = self.screens["settings"]
 
+                elif option == "CREDITS":
+                    self._click()
+                    self.current_screen = self.screens["credits"]
 
-            elif symbol == arcade.key.C:
-                self._click()
-                self.current_screen = self.screens["credits"]
+                elif option == "QUIT":
+                    arcade.exit()
 
-
-            elif symbol == arcade.key.I:
-                self._click()
-                self.current_screen = self.screens["instructions"]
 
 
         # Settings Screen
@@ -221,6 +243,41 @@ class MainView(arcade.View):
                 self.window.height,
             )
         )
+
+        # Main Menu Screen
+        if self.current_screen == self.screens["main-menu"]:
+            fsize = 40
+
+            for i in range(len(self.options)):
+                if i == self.menu_indicator % len(self.options):
+                    left_margin = fsize * 1.25
+                    current_color = arcade.color.YELLOW
+                else:
+                    left_margin = 0
+                    current_color = arcade.color.WHITE
+
+                arcade.draw_text(
+                    self.options[i],
+                    self.window.width / 2 - 180 + left_margin,
+                    self.window.height / 4 + (fsize * i * 1.5),
+                    current_color,
+                    font_size=fsize,
+                    font_name="ByteBounce",
+                    anchor_x='left',
+                    anchor_y='center',
+                )
+
+            # Draw the indicator
+            arcade.draw_arc_filled(
+                self.window.width / 2 - fsize * 4,
+                self.window.height / 4 + (self.menu_indicator % len(self.options) * fsize * 1.5),
+                fsize,
+                fsize,
+                arcade.color.YELLOW,
+                30,
+                330
+            )
+
 
         # High Scores Screen
         if self.current_screen == self.screens["high-scores"]:

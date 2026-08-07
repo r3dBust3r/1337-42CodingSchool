@@ -70,7 +70,6 @@ class PacmanView(arcade.View):
             "bg": arcade.load_sound("assets/sounds/bg.mp3"),
             "eat": arcade.load_sound("assets/sounds/eat.mp3"),
             "die": arcade.load_sound("assets/sounds/die.mp3"),
-            "game-over": arcade.load_sound("assets/sounds/game-over.mp3"),
         }
 
         # Gameover
@@ -452,43 +451,6 @@ class PacmanView(arcade.View):
                     elif ghost.current_dir == "DOWN": ghost.center_y -= ghost_speed
                     elif ghost.current_dir == "LEFT": ghost.center_x -= ghost_speed
                     elif ghost.current_dir == "RIGHT": ghost.center_x += ghost_speed
-
-
-    def _gameover(self):
-        # arcade.play_sound(self.sounds["game-over"])
-        # arcade.stop_sound(self.sounds["bg"])
-        if self.gameover_sound:
-            arcade.stop_sound(self.gameplay_music)
-            arcade.play_sound(self.sounds["game-over"])
-
-        self.gameover_sound = False
-
-        arcade.draw_lbwh_rectangle_filled(
-            0, 0,
-            self.window.width,
-            self.window.height,
-            (0, 0, 0, 200)
-        )
-
-        arcade.draw_text(
-            "GAME OVER",
-            self.window.width / 2,
-            self.window.height / 2,
-            arcade.color.WHITE,
-            120,
-            font_name="ByteBounce",
-            anchor_x='center',
-        )
-
-        arcade.draw_text(
-            f"YOUR SCORE: {self.score}",
-            self.window.width / 2,
-            self.window.height / 2 - 80,
-            arcade.color.WHITE,
-            60,
-            font_name="ByteBounce",
-            anchor_x='center',
-        )
 
 
     def _button(self, content: str, left: float, bottom: float, panel_color: tuple, width_mult: int = 1) -> None:
