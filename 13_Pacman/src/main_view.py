@@ -88,7 +88,7 @@ class MainView(arcade.View):
         if self.current_screen == self.screens["main-menu"]:
             if symbol == arcade.key.ENTER:
                 arcade.stop_sound(self.bg_sound)
-                maze_grid = self._build_maze(3,3)
+                maze_grid = self._build_maze(13, 9)
                 game_view = PacmanView(maze_grid, self.config, self.settings, self.pacgums)
                 self.window.show_view(game_view)
 

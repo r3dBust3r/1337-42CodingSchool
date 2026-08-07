@@ -10,6 +10,9 @@ class PacmanView(arcade.View):
         self.config = config
         self.settings = settings
         self.pacgums = pacgums
+        self.current_level = 1
+        self.remaining_time = config.level_max_time
+        self.second = 0
 
         self.rows = len(self.maze_grid)
         self.cols = len(self.maze_grid[0]) if self.rows > 0 else 1
@@ -21,7 +24,7 @@ class PacmanView(arcade.View):
         self.left_margin = 0
         self.bottom_margin = 0
         self.playable_width = 0
-        self.hud_width = 300
+        self.hud_width = 360
 
         # Stats, Controls & HUD
         self.lives = self.config.lives
@@ -186,7 +189,6 @@ class PacmanView(arcade.View):
 
 
     def _eaten_by_ghost(self, ghost):
-        return False
         dist = arcade.math.get_distance(self.px, self.py, ghost.center_x, ghost.center_y)
         return dist < (self.cell_size / 2)
 
@@ -337,7 +339,7 @@ class PacmanView(arcade.View):
 
 
     def on_update(self, delta_time: float) -> None:
-        if not self.lives:
+        if self.lives <= 0 or self.remaining_time <= 0:
             arcade.stop_sound(self.gameplay_music)
             gameover = GameOverView(self.score, self.config, False)
             self.window.show_view(gameover)
@@ -358,6 +360,12 @@ class PacmanView(arcade.View):
             if self.pacman_mouth <= 0.0:
                 self.pacman_mouth = 0.0
                 self.pacman_opening = True
+
+        # Time
+        self.second += delta_time
+        if self.second >= 1:
+            self.second = 0
+            self.remaining_time -= 1
 
         # Pacman Movement
         if self.current_dir != "STOP":
@@ -528,46 +536,48 @@ class PacmanView(arcade.View):
 
 
     def _hud_panel(self) -> None:
-        panel_color = arcade.color.DARK_CYAN
-        
         arcade.draw_lbwh_rectangle_filled(
             0, 0,
             self.hud_width,
             self.window.height,
-            panel_color
+            (255, 255, 255, 25)
         )
 
-        # self._text("Controls", 30, self.window.height - 30, arcade.color.BLACK, 60)
+        hud_items = {
+            "LIVES": "",
+            "SCORE": self.score,
+            "LEVEL": self.current_level,
+            "REM TIME": self.remaining_time,
+            "": "",
+            "PAUSE": "[SPACE]", 
+            "HOME": "[ESC]", 
+            "SETTINGS": "[F12]", 
+        }
 
-        # def _draw_move_pad(start_x: float, top_y: float, keys: list[str]) -> None:
-            
-        #     size = 60
-        #     margin = 5
-        #     offset = size + margin
-            
-        #     self._button(keys[0], start_x + offset, top_y, panel_color)
-        #     self._button(keys[1], start_x, top_y - offset, panel_color)
-        #     self._button(keys[2], start_x + offset, top_y - offset, panel_color)
-        #     self._button(keys[3], start_x + (offset * 2), top_y - offset, panel_color)
+        fsize = 30
 
-        # _draw_move_pad(30, self.window.height - 150, ["W", "A", "S", "D"])
-        # _draw_move_pad(30, self.window.height - 300, ["↑", "←", "↓", "→"])
+        for i, (key, val) in enumerate(hud_items.items(), 2):
+            key = key + ":" if key else ""
+            arcade.draw_text(
+                f"{key} {val}",
+                fsize,
+                self.window.height - (fsize * i * 1.25),
+                arcade.color.ANTIQUE_WHITE,
+                font_size=fsize * 1.3,
+                font_name="ByteBounce",
+                anchor_y='center',
+            )
 
-        # actions = [
-        #     ("R", "RESTART", 1),
-        #     ("M", "MUTE", 1),
-        #     ("ESC", "QUIT", 2),
-        #     ("SPACE", "PAUSE", 4)
-        # ]
-
-        # start_y = self.window.height - 450
-        # y_spacing = 70
-
-        # for index, (key_str, label, width_mult) in enumerate(actions):
-        #     current_y = start_y - (index * y_spacing)
-
-        #     self._text(label, 30, current_y + 12, arcade.color.BLACK, 35)
-        #     self._button(key_str, 180, current_y, panel_color, width_mult)
+        for i in range(self.lives):
+            arcade.draw_arc_filled(
+                170 + 34 * i,
+                self.window.height - fsize * 2 * 1.25,
+                32,
+                32,
+                arcade.color.YELLOW,
+                30,
+                330
+            )
 
 
     def _pause_overlay(self):
