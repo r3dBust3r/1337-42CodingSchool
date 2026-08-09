@@ -24,8 +24,8 @@ class GameOverView(arcade.View):
         }
 
         self.sounds = {
-            "won": arcade.load_sound('assets/sounds/game-over-s.mp3'),
-            "failed": arcade.load_sound('assets/sounds/game-over-f.mp3'),
+            "won": arcade.load_sound('assets/sounds/game-over-s.wav'),
+            "failed": arcade.load_sound('assets/sounds/game-over-f.wav'),
         }
 
 

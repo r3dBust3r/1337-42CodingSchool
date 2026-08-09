@@ -54,7 +54,7 @@ class MainView(arcade.View):
 
         # Sounds
         self.sounds = {
-            "bg": arcade.load_sound('assets/sounds/main-menu.mp3'),
+            "bg": arcade.load_sound('assets/sounds/main-menu.wav'),
             "enter": arcade.load_sound('assets/sounds/enter.wav'),
             "click": arcade.load_sound('assets/sounds/click.wav'),
         }

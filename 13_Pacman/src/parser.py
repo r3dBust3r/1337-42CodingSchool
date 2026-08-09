@@ -15,19 +15,46 @@ class Parser:
         self._parse_config()
 
 
-    def _parse_config(self) -> None:
+    def _strip_comments(self):
+        striped = ''
+
         with open(self._config_file) as file:
-            try:
-                raw_config = json.load(file)
-            except json.JSONDecodeError:
-                raise PacmanError('invalid json format')
+            content = file.readlines()
+            for line in content:
+                line = line.strip()
+                if '//' in line: line = line[0:line.index('//')]
+                if '#' in line: line = line[0:line.index('#')]
 
-            try:
-                config = ConfigModel(**raw_config)
-            except Exception as e:
-                raise PacmanError(f'invalid config: {e}')
+                striped += line
 
-            self._config = config
+        return striped
+
+
+    def _parse_config(self) -> None:
+        try:
+            raw_config = json.loads(self._strip_comments())
+        except json.JSONDecodeError:
+            raise PacmanError('invalid json format')
+
+        try:
+            config = ConfigModel(**raw_config)
+        except Exception as e:
+            raise PacmanError(f'invalid config: {e}')
+
+        self._config = config
+
+        # with open(self._config_file) as file:
+        #     try:
+        #         raw_config = json.load(file)
+        #     except json.JSONDecodeError:
+        #         raise PacmanError('invalid json format')
+
+        #     try:
+        #         config = ConfigModel(**raw_config)
+        #     except Exception as e:
+        #         raise PacmanError(f'invalid config: {e}')
+
+        #     self._config = config
 
 
     def get_config(self) -> ConfigModel:

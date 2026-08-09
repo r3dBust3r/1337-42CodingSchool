@@ -16,7 +16,7 @@ class PacmanView(arcade.View):
         self.config = config
 
         # pacman can defeat ghosts
-        self.blue_ghost_texture = arcade.load_texture("assets/images/ghost-ee.png")
+        self.blue_ghost_texture = arcade.load_texture("assets/images/ghosts/ghost-ee.png")
         self.power_mode = False
         self.power_timer = 0
         self.respawn_after = 5
@@ -82,12 +82,12 @@ class PacmanView(arcade.View):
 
         # Sound Effects
         self.sounds = {
-            "bg": arcade.load_sound("assets/sounds/bg.mp3"),
-            "eating-pacgum": arcade.load_sound("assets/sounds/eating-pacgum.mp3"),
-            "dying": arcade.load_sound("assets/sounds/dying.mp3"),
-            "eating-ghost": arcade.load_sound("assets/sounds/eating-ghost.mp3"),
-            "scared-ghosts": arcade.load_sound("assets/sounds/scared-ghosts.mp3"),
-            "start": arcade.load_sound("assets/sounds/start.mp3"),
+            "bg": arcade.load_sound("assets/sounds/bg.wav"),
+            "eating-pacgum": arcade.load_sound("assets/sounds/eating-pacgum.wav"),
+            "dying": arcade.load_sound("assets/sounds/dying.wav"),
+            "eating-ghost": arcade.load_sound("assets/sounds/eating-ghost.wav"),
+            "scared-ghosts": arcade.load_sound("assets/sounds/scared-ghosts.wav"),
+            "start": arcade.load_sound("assets/sounds/start.wav"),
         }
 
         self.gameover_sound = True
@@ -130,22 +130,22 @@ class PacmanView(arcade.View):
                 if cell.has_pacgum:
                     if cell.super_pacgum:
                         if r == 0 and c == 0:
-                            super_fruit = f"assets/images/super-pacgum-01.png"
+                            super_fruit = f"assets/images/pacgums/super-pacgum-01.png"
 
                         if r == 0 and c == self.cols - 1:
-                            super_fruit = f"assets/images/super-pacgum-02.png"
+                            super_fruit = f"assets/images/pacgums/super-pacgum-02.png"
 
                         if r == self.rows - 1 and c == 0:
-                            super_fruit = f"assets/images/super-pacgum-03.png"
+                            super_fruit = f"assets/images/pacgums/super-pacgum-03.png"
 
                         if r == self.rows - 1 and c == self.cols - 1:
-                            super_fruit = f"assets/images/super-pacgum-04.png"
+                            super_fruit = f"assets/images/pacgums/super-pacgum-04.png"
 
                         fruit = arcade.Sprite(super_fruit)
                         fruit.width = self.cell_size
 
                     else:
-                        fruit = arcade.Sprite(f"assets/images/pacgum-0{(fruit_i % 8) + 1}.png")
+                        fruit = arcade.Sprite(f"assets/images/pacgums/pacgum-0{(fruit_i % 8) + 1}.png")
                         fruit.width = self.cell_size * 0.5
 
                     fruit.height = fruit.width 
@@ -163,10 +163,10 @@ class PacmanView(arcade.View):
     def _spawn_ghosts(self) -> None:
         # Setup Ghost Sprites in the corners
         corners = [
-            (0, 0, "assets/images/ghost-01.png"), # Top-Left
-            (0, self.cols - 1, "assets/images/ghost-02.png"), # Top-Right
-            (self.rows - 1, 0, "assets/images/ghost-03.png"), # Bottom-Left
-            (self.rows - 1, self.cols - 1, "assets/images/ghost-04.png") # Bottom-Right
+            (0, 0, "assets/images/ghosts/ghost-01.png"), # Top-Left
+            (0, self.cols - 1, "assets/images/ghosts/ghost-02.png"), # Top-Right
+            (self.rows - 1, 0, "assets/images/ghosts/ghost-03.png"), # Bottom-Left
+            (self.rows - 1, self.cols - 1, "assets/images/ghosts/ghost-04.png") # Bottom-Right
         ]
 
         for gid, (row, col, ghost_filename) in enumerate(corners, 1):
@@ -414,6 +414,10 @@ class PacmanView(arcade.View):
             self.scared_ghosts_music.volume = 0
             from src.settings_view import SettingsView
             self.window.show_view(SettingsView(self))
+
+        elif symbol == arcade.key.F10:
+            if self.current_level < len(self.levels):
+                self._update_level()
 
 
         if self.current_dir == "STOP":
@@ -704,6 +708,7 @@ class PacmanView(arcade.View):
             "REM POWER MODE": round(self.power_timer),
             "": "",
             "PAUSE": "[SPACE]", 
+            "SKIP LEVEL": "[F10]", 
             "SETTINGS": "[F12]", 
             "QUIT": "[ESC]", 
         }
