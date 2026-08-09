@@ -35,6 +35,11 @@ class SettingsView(arcade.View):
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol in (arcade.key.F12, arcade.key.BACKSPACE):
+            self.game_view.gameplay_music.volume = self.game_view.settings['volume']
+
+            if self.game_view.power_mode:
+                self.game_view.scared_ghosts_music.volume = self.game_view.settings['volume']
+
             self.window.show_view(self.game_view)
             return
 

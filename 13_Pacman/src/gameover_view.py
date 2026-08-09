@@ -41,14 +41,18 @@ class GameOverView(arcade.View):
 
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
-        if chr(symbol).isalpha() or symbol == arcade.key.SPACE:
+        ak = arcade.key
+        if symbol in (ak.UP, ak.DOWN, ak.LEFT, ak.RIGHT):
+            return
+
+        if chr(symbol).isalpha() or symbol == ak.SPACE:
             if len(self.player_name) < 10:
                 self.player_name += chr(symbol).upper()
 
-        elif symbol == arcade.key.BACKSPACE:
+        elif symbol == ak.BACKSPACE:
             self.player_name = self.player_name[:-1]
 
-        if symbol == arcade.key.ENTER:
+        if symbol == ak.ENTER:
             if not self.player_name.strip():
                 return
 
