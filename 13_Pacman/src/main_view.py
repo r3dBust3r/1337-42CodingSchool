@@ -361,8 +361,14 @@ class MainView(arcade.View):
         
         try:
             with open(hs_fname) as hs:
+                high_scrs = hs.read().strip()
+
+                if not high_scrs:
+                    self.cached_scores = []
+                    return
+
                 try:
-                    scores = json.load(hs)
+                    scores = json.loads(high_scrs)
                 except json.JSONDecodeError:
                     raise PacmanError(f'invalid json file: {hs_fname}')
 
