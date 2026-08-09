@@ -1,12 +1,7 @@
+from src.error import PacmanError
 import arcade
 import json
 import os
-# from mazegenerator import MazeGenerator
-# from src.error import PacmanError
-# from src.game_view import PacmanView
-# from src.cell import Cell
-# import json
-from src.error import PacmanError
 
 
 class GameOverView(arcade.View):
@@ -42,24 +37,36 @@ class GameOverView(arcade.View):
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         ak = arcade.key
-        if symbol in (ak.UP, ak.DOWN, ak.LEFT, ak.RIGHT):
-            return
 
-        if chr(symbol).isalpha() or symbol == ak.SPACE:
-            if len(self.player_name) < 10:
-                self.player_name += chr(symbol).upper()
-
-        elif symbol == ak.BACKSPACE:
+        if symbol == ak.BACKSPACE:
             self.player_name = self.player_name[:-1]
+            return
 
         if symbol == ak.ENTER:
             if not self.player_name.strip():
                 return
 
             self._save_score()
+
             from src.main_view import MainView
             main_view = MainView(self.config)
             self.window.show_view(main_view)
+            return
+
+        if symbol == ak.SPACE:
+            if len(self.player_name) < 10:
+                self.player_name += ' '
+            return
+
+        if ak.A <= symbol <= ak.Z:
+            if len(self.player_name) < 10:
+                self.player_name += chr(symbol).upper()
+            return
+
+        if ak.KEY_0 <= symbol <= ak.KEY_9:
+            if len(self.player_name) < 10:
+                self.player_name += chr(symbol)
+            return
 
 
     def _save_score(self):

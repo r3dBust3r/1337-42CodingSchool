@@ -31,8 +31,13 @@ class Parser:
 
 
     def _parse_config(self) -> None:
+        config = self._strip_comments()
         try:
-            raw_config = json.loads(self._strip_comments())
+            if not config:
+                raw_config = json.loads('{}')
+            else:
+                raw_config = json.loads(config)
+
         except json.JSONDecodeError:
             raise PacmanError('invalid json format')
 
@@ -42,19 +47,6 @@ class Parser:
             raise PacmanError(f'invalid config: {e}')
 
         self._config = config
-
-        # with open(self._config_file) as file:
-        #     try:
-        #         raw_config = json.load(file)
-        #     except json.JSONDecodeError:
-        #         raise PacmanError('invalid json format')
-
-        #     try:
-        #         config = ConfigModel(**raw_config)
-        #     except Exception as e:
-        #         raise PacmanError(f'invalid config: {e}')
-
-        #     self._config = config
 
 
     def get_config(self) -> ConfigModel:
