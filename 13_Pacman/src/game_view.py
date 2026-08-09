@@ -2,10 +2,17 @@ from src.gameover_view import GameOverView
 import arcade
 import random
 
+from typing import List, Dict, Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.models import LevelConfig
+
+
 class PacmanView(arcade.View):
-    def __init__(self, maze_grid, config, settings, pacgums) -> None:
+    def __init__(self, levels: List[Dict[str, Union['LevelConfig', int]]], config, settings) -> None:
         super().__init__()
-        self.maze_grid = maze_grid
+        self.levels = levels
+        self.maze_grid = levels[0]['level']
         self.config = config
 
         # pacman can defeat ghosts
@@ -20,7 +27,7 @@ class PacmanView(arcade.View):
         self.settings = settings
         self.init_speed = self.settings['speed']
         
-        self.pacgums = pacgums
+        self.pacgums = levels[0]['pacgums']
         self.current_level = 1
         self.remaining_time = config.level_max_time
         self.second = 0
@@ -202,6 +209,8 @@ class PacmanView(arcade.View):
         for ghost, (row, col) in zip(self.ghost_list, corners):
             ghost.g_row = row
             ghost.g_col = col
+            ghost.width = self.cell_size * 0.8
+            ghost.height = self.cell_size * 0.8
             ghost.current_dir = "STOP"
             
             center_x, center_y = self._get_center_pixels(row, col)
@@ -411,6 +420,57 @@ class PacmanView(arcade.View):
             self._update_pacman_target()
 
 
+    def _update_level(self):
+        self.current_level += 1
+        self.maze_grid = self.levels[self.current_level - 1]['level']
+
+        self.power_mode = False
+        self.power_timer = 0
+        self.dying_timer = 0
+
+        self.start_timer = 4
+        self.gameplay_music.volume = 0
+        self.scared_ghosts_music.volume = 0
+        self.start_music = arcade.play_sound(self.sounds['start'], volume=self.initial_vol)
+
+        self.pacgums = self.levels[self.current_level - 1]['pacgums']
+        self.remaining_time = self.config.level_max_time
+        self.second = 0
+
+        self.rows = len(self.maze_grid)
+        self.cols = len(self.maze_grid[0]) if self.rows > 0 else 1
+        
+        max_cell_width = (self.playable_width * 0.90) // self.cols
+        max_cell_height = (self.window.height * 0.90) // self.rows
+        self.cell_size = int(min(max_cell_width, max_cell_height))
+
+        # For Alignments
+        self.maze_width = self.cols * self.cell_size
+        self.maze_height = self.rows * self.cell_size
+        self.bottom_margin = (self.window.height - self.maze_height) / 2
+        self.left_margin = self.hud_width + (self.playable_width - self.maze_width) / 2
+
+        # Pacman Movement State
+        self.current_dir = "STOP"
+        self.next_dir = "STOP"
+        self.facing_angle = 0
+
+        # Grid positions
+        self.pac_row = 0
+        self.pac_col = 0
+        self.px = 0.0
+        self.py = 0.0
+        self.target_px = 0.0
+        self.target_py = 0.0
+
+        self.ghost_list.clear()
+        self.pacgum_list.clear()
+
+        self._spawn_pacman()
+        self._spawn_ghosts() 
+        self._setup_pacgums()
+
+
     def on_update(self, delta_time: float) -> None:
         # Start delay & sound
         if self.start_timer > 0:
@@ -422,9 +482,11 @@ class PacmanView(arcade.View):
             self.gameplay_music.volume = self.settings['volume']
 
         # Checking lives & gameover
-        if self.settings['lives'] <= 0 or self.remaining_time <= 0:
+        if self.settings['lives'] <= 0 or self.remaining_time <= 0 or self.current_level > len(self.levels):
             self.scared_ghosts_music.volume = 0
             arcade.stop_sound(self.gameplay_music)
+            arcade.stop_sound(self.scared_ghosts_music)
+            arcade.stop_sound(self.start_music)
             gameover = GameOverView(self.score, self.config, False)
             self.window.show_view(gameover)
 
@@ -516,7 +578,14 @@ class PacmanView(arcade.View):
                         self.score += self.config.points_per_pacgum
 
                     if self.pacgums <= 0:
+                        # update level or gameover
+                        if self.current_level < len(self.levels):
+                            self._update_level()
+                            return
+
                         arcade.stop_sound(self.gameplay_music)
+                        arcade.stop_sound(self.scared_ghosts_music)
+                        arcade.stop_sound(self.start_music)
                         gameover = GameOverView(self.score, self.config, True)
                         self.window.show_view(gameover)
 
@@ -630,7 +699,7 @@ class PacmanView(arcade.View):
         hud_items = {
             "LIVES": "",
             "SCORE": self.score,
-            "LEVEL": self.current_level,
+            "CURRENT LEVEL": f"{self.current_level}/{len(self.levels)}",
             "REM LEVEL TIME": self.remaining_time,
             "REM POWER MODE": round(self.power_timer),
             "": "",
@@ -639,14 +708,14 @@ class PacmanView(arcade.View):
             "QUIT": "[ESC]", 
         }
 
-        fsize = 28
+        fsize = 26
 
         for i, (key, val) in enumerate(hud_items.items(), 2):
             key = key + ":" if key else ""
             arcade.draw_text(
                 f"{key} {val}",
                 fsize,
-                self.window.height - (fsize * i * 1.25),
+                self.window.height - (fsize * i * 1.5),
                 arcade.color.ANTIQUE_WHITE,
                 font_size=fsize * 1.3,
                 font_name="ByteBounce",
@@ -657,7 +726,7 @@ class PacmanView(arcade.View):
             for i in range(self.settings['lives']):
                 arcade.draw_arc_filled(
                     170 + 34 * i,
-                    self.window.height - fsize * 2 * 1.25,
+                    self.window.height - fsize * 2 * 1.5,
                     32,
                     32,
                     arcade.color.YELLOW,
@@ -668,7 +737,7 @@ class PacmanView(arcade.View):
             arcade.draw_text(
                 f"x{self.settings['lives']}",
                 190,
-                self.window.height - (fsize * 2 * 1.25),
+                self.window.height - (fsize * 2 * 1.5),
                 arcade.color.ANTIQUE_WHITE,
                 font_size=fsize * 1.3,
                 font_name="ByteBounce",
@@ -676,7 +745,7 @@ class PacmanView(arcade.View):
             )
             arcade.draw_arc_filled(
                 170,
-                self.window.height - fsize * 2 * 1.25,
+                self.window.height - fsize * 2 * 1.5,
                 32,
                 32,
                 arcade.color.YELLOW,

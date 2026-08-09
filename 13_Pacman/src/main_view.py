@@ -4,13 +4,19 @@ from src.game_view import PacmanView
 from src.cell import Cell
 import arcade
 import json
+from random import sample
+
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.models import LevelConfig
 
 
 class MainView(arcade.View):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.pacgums = 0
 
         self.settings_buffer_timer = 0
         self.setting_buffer_draw = False
@@ -61,33 +67,54 @@ class MainView(arcade.View):
         self.bg_sound = arcade.play_sound(self.sounds["bg"], volume=.5)
 
 
-    def _build_maze(self, maze_w, maze_h):
-        maze_gen = MazeGenerator((maze_w, maze_h), seed=self.config.seed)
-        maze_grid = maze_gen.maze
+    def _generate_levels(self, levels_dimensions: list['LevelConfig']):
+        levels = []
 
-        # Cell objs
-        maze = []
+        if not levels_dimensions:
+            raise PacmanError('no levels in the config file')
 
-        for i in range(len(maze_grid)):
-            maze.append([])
-            for j in range(len(maze_grid[i])):
-                cell = Cell(maze_grid[i][j])
-                maze[i].append(cell)
+        for level in levels_dimensions:
+            maze_gen = MazeGenerator((level.width, level.height), seed=self.config.seed)
+            maze_grid = maze_gen.maze            
 
-                if (i == 0 and j == 0):
-                    cell.super_pacgum = True
-                elif (i == 0 and j == len(maze_grid[0]) - 1):
-                    cell.super_pacgum = True
-                elif (i == len(maze_grid) - 1 and j == 0):
-                    cell.super_pacgum = True
-                elif (i == len(maze_grid) - 1 and j == len(maze_grid[0]) - 1):
-                    cell.super_pacgum = True
+            maze = []
+            valid_empty_cells = []
+            level_pacgums = 0
 
-                if cell.walls != 15:
-                    cell.has_pacgum = True
-                    self.pacgums += 1
+            for i in range(len(maze_grid)):
+                maze.append([])
+                for j in range(len(maze_grid[i])):
+                    cell = Cell(maze_grid[i][j])
+                    
+                    cell.has_pacgum = False
+                    cell.super_pacgum = False
+                    maze[i].append(cell)
 
-        return maze
+                    is_corner = (
+                        (i == 0 and j == 0) or
+                        (i == 0 and j == len(maze_grid[0]) - 1) or
+                        (i == len(maze_grid) - 1 and j == 0) or
+                        (i == len(maze_grid) - 1 and j == len(maze_grid[0]) - 1)
+                    )
+
+                    if is_corner:
+                        cell.super_pacgum = True
+                        cell.has_pacgum = True
+                        level_pacgums += 1
+                    elif cell.walls != 15:
+                        valid_empty_cells.append(cell)
+
+            pacgums_to_place = min(self.config.pacgum, len(valid_empty_cells))
+            
+            selected_cells = sample(valid_empty_cells, pacgums_to_place)
+            
+            for cell in selected_cells:
+                cell.has_pacgum = True
+                level_pacgums += 1
+
+            levels.append({'level': maze, 'pacgums': level_pacgums})
+
+        return levels
 
 
     def _click(self):
@@ -124,8 +151,8 @@ class MainView(arcade.View):
                 if option == "NEW GAME":
                     arcade.play_sound(self.sounds["enter"])
                     arcade.stop_sound(self.bg_sound)
-                    maze_grid = self._build_maze(13, 9)
-                    game_view = PacmanView(maze_grid, self.config, self.settings, self.pacgums)
+                    levels = self._generate_levels(self.config.level)
+                    game_view = PacmanView(levels, self.config, self.settings)
                     self.window.show_view(game_view)
 
                 elif option == "HIGH SCORES":
