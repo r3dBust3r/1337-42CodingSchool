@@ -1,28 +1,27 @@
 from src.gameover_view import GameOverView
+from src.cell import Cell
+from src.models import ConfigModel
 import arcade
 import random
 
-from typing import List, Dict, Union, TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from src.models import LevelConfig
+from typing import Any, List, Dict
 
 
 class PacmanView(arcade.View):
-    def __init__(self, levels: List[Dict[str, Union['LevelConfig', int]]], config, settings) -> None:
+    def __init__(self, levels: List[Dict[str, Any]], config: ConfigModel, settings: Dict[str, Any]) -> None:
         super().__init__()
         self.levels = levels
-        self.maze_grid = levels[0]['level']
+        self.maze_grid: List[List[Cell]] = levels[0]['level']
         self.config = config
 
         # pacman can defeat ghosts
         self.blue_ghost_texture = arcade.load_texture("assets/images/ghosts/ghost-ee.png")
         self.power_mode = False
-        self.power_timer = 0
+        self.power_timer: float = 0.0
         self.respawn_after = 5
-        self.dying_timer = 0
+        self.dying_timer: float = 0.0
 
-        self.start_timer = 4
+        self.start_timer: float = 4.0
 
         self.settings = settings
         self.init_speed = self.settings['speed']
@@ -30,7 +29,7 @@ class PacmanView(arcade.View):
         self.pacgums = levels[0]['pacgums']
         self.current_level = 1
         self.remaining_time = config.level_max_time
-        self.second = 0
+        self.second: float = 0.0
 
         self.rows = len(self.maze_grid)
         self.cols = len(self.maze_grid[0]) if self.rows > 0 else 1
@@ -39,8 +38,8 @@ class PacmanView(arcade.View):
         # For Alignments
         self.maze_width = 0
         self.maze_height = 0
-        self.left_margin = 0
-        self.bottom_margin = 0
+        self.left_margin: float = 0.0
+        self.bottom_margin: float = 0.0
         self.playable_width = 0
         self.hud_width = 400
 
@@ -77,8 +76,8 @@ class PacmanView(arcade.View):
         self.score: int = 0 
         
         # Sprite Lists
-        self.ghost_list = arcade.SpriteList()
-        self.pacgum_list = arcade.SpriteList()
+        self.ghost_list: arcade.SpriteList[Any] = arcade.SpriteList()
+        self.pacgum_list: arcade.SpriteList[arcade.Sprite] = arcade.SpriteList()
 
         # Sound Effects
         self.sounds = {
@@ -89,6 +88,10 @@ class PacmanView(arcade.View):
             "scared-ghosts": arcade.load_sound("assets/sounds/scared-ghosts.wav"),
             "start": arcade.load_sound("assets/sounds/start.wav"),
         }
+
+        self.gameplay_music: Any = None
+        self.scared_ghosts_music: Any = None
+        self.start_music: Any = None
 
         self.gameover_sound = True
         self._init_env()
@@ -120,7 +123,7 @@ class PacmanView(arcade.View):
         self._setup_pacgums()
 
 
-    def _setup_pacgums(self):
+    def _setup_pacgums(self) -> None:
         # Setup Pacgum
         fruit_i = 0
         for r in range(self.rows):
@@ -170,7 +173,7 @@ class PacmanView(arcade.View):
         ]
 
         for gid, (row, col, ghost_filename) in enumerate(corners, 1):
-            ghost = arcade.Sprite(ghost_filename)
+            ghost: Any = arcade.Sprite(ghost_filename)
             ghost.width = self.cell_size * 0.8
             ghost.height = self.cell_size * 0.8
 
@@ -198,6 +201,7 @@ class PacmanView(arcade.View):
             self.ghost_list.append(ghost)
 
 
+
     def _respawn_ghosts(self) -> None:
         corners = [
             (0, 0), # Top-Left
@@ -220,7 +224,7 @@ class PacmanView(arcade.View):
             ghost.target_y = center_y
 
 
-    def _kill_ghost(self, ghost):
+    def _kill_ghost(self, ghost: Any) -> None:
         ghost.g_row = ghost.home_row
         ghost.g_col = ghost.home_col
 
@@ -239,7 +243,7 @@ class PacmanView(arcade.View):
         ghost.texture = ghost.normal_texture
 
 
-    def _check_collision(self, ghost):
+    def _check_collision(self, ghost: Any) -> None:
         current_vol = 0.0 if self.settings['mute'] else self.settings['volume']
 
         dist = arcade.math.get_distance(
@@ -263,7 +267,7 @@ class PacmanView(arcade.View):
                     return
 
                 arcade.play_sound(self.sounds["dying"], volume=current_vol)
-                self.dying_timer = 2
+                self.dying_timer = 2.0
                 self._spawn_pacman()
                 self._respawn_ghosts()
                 self.settings['lives'] -= 1
@@ -313,7 +317,7 @@ class PacmanView(arcade.View):
         return center_x, center_y
 
 
-    def _get_valid_ghost_moves(self, ghost) -> list[str]:
+    def _get_valid_ghost_moves(self, ghost: Any) -> list[str]:
         moves = []
         if self._can_move(ghost.g_row, ghost.g_col, "UP"): moves.append("UP")
         if self._can_move(ghost.g_row, ghost.g_col, "DOWN"): moves.append("DOWN")
@@ -350,7 +354,7 @@ class PacmanView(arcade.View):
         return False
 
 
-    def _update_ghost_target(self, ghost) -> None:
+    def _update_ghost_target(self, ghost: Any) -> None:
         if ghost.current_dir == "UP":
             ghost.target_x, ghost.target_y = self._get_center_pixels(ghost.g_row - 1, ghost.g_col)
 
@@ -387,7 +391,8 @@ class PacmanView(arcade.View):
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
-            arcade.stop_sound(self.gameplay_music)
+            if self.gameplay_music is not None:
+                arcade.stop_sound(self.gameplay_music)
 
             from src.main_view import MainView
             main_view = MainView(self.config)
@@ -410,8 +415,10 @@ class PacmanView(arcade.View):
             self.next_dir = "RIGHT"
 
         elif symbol == arcade.key.F12:
-            self.gameplay_music.volume = 0
-            self.scared_ghosts_music.volume = 0
+            if self.gameplay_music is not None:
+                self.gameplay_music.volume = 0
+            if self.scared_ghosts_music is not None:
+                self.scared_ghosts_music.volume = 0
             from src.settings_view import SettingsView
             self.window.show_view(SettingsView(self))
 
@@ -424,22 +431,24 @@ class PacmanView(arcade.View):
             self._update_pacman_target()
 
 
-    def _update_level(self):
+    def _update_level(self) -> None:
         self.current_level += 1
         self.maze_grid = self.levels[self.current_level - 1]['level']
 
         self.power_mode = False
-        self.power_timer = 0
-        self.dying_timer = 0
+        self.power_timer = 0.0
+        self.dying_timer = 0.0
 
-        self.start_timer = 4
-        self.gameplay_music.volume = 0
-        self.scared_ghosts_music.volume = 0
+        self.start_timer = 4.0
+        if self.gameplay_music is not None:
+            self.gameplay_music.volume = 0
+        if self.scared_ghosts_music is not None:
+            self.scared_ghosts_music.volume = 0
         self.start_music = arcade.play_sound(self.sounds['start'], volume=self.initial_vol)
 
         self.pacgums = self.levels[self.current_level - 1]['pacgums']
         self.remaining_time = self.config.level_max_time
-        self.second = 0
+        self.second = 0.0
 
         self.rows = len(self.maze_grid)
         self.cols = len(self.maze_grid[0]) if self.rows > 0 else 1
@@ -482,25 +491,34 @@ class PacmanView(arcade.View):
             return
 
         if self.start_timer <= 0:
-            self.start_music.volume = 0
-            self.gameplay_music.volume = self.settings['volume']
+            if self.start_music is not None:
+                self.start_music.volume = 0
+            if self.gameplay_music is not None:
+                self.gameplay_music.volume = self.settings['volume']
 
         # Checking lives & gameover
         if self.settings['lives'] <= 0 or self.remaining_time <= 0 or self.current_level > len(self.levels):
-            self.scared_ghosts_music.volume = 0
-            arcade.stop_sound(self.gameplay_music)
-            arcade.stop_sound(self.scared_ghosts_music)
-            arcade.stop_sound(self.start_music)
+            if self.scared_ghosts_music is not None:
+                self.scared_ghosts_music.volume = 0
+            if self.gameplay_music is not None:
+                arcade.stop_sound(self.gameplay_music)
+            if self.scared_ghosts_music is not None:
+                arcade.stop_sound(self.scared_ghosts_music)
+            if self.start_music is not None:
+                arcade.stop_sound(self.start_music)
             gameover = GameOverView(self.score, self.config, False)
             self.window.show_view(gameover)
 
         if self.pause:
-            self.gameplay_music.volume = 0
-            self.scared_ghosts_music.volume = 0
+            if self.gameplay_music is not None:
+                self.gameplay_music.volume = 0
+            if self.scared_ghosts_music is not None:
+                self.scared_ghosts_music.volume = 0
             return
         else:
-            self.gameplay_music.volume = self.settings['volume']
-            if self.power_mode:
+            if self.gameplay_music is not None:
+                self.gameplay_music.volume = self.settings['volume']
+            if self.power_mode and self.scared_ghosts_music is not None:
                 self.scared_ghosts_music.volume = self.settings['volume']
 
 
@@ -525,7 +543,7 @@ class PacmanView(arcade.View):
         # Level Time
         self.second += delta_time
         if self.second >= 1:
-            self.second = 0
+            self.second = 0.0
             self.remaining_time -= 1
 
 
@@ -534,7 +552,8 @@ class PacmanView(arcade.View):
             self.power_timer -= delta_time
 
             if self.power_timer <= 0:
-                self.scared_ghosts_music.volume = 0
+                if self.scared_ghosts_music is not None:
+                    self.scared_ghosts_music.volume = 0
                 self.power_mode = False
                 for ghost in self.ghost_list:
                     ghost.texture = ghost.normal_texture
@@ -571,8 +590,9 @@ class PacmanView(arcade.View):
                     
                     if current_cell.super_pacgum:
                         self.power_mode = True
-                        self.power_timer = 15
-                        self.scared_ghosts_music.volume = self.settings['volume']
+                        self.power_timer = 15.0
+                        if self.scared_ghosts_music is not None:
+                            self.scared_ghosts_music.volume = self.settings['volume']
                         for ghost in self.ghost_list:
                             ghost.texture = self.blue_ghost_texture
                             ghost.is_scared = True
@@ -587,9 +607,12 @@ class PacmanView(arcade.View):
                             self._update_level()
                             return
 
-                        arcade.stop_sound(self.gameplay_music)
-                        arcade.stop_sound(self.scared_ghosts_music)
-                        arcade.stop_sound(self.start_music)
+                        if self.gameplay_music is not None:
+                            arcade.stop_sound(self.gameplay_music)
+                        if self.scared_ghosts_music is not None:
+                            arcade.stop_sound(self.scared_ghosts_music)
+                        if self.start_music is not None:
+                            arcade.stop_sound(self.start_music)
                         gameover = GameOverView(self.score, self.config, True)
                         self.window.show_view(gameover)
 
@@ -759,7 +782,7 @@ class PacmanView(arcade.View):
             )
 
 
-    def _pause_overlay(self):
+    def _pause_overlay(self) -> None:
         arcade.draw_lbwh_rectangle_filled(
             0, 0,
             self.window.width,
@@ -816,7 +839,7 @@ class PacmanView(arcade.View):
         )
 
 
-    def _draw_cell(self, cell, from_left, from_bottom):
+    def _draw_cell(self, cell: Cell, from_left: float, from_bottom: float) -> None:
         cell_center_x = from_left + (self.cell_size / 2)
         cell_center_y = from_bottom + (self.cell_size / 2)
         cell_half = self.cell_size / 2

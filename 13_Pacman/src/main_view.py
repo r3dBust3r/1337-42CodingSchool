@@ -2,25 +2,22 @@ from mazegenerator import MazeGenerator
 from src.error import PacmanError
 from src.game_view import PacmanView
 from src.cell import Cell
+from src.models import ConfigModel, LevelConfig
 import arcade
 import json
 from random import sample
-
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from src.models import LevelConfig
+from typing import Any
 
 
 class MainView(arcade.View):
-    def __init__(self, config):
+    def __init__(self, config: ConfigModel) -> None:
         super().__init__()
         self.config = config
 
-        self.settings_buffer_timer = 0
+        self.settings_buffer_timer: float = 0.0
         self.setting_buffer_draw = False
         self.settings_buffer = ""
+        self.bg_sound: Any = None
 
         self.options = [
             "QUIT",
@@ -43,9 +40,9 @@ class MainView(arcade.View):
 
 
         # Settings
-        self.settings = {
+        self.settings: dict[str, Any] = {
             "mute": False,
-            "volume": 1,
+            "volume": 1.0,
             "invincibility": False,
             "speed": 300,
             "lives": config.lives,
@@ -67,7 +64,7 @@ class MainView(arcade.View):
         self.bg_sound = arcade.play_sound(self.sounds["bg"], volume=.5)
 
 
-    def _generate_levels(self, levels_dimensions: list['LevelConfig']):
+    def _generate_levels(self, levels_dimensions: list[LevelConfig]) -> list[dict[str, Any]]:
         levels = []
 
         if not levels_dimensions:
@@ -77,7 +74,7 @@ class MainView(arcade.View):
             maze_gen = MazeGenerator((level.width, level.height), seed=self.config.seed)
             maze_grid = maze_gen.maze            
 
-            maze = []
+            maze: list[list[Cell]] = []
             valid_empty_cells = []
             level_pacgums = 0
 
@@ -117,7 +114,7 @@ class MainView(arcade.View):
         return levels
 
 
-    def _click(self):
+    def _click(self) -> None:
         arcade.play_sound(
             self.sounds["click"]
         )
@@ -150,7 +147,8 @@ class MainView(arcade.View):
 
                 if option == "NEW GAME":
                     arcade.play_sound(self.sounds["enter"])
-                    arcade.stop_sound(self.bg_sound)
+                    if self.bg_sound is not None:
+                        arcade.stop_sound(self.bg_sound)
                     levels = self._generate_levels(self.config.level)
                     game_view = PacmanView(levels, self.config, self.settings)
                     self.window.show_view(game_view)
@@ -184,10 +182,11 @@ class MainView(arcade.View):
                 self.settings["mute"] = not self.settings["mute"]
                 self.settings_buffer = 'MUTED' if self.settings['mute'] else 'UNMUTED'
                 
-                if self.settings["mute"]:
-                    self.bg_sound.volume = 0.0
-                else:
-                    self.bg_sound.volume = self.settings["volume"] / 2
+                if self.bg_sound is not None:
+                    if self.settings["mute"]:
+                        self.bg_sound.volume = 0.0
+                    else:
+                        self.bg_sound.volume = self.settings["volume"] / 2
                 
             elif symbol in (arcade.key.PLUS, arcade.key.EQUAL):
                 self._click()
@@ -195,7 +194,7 @@ class MainView(arcade.View):
                 self.settings["volume"] = min(3.0, self.settings["volume"] + 0.1)
                 self.settings_buffer = f'VOLUME: {100 * self.settings["volume"]:.0f}%'
                 
-                if not self.settings["mute"]:
+                if self.bg_sound is not None and not self.settings["mute"]:
                     self.bg_sound.volume = self.settings["volume"] / 2
 
             elif symbol in (arcade.key.MINUS, arcade.key.UNDERSCORE):
@@ -204,7 +203,7 @@ class MainView(arcade.View):
                 self.settings["volume"] = max(0.0, self.settings["volume"] - 0.1)
                 self.settings_buffer = f'VOLUME: {100 * self.settings["volume"]:.0f}%'
                 
-                if not self.settings["mute"]:
+                if self.bg_sound is not None and not self.settings["mute"]:
                     self.bg_sound.volume = self.settings["volume"] / 2
 
             elif symbol == arcade.key.UP:
@@ -248,14 +247,15 @@ class MainView(arcade.View):
 
         if self.settings_buffer_timer >= 3:
             self.setting_buffer_draw = False
-            self.settings_buffer_timer = 0
+            self.settings_buffer_timer = 0.0
 
 
         # Sounds
-        if self.settings["mute"]:
-            self.bg_sound.volume = 0.0
-        else:
-            self.bg_sound.volume = self.settings["volume"] / 2
+        if self.bg_sound is not None:
+            if self.settings["mute"]:
+                self.bg_sound.volume = 0.0
+            else:
+                self.bg_sound.volume = self.settings["volume"] / 2
 
 
     def on_draw(self) -> None:
@@ -381,3 +381,4 @@ class MainView(arcade.View):
 
         except PermissionError:
             raise PacmanError(f'no access permission to: {hs_fname}')
+

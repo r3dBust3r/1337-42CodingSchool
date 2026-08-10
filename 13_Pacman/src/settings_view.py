@@ -1,12 +1,13 @@
+from typing import Any
 import arcade
 
 class SettingsView(arcade.View):
-    def __init__(self, game_view) -> None:
+    def __init__(self, game_view: Any) -> None:
         super().__init__()
         self.game_view = game_view
         self.screen = arcade.load_texture('assets/images/screens/screen-03.png')
 
-        self.settings_buffer_timer = 0
+        self.settings_buffer_timer: float = 0.0
         self.setting_buffer_draw = False
         self.settings_buffer = ""
 
@@ -14,12 +15,12 @@ class SettingsView(arcade.View):
             "click": arcade.load_sound('assets/sounds/click.wav'),
         }
 
-    def _click(self):
+    def _click(self) -> None:
         arcade.play_sound(
             self.sounds["click"]
         )
 
-    def _update_live_volume(self, new_volume: float):
+    def _update_live_volume(self, new_volume: float) -> None:
         current_position = self.game_view.gameplay_music.time
         
         arcade.stop_sound(self.game_view.gameplay_music)
@@ -105,7 +106,6 @@ class SettingsView(arcade.View):
             self.game_view.settings["ghost-freeze"] = not self.game_view.settings["ghost-freeze"]
             self.settings_buffer = 'GHOST FREEZED' if self.game_view.settings['ghost-freeze'] else 'GHOST UNFREEZED'
 
-
     def on_update(self, delta_time: float) -> None:
         # Settings buffer
         if self.setting_buffer_draw:
@@ -113,7 +113,7 @@ class SettingsView(arcade.View):
 
         if self.settings_buffer_timer >= 3:
             self.setting_buffer_draw = False
-            self.settings_buffer_timer = 0
+            self.settings_buffer_timer = 0.0
 
     def on_draw(self) -> None:
         # Screen Texture

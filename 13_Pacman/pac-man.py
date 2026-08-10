@@ -5,13 +5,13 @@ import arcade
 
 
 if TYPE_CHECKING:
-    from models import ConfigModel
+    from src.models import ConfigModel
 
 from warnings import filterwarnings
 filterwarnings('ignore')
 
 
-def main():
+def main() -> None:
     # Parser
     parser: Parser = Parser()
     config: ConfigModel = parser.get_config()
@@ -24,8 +24,9 @@ def main():
     window.show_view(main_menu)
     arcade.run()
 
+
 if __name__ == "__main__":
-    try: 
+    try:
         main()
     except Exception as e:
         print(f'Error: {e}')

@@ -1,3 +1,4 @@
+from src.models import ConfigModel
 from src.error import PacmanError
 import arcade
 import json
@@ -5,7 +6,7 @@ import os
 
 
 class GameOverView(arcade.View):
-    def __init__(self, score: int, config, won: bool):
+    def __init__(self, score: int, config: ConfigModel, won: bool) -> None:
         super().__init__()
         self.score = score
         self.config = config
@@ -69,7 +70,7 @@ class GameOverView(arcade.View):
             return
 
 
-    def _save_score(self):
+    def _save_score(self) -> None:
         scores = []
 
         if os.path.exists(self.save_file):

@@ -1,6 +1,7 @@
 from src.models import ConfigModel
 from src.error import PacmanError
 from sys import argv
+from typing import Any
 import json
 
 
@@ -15,7 +16,7 @@ class Parser:
         self._parse_config()
 
 
-    def _strip_comments(self):
+    def _strip_comments(self) -> str:
         striped = ''
 
         with open(self._config_file) as file:
@@ -31,7 +32,7 @@ class Parser:
 
 
     def _parse_config(self) -> None:
-        config = self._strip_comments()
+        config: Any = self._strip_comments()
         try:
             if not config:
                 raw_config = json.loads('{}')
