@@ -6,7 +6,7 @@
 /*   By: ottalhao <ottalhao@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/26 21:28:50 by ottalhao          #+#    #+#             */
-/*   Updated: 2026/07/31 18:57:28 by ottalhao         ###   ########.fr       */
+/*   Updated: 2026/08/10 23:32:31 by ottalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	p_err(char *s)
 {
-	fprintf(stderr, s);
+	fprintf(stderr, "%s", s);
 }
 
 int	print_usage(void)
