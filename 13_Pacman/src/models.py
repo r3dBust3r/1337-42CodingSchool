@@ -8,7 +8,11 @@ class LevelConfig(BaseModel):
 
 class ConfigModel(BaseModel):
     highscore_filename: str = Field(default="highscores.json")
-    level: list[LevelConfig] = Field(default_factory=lambda: [LevelConfig()], min_length=1, max_length=999)
+    level: list[LevelConfig] = Field(
+        default_factory=lambda: [LevelConfig()],
+        min_length=1,
+        max_length=999
+    )
     lives: int = Field(default=3, ge=1, le=999)
     pacgum: int = Field(default=42, ge=0)
     points_per_pacgum: int = Field(default=10, ge=0, le=9999)

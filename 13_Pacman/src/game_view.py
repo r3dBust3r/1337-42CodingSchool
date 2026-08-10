@@ -8,14 +8,21 @@ from typing import Any, List, Dict
 
 
 class PacmanView(arcade.View):
-    def __init__(self, levels: List[Dict[str, Any]], config: ConfigModel, settings: Dict[str, Any]) -> None:
+    def __init__(
+        self,
+        levels: List[Dict[str, Any]],
+        config: ConfigModel,
+        settings: Dict[str, Any]
+    ) -> None:
         super().__init__()
         self.levels = levels
         self.maze_grid: List[List[Cell]] = levels[0]['level']
         self.config = config
 
         # pacman can defeat ghosts
-        self.blue_ghost_texture = arcade.load_texture("assets/images/ghosts/ghost-ee.png")
+        self.blue_ghost_texture = arcade.load_texture(
+            "assets/images/ghosts/ghost-ee.png"
+        )
         self.power_mode = False
         self.power_timer: float = 0.0
         self.respawn_after = 5
@@ -25,7 +32,7 @@ class PacmanView(arcade.View):
 
         self.settings = settings
         self.init_speed = self.settings['speed']
-        
+
         self.pacgums = levels[0]['pacgums']
         self.current_level = 1
         self.remaining_time = config.level_max_time
@@ -50,7 +57,7 @@ class PacmanView(arcade.View):
         # Pacman Animation State
         self.pacman_mouth = 0.0
         self.pacman_opening = True
-        
+
         # Pacman Movement State
         self.current_dir = "STOP"
         self.next_dir = "STOP"
@@ -73,20 +80,23 @@ class PacmanView(arcade.View):
         self.target_py = 0.0
 
         # Score State
-        self.score: int = 0 
-        
+        self.score: int = 0
+
         # Sprite Lists
         self.ghost_list: arcade.SpriteList[Any] = arcade.SpriteList()
-        self.pacgum_list: arcade.SpriteList[arcade.Sprite] = arcade.SpriteList()
+        self.pacgum_list: arcade.SpriteList[arcade.Sprite] = (
+            arcade.SpriteList()
+        )
 
         # Sound Effects
+        assets = "assets/sounds"
         self.sounds = {
-            "bg": arcade.load_sound("assets/sounds/bg.wav"),
-            "eating-pacgum": arcade.load_sound("assets/sounds/eating-pacgum.wav"),
-            "dying": arcade.load_sound("assets/sounds/dying.wav"),
-            "eating-ghost": arcade.load_sound("assets/sounds/eating-ghost.wav"),
-            "scared-ghosts": arcade.load_sound("assets/sounds/scared-ghosts.wav"),
-            "start": arcade.load_sound("assets/sounds/start.wav"),
+            "bg": arcade.load_sound(f"{assets}/bg.wav"),
+            "eating-pacgum": arcade.load_sound(f"{assets}/eating-pacgum.wav"),
+            "dying": arcade.load_sound(f"{assets}/dying.wav"),
+            "eating-ghost": arcade.load_sound(f"{assets}/eating-ghost.wav"),
+            "scared-ghosts": arcade.load_sound(f"{assets}/scared-ghosts.wav"),
+            "start": arcade.load_sound(f"{assets}/start.wav"),
         }
 
         self.gameplay_music: Any = None
@@ -95,7 +105,6 @@ class PacmanView(arcade.View):
 
         self.gameover_sound = True
         self._init_env()
-
 
     def _init_env(self) -> None:
         arcade.set_background_color(arcade.color.BLACK)
@@ -110,22 +119,33 @@ class PacmanView(arcade.View):
         self.maze_width = self.cols * self.cell_size
         self.maze_height = self.rows * self.cell_size
         self.bottom_margin = (self.window.height - self.maze_height) / 2
-        self.left_margin = self.hud_width + (self.playable_width - self.maze_width) / 2
+        self.left_margin = (
+            self.hud_width + (self.playable_width - self.maze_width) / 2
+        )
 
-        self.initial_vol = 0.0 if self.settings['mute'] else self.settings['volume'] / 2
-        self.gameplay_music = arcade.play_sound(self.sounds['bg'], volume=0, loop=True)
-        self.scared_ghosts_music = arcade.play_sound(self.sounds['scared-ghosts'], volume=0, loop=True)
-        self.start_music = arcade.play_sound(self.sounds['start'], volume=self.initial_vol)
+        self.initial_vol = (
+            0.0 if self.settings['mute'] else self.settings['volume'] / 2
+        )
+        self.gameplay_music = arcade.play_sound(
+            self.sounds['bg'], volume=0, loop=True
+        )
+        self.scared_ghosts_music = arcade.play_sound(
+            self.sounds['scared-ghosts'], volume=0, loop=True
+        )
+        self.start_music = arcade.play_sound(
+            self.sounds['start'], volume=self.initial_vol
+        )
 
         # Spawn pacman, ghosts, pacgums
         self._spawn_pacman()
         self._spawn_ghosts()
         self._setup_pacgums()
 
-
     def _setup_pacgums(self) -> None:
         # Setup Pacgum
         fruit_i = 0
+        assets = "assets/images/pacgums"
+
         for r in range(self.rows):
             for c in range(self.cols):
                 cell = self.maze_grid[r][c]
@@ -133,25 +153,26 @@ class PacmanView(arcade.View):
                 if cell.has_pacgum:
                     if cell.super_pacgum:
                         if r == 0 and c == 0:
-                            super_fruit = f"assets/images/pacgums/super-pacgum-01.png"
+                            super_fruit = (f"{assets}/super-pacgum-01.png")
 
                         if r == 0 and c == self.cols - 1:
-                            super_fruit = f"assets/images/pacgums/super-pacgum-02.png"
+                            super_fruit = (f"{assets}/super-pacgum-02.png")
 
                         if r == self.rows - 1 and c == 0:
-                            super_fruit = f"assets/images/pacgums/super-pacgum-03.png"
+                            super_fruit = (f"{assets}/super-pacgum-03.png")
 
                         if r == self.rows - 1 and c == self.cols - 1:
-                            super_fruit = f"assets/images/pacgums/super-pacgum-04.png"
+                            super_fruit = (f"{assets}/super-pacgum-04.png")
 
                         fruit = arcade.Sprite(super_fruit)
                         fruit.width = self.cell_size
 
                     else:
-                        fruit = arcade.Sprite(f"assets/images/pacgums/pacgum-0{(fruit_i % 8) + 1}.png")
+                        num = (fruit_i % 8) + 1
+                        fruit = arcade.Sprite(f"{assets}/pacgum-0{num}.png")
                         fruit.width = self.cell_size * 0.5
 
-                    fruit.height = fruit.width 
+                    fruit.height = fruit.width
 
                     center_x, center_y = self._get_center_pixels(r, c)
                     fruit.center_x = center_x
@@ -162,14 +183,14 @@ class PacmanView(arcade.View):
 
                 fruit_i += 1
 
-
     def _spawn_ghosts(self) -> None:
         # Setup Ghost Sprites in the corners
+        assets = "assets/images/ghosts"
         corners = [
-            (0, 0, "assets/images/ghosts/ghost-01.png"), # Top-Left
-            (0, self.cols - 1, "assets/images/ghosts/ghost-02.png"), # Top-Right
-            (self.rows - 1, 0, "assets/images/ghosts/ghost-03.png"), # Bottom-Left
-            (self.rows - 1, self.cols - 1, "assets/images/ghosts/ghost-04.png") # Bottom-Right
+            (0, 0, f"{assets}/ghost-01.png"),
+            (0, self.cols - 1, f"{assets}/ghost-02.png"),
+            (self.rows - 1, 0, f"{assets}/ghost-03.png"),
+            (self.rows - 1, self.cols - 1, f"{assets}/ghost-04.png")
         ]
 
         for gid, (row, col, ghost_filename) in enumerate(corners, 1):
@@ -190,7 +211,7 @@ class PacmanView(arcade.View):
             cx, cy = self._get_center_pixels(row, col)
             ghost.center_x = cx
             ghost.center_y = cy
-            
+
             # Give each ghost its own tracking variables
             ghost.g_row = row
             ghost.g_col = col
@@ -200,14 +221,12 @@ class PacmanView(arcade.View):
 
             self.ghost_list.append(ghost)
 
-
-
     def _respawn_ghosts(self) -> None:
         corners = [
-            (0, 0), # Top-Left
-            (0, self.cols - 1), # Top-Right
-            (self.rows - 1, 0), # Bottom-Left
-            (self.rows - 1, self.cols - 1) # Bottom-Right
+            (0, 0),  # Top-Left
+            (0, self.cols - 1),  # Top-Right
+            (self.rows - 1, 0),  # Bottom-Left
+            (self.rows - 1, self.cols - 1)  # Bottom-Right
         ]
 
         for ghost, (row, col) in zip(self.ghost_list, corners):
@@ -216,13 +235,12 @@ class PacmanView(arcade.View):
             ghost.width = self.cell_size * 0.8
             ghost.height = self.cell_size * 0.8
             ghost.current_dir = "STOP"
-            
+
             center_x, center_y = self._get_center_pixels(row, col)
             ghost.center_x = center_x
             ghost.center_y = center_y
             ghost.target_x = center_x
             ghost.target_y = center_y
-
 
     def _kill_ghost(self, ghost: Any) -> None:
         ghost.g_row = ghost.home_row
@@ -242,9 +260,10 @@ class PacmanView(arcade.View):
         ghost.is_scared = False
         ghost.texture = ghost.normal_texture
 
-
     def _check_collision(self, ghost: Any) -> None:
-        current_vol = 0.0 if self.settings['mute'] else self.settings['volume']
+        current_vol = (
+            0.0 if self.settings['mute'] else self.settings['volume']
+        )
 
         dist = arcade.math.get_distance(
             self.px,
@@ -257,7 +276,9 @@ class PacmanView(arcade.View):
 
         if collision:
             if ghost.is_scared:
-                arcade.play_sound(self.sounds["eating-ghost"], volume=current_vol)
+                arcade.play_sound(
+                    self.sounds["eating-ghost"], volume=current_vol
+                )
                 self.score += self.config.points_per_ghost
                 self._kill_ghost(ghost)
                 return
@@ -272,29 +293,28 @@ class PacmanView(arcade.View):
                 self._respawn_ghosts()
                 self.settings['lives'] -= 1
 
-
     def _spawn_pacman(self) -> None:
         self.current_dir = "STOP"
 
         center_row = self.rows // 2
         center_col = self.cols // 2
-        
+
         # Gather every valid, open cell in the maze
         available_cells = []
         for r in range(self.rows):
             for c in range(self.cols):
                 if self.maze_grid[r][c].walls != 15:
                     available_cells.append((r, c))
-                    
+
         # Find the open cell that is mathematically closest to the true center
         closest_cell = min(
-            available_cells, 
+            available_cells,
             key=lambda pos: abs(pos[0] - center_row) + abs(pos[1] - center_col)
         )
 
         self.pac_row = closest_cell[0]
         self.pac_col = closest_cell[1]
-                
+
         # Lock his starting pixel coordinates to the chosen cell
         self.px, self.py = self._get_center_pixels(self.pac_row, self.pac_col)
         self.target_px, self.target_py = self.px, self.py
@@ -305,7 +325,6 @@ class PacmanView(arcade.View):
             self.pacgums -= 1
             spawn_cell.has_pacgum = False
 
-
     def _get_center_pixels(self, row: int, col: int) -> tuple[float, float]:
         half_cell = self.cell_size / 2
 
@@ -313,17 +332,20 @@ class PacmanView(arcade.View):
 
         maze_top_edge = self.bottom_margin + self.maze_height
         center_y = maze_top_edge - (row * self.cell_size) - half_cell
-        
-        return center_x, center_y
 
+        return center_x, center_y
 
     def _get_valid_ghost_moves(self, ghost: Any) -> list[str]:
         moves = []
-        if self._can_move(ghost.g_row, ghost.g_col, "UP"): moves.append("UP")
-        if self._can_move(ghost.g_row, ghost.g_col, "DOWN"): moves.append("DOWN")
-        if self._can_move(ghost.g_row, ghost.g_col, "LEFT"): moves.append("LEFT")
-        if self._can_move(ghost.g_row, ghost.g_col, "RIGHT"): moves.append("RIGHT")
-        
+        if self._can_move(ghost.g_row, ghost.g_col, "UP"):
+            moves.append("UP")
+        if self._can_move(ghost.g_row, ghost.g_col, "DOWN"):
+            moves.append("DOWN")
+        if self._can_move(ghost.g_row, ghost.g_col, "LEFT"):
+            moves.append("LEFT")
+        if self._can_move(ghost.g_row, ghost.g_col, "RIGHT"):
+            moves.append("RIGHT")
+
         # Prevent rotating
         opposites = {
             "UP": "DOWN",
@@ -333,61 +355,79 @@ class PacmanView(arcade.View):
             "STOP": "STOP"
         }
         reverse_dir = opposites[ghost.current_dir]
-        
+
         if len(moves) > 1 and reverse_dir in moves:
             moves.remove(reverse_dir)
 
         return moves
 
-
     def _can_move(self, row: int, col: int, direction: str) -> bool:
         if row < 0 or row >= self.rows or col < 0 or col >= self.cols:
             return False
-    
+
         cell = self.maze_grid[row][col]
 
-        if direction == "UP" and not (cell.walls & 1): return True
-        if direction == "RIGHT" and not (cell.walls & 2): return True
-        if direction == "DOWN" and not (cell.walls & 4): return True
-        if direction == "LEFT" and not (cell.walls & 8): return True
+        if direction == "UP" and not (cell.walls & 1):
+            return True
+        if direction == "RIGHT" and not (cell.walls & 2):
+            return True
+        if direction == "DOWN" and not (cell.walls & 4):
+            return True
+        if direction == "LEFT" and not (cell.walls & 8):
+            return True
 
         return False
 
-
     def _update_ghost_target(self, ghost: Any) -> None:
         if ghost.current_dir == "UP":
-            ghost.target_x, ghost.target_y = self._get_center_pixels(ghost.g_row - 1, ghost.g_col)
+            ghost.target_x, ghost.target_y = self._get_center_pixels(
+                ghost.g_row - 1, ghost.g_col
+            )
 
         elif ghost.current_dir == "DOWN":
-            ghost.target_x, ghost.target_y = self._get_center_pixels(ghost.g_row + 1, ghost.g_col)
+            ghost.target_x, ghost.target_y = self._get_center_pixels(
+                ghost.g_row + 1, ghost.g_col
+            )
 
         elif ghost.current_dir == "LEFT":
-            ghost.target_x, ghost.target_y = self._get_center_pixels(ghost.g_row, ghost.g_col - 1)
+            ghost.target_x, ghost.target_y = self._get_center_pixels(
+                ghost.g_row, ghost.g_col - 1
+            )
 
         elif ghost.current_dir == "RIGHT":
-            ghost.target_x, ghost.target_y = self._get_center_pixels(ghost.g_row, ghost.g_col + 1)
-
+            ghost.target_x, ghost.target_y = self._get_center_pixels(
+                ghost.g_row, ghost.g_col + 1
+            )
 
     def _update_pacman_target(self) -> None:
-        if self.next_dir != "STOP" and self._can_move(self.pac_row, self.pac_col, self.next_dir):
+        if self.next_dir != "STOP" and self._can_move(
+            self.pac_row, self.pac_col, self.next_dir
+        ):
             self.current_dir = self.next_dir
             self.facing_angle = self.angles[self.current_dir]
 
         elif not self._can_move(self.pac_row, self.pac_col, self.current_dir):
             self.current_dir = "STOP"
-            
+
         if self.current_dir == "UP":
-            self.target_px, self.target_py = self._get_center_pixels(self.pac_row - 1, self.pac_col)
+            self.target_px, self.target_py = self._get_center_pixels(
+                self.pac_row - 1, self.pac_col
+            )
 
         elif self.current_dir == "DOWN":
-            self.target_px, self.target_py = self._get_center_pixels(self.pac_row + 1, self.pac_col)
+            self.target_px, self.target_py = self._get_center_pixels(
+                self.pac_row + 1, self.pac_col
+            )
 
         elif self.current_dir == "LEFT":
-            self.target_px, self.target_py = self._get_center_pixels(self.pac_row, self.pac_col - 1)
+            self.target_px, self.target_py = self._get_center_pixels(
+                self.pac_row, self.pac_col - 1
+            )
 
         elif self.current_dir == "RIGHT":
-            self.target_px, self.target_py = self._get_center_pixels(self.pac_row, self.pac_col + 1)
-
+            self.target_px, self.target_py = self._get_center_pixels(
+                self.pac_row, self.pac_col + 1
+            )
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
@@ -400,7 +440,6 @@ class PacmanView(arcade.View):
 
         if symbol == arcade.key.SPACE:
             self.pause = not self.pause
-
 
         if symbol == arcade.key.UP or symbol == arcade.key.W:
             self.next_dir = "UP"
@@ -426,10 +465,8 @@ class PacmanView(arcade.View):
             if self.current_level < len(self.levels):
                 self._update_level()
 
-
         if self.current_dir == "STOP":
             self._update_pacman_target()
-
 
     def _update_level(self) -> None:
         self.current_level += 1
@@ -444,7 +481,9 @@ class PacmanView(arcade.View):
             self.gameplay_music.volume = 0
         if self.scared_ghosts_music is not None:
             self.scared_ghosts_music.volume = 0
-        self.start_music = arcade.play_sound(self.sounds['start'], volume=self.initial_vol)
+        self.start_music = arcade.play_sound(
+            self.sounds['start'], volume=self.initial_vol
+        )
 
         self.pacgums = self.levels[self.current_level - 1]['pacgums']
         self.remaining_time = self.config.level_max_time
@@ -452,7 +491,7 @@ class PacmanView(arcade.View):
 
         self.rows = len(self.maze_grid)
         self.cols = len(self.maze_grid[0]) if self.rows > 0 else 1
-        
+
         max_cell_width = (self.playable_width * 0.90) // self.cols
         max_cell_height = (self.window.height * 0.90) // self.rows
         self.cell_size = int(min(max_cell_width, max_cell_height))
@@ -461,7 +500,9 @@ class PacmanView(arcade.View):
         self.maze_width = self.cols * self.cell_size
         self.maze_height = self.rows * self.cell_size
         self.bottom_margin = (self.window.height - self.maze_height) / 2
-        self.left_margin = self.hud_width + (self.playable_width - self.maze_width) / 2
+        self.left_margin = (
+            self.hud_width + (self.playable_width - self.maze_width) / 2
+        )
 
         # Pacman Movement State
         self.current_dir = "STOP"
@@ -480,9 +521,8 @@ class PacmanView(arcade.View):
         self.pacgum_list.clear()
 
         self._spawn_pacman()
-        self._spawn_ghosts() 
+        self._spawn_ghosts()
         self._setup_pacgums()
-
 
     def on_update(self, delta_time: float) -> None:
         # Start delay & sound
@@ -497,7 +537,11 @@ class PacmanView(arcade.View):
                 self.gameplay_music.volume = self.settings['volume']
 
         # Checking lives & gameover
-        if self.settings['lives'] <= 0 or self.remaining_time <= 0 or self.current_level > len(self.levels):
+        if (
+            self.settings['lives'] <= 0 or
+            self.remaining_time <= 0 or
+            self.current_level > len(self.levels)
+        ):
             if self.scared_ghosts_music is not None:
                 self.scared_ghosts_music.volume = 0
             if self.gameplay_music is not None:
@@ -521,14 +565,13 @@ class PacmanView(arcade.View):
             if self.power_mode and self.scared_ghosts_music is not None:
                 self.scared_ghosts_music.volume = self.settings['volume']
 
-
         # Pacman dying state
         if self.dying_timer > 0:
             self.dying_timer -= delta_time
             return
 
         # Pacman Mouth Animation
-        animation_speed = 4.0 
+        animation_speed = 4.0
         if self.pacman_opening:
             self.pacman_mouth += delta_time * animation_speed
             if self.pacman_mouth >= 1.0:
@@ -546,7 +589,6 @@ class PacmanView(arcade.View):
             self.second = 0.0
             self.remaining_time -= 1
 
-
         # Power mode state
         if self.power_mode:
             self.power_timer -= delta_time
@@ -559,40 +601,51 @@ class PacmanView(arcade.View):
                     ghost.texture = ghost.normal_texture
                     ghost.is_scared = False
 
-
         # Pacman Movement
         if self.current_dir != "STOP":
-            dist = arcade.math.get_distance(self.px, self.py, self.target_px, self.target_py)
-            
-            move_dist = self.settings['speed'] * delta_time 
-            
+            dist = arcade.math.get_distance(
+                self.px, self.py, self.target_px, self.target_py
+            )
+
+            move_dist = self.settings['speed'] * delta_time
+
             if dist <= move_dist:
                 self.px = self.target_px
                 self.py = self.target_py
 
-                if self.current_dir == "UP": self.pac_row -= 1
-                elif self.current_dir == "DOWN": self.pac_row += 1
-                elif self.current_dir == "LEFT": self.pac_col -= 1
-                elif self.current_dir == "RIGHT": self.pac_col += 1
-                
+                if self.current_dir == "UP":
+                    self.pac_row -= 1
+                elif self.current_dir == "DOWN":
+                    self.pac_row += 1
+                elif self.current_dir == "LEFT":
+                    self.pac_col -= 1
+                elif self.current_dir == "RIGHT":
+                    self.pac_col += 1
+
                 # Collision Check
                 current_cell = self.maze_grid[self.pac_row][self.pac_col]
-                
+
                 if current_cell.has_pacgum:
                     self.pacgums -= 1
                     current_cell.has_pacgum = False
-                    
-                    current_vol = 0.0 if self.settings['mute'] else self.settings['volume']
-                    arcade.play_sound(self.sounds['eating-pacgum'], volume=current_vol)
+
+                    current_vol = (
+                        0.0 if self.settings['mute']
+                        else self.settings['volume']
+                    )
+                    arcade.play_sound(
+                        self.sounds['eating-pacgum'], volume=current_vol
+                    )
 
                     if current_cell.fruit:
                         current_cell.fruit.remove_from_sprite_lists()
-                    
+
                     if current_cell.super_pacgum:
                         self.power_mode = True
                         self.power_timer = 15.0
                         if self.scared_ghosts_music is not None:
-                            self.scared_ghosts_music.volume = self.settings['volume']
+                            sgm = self.scared_ghosts_music
+                            sgm.volume = self.settings['volume']
                         for ghost in self.ghost_list:
                             ghost.texture = self.blue_ghost_texture
                             ghost.is_scared = True
@@ -617,18 +670,20 @@ class PacmanView(arcade.View):
                         self.window.show_view(gameover)
 
                 self._update_pacman_target()
-                
+
             else:
-                if self.current_dir == "UP": self.py += move_dist
-                elif self.current_dir == "DOWN": self.py -= move_dist
-                elif self.current_dir == "LEFT": self.px -= move_dist
-                elif self.current_dir == "RIGHT": self.px += move_dist
-
-
+                if self.current_dir == "UP":
+                    self.py += move_dist
+                elif self.current_dir == "DOWN":
+                    self.py -= move_dist
+                elif self.current_dir == "LEFT":
+                    self.px -= move_dist
+                elif self.current_dir == "RIGHT":
+                    self.px += move_dist
 
         # Ghost movements
-        ghost_speed = self.init_speed * 0.85 * delta_time 
-        
+        ghost_speed = self.init_speed * 0.85 * delta_time
+
         for ghost in self.ghost_list:
             if ghost.is_dead:
                 ghost.respawn_timer -= delta_time
@@ -637,7 +692,6 @@ class PacmanView(arcade.View):
                     ghost.visible = True
 
                 continue
-
 
             self._check_collision(ghost)
 
@@ -650,29 +704,46 @@ class PacmanView(arcade.View):
                     ghost.current_dir = random.choice(moves)
                     self._update_ghost_target(ghost)
             else:
-                dist = arcade.math.get_distance(ghost.center_x, ghost.center_y, ghost.target_x, ghost.target_y)
-                
+                dist = arcade.math.get_distance(
+                    ghost.center_x, ghost.center_y,
+                    ghost.target_x, ghost.target_y
+                )
+
                 if dist <= ghost_speed:
                     ghost.center_x = ghost.target_x
                     ghost.center_y = ghost.target_y
-                    
-                    if ghost.current_dir == "UP": ghost.g_row -= 1
-                    elif ghost.current_dir == "DOWN": ghost.g_row += 1
-                    elif ghost.current_dir == "LEFT": ghost.g_col -= 1
-                    elif ghost.current_dir == "RIGHT": ghost.g_col += 1
-                    
+
+                    if ghost.current_dir == "UP":
+                        ghost.g_row -= 1
+                    elif ghost.current_dir == "DOWN":
+                        ghost.g_row += 1
+                    elif ghost.current_dir == "LEFT":
+                        ghost.g_col -= 1
+                    elif ghost.current_dir == "RIGHT":
+                        ghost.g_col += 1
+
                     moves = self._get_valid_ghost_moves(ghost)
                     if moves:
                         ghost.current_dir = random.choice(moves)
                         self._update_ghost_target(ghost)
                 else:
-                    if ghost.current_dir == "UP": ghost.center_y += ghost_speed
-                    elif ghost.current_dir == "DOWN": ghost.center_y -= ghost_speed
-                    elif ghost.current_dir == "LEFT": ghost.center_x -= ghost_speed
-                    elif ghost.current_dir == "RIGHT": ghost.center_x += ghost_speed
+                    if ghost.current_dir == "UP":
+                        ghost.center_y += ghost_speed
+                    elif ghost.current_dir == "DOWN":
+                        ghost.center_y -= ghost_speed
+                    elif ghost.current_dir == "LEFT":
+                        ghost.center_x -= ghost_speed
+                    elif ghost.current_dir == "RIGHT":
+                        ghost.center_x += ghost_speed
 
-
-    def _button(self, content: str, left: float, bottom: float, panel_color: tuple, width_mult: int = 1) -> None:
+    def _button(
+        self,
+        content: str,
+        left: float,
+        bottom: float,
+        panel_color: tuple,
+        width_mult: int = 1
+    ) -> None:
         base_width = 60 * width_mult
         base_height = 60
 
@@ -683,7 +754,7 @@ class PacmanView(arcade.View):
         x_margin = 10
         bottom_margin = 20
         top_margin = 3
-        
+
         panel_width = base_width - (x_margin * 2)
         panel_height = base_height - bottom_margin - top_margin
 
@@ -706,8 +777,14 @@ class PacmanView(arcade.View):
             anchor_y="center"
         )
 
-
-    def _text(self, content: str, left: float, bottom: float, color: tuple, fsize: int) -> None:
+    def _text(
+        self,
+        content: str,
+        left: float,
+        bottom: float,
+        color: tuple,
+        fsize: int
+    ) -> None:
         arcade.draw_text(
             content, left, bottom, color,
             font_size=fsize,
@@ -730,10 +807,10 @@ class PacmanView(arcade.View):
             "REM LEVEL TIME": self.remaining_time,
             "REM POWER MODE": round(self.power_timer),
             "": "",
-            "PAUSE": "[SPACE]", 
-            "SKIP LEVEL": "[F10]", 
-            "SETTINGS": "[F12]", 
-            "QUIT": "[ESC]", 
+            "PAUSE": "[SPACE]",
+            "SKIP LEVEL": "[F10]",
+            "SETTINGS": "[F12]",
+            "QUIT": "[ESC]",
         }
 
         fsize = 26
@@ -781,7 +858,6 @@ class PacmanView(arcade.View):
                 330
             )
 
-
     def _pause_overlay(self) -> None:
         arcade.draw_lbwh_rectangle_filled(
             0, 0,
@@ -799,7 +875,6 @@ class PacmanView(arcade.View):
             font_name="ByteBounce",
             anchor_x='center',
         )
-
 
     def on_draw(self) -> None:
         self.clear()
@@ -822,24 +897,23 @@ class PacmanView(arcade.View):
         self._draw_pacman()
         self.ghost_list.draw()
 
-
         if self.pause:
             self._pause_overlay()
-
 
     def _draw_pacman(self) -> None:
         arcade.draw_arc_filled(
             self.px,
             self.py,
-            self.cell_size * 0.7, 
+            self.cell_size * 0.7,
             self.cell_size * 0.7,
             arcade.color.YELLOW,
             self.facing_angle + (self.pacman_mouth * 60),
             self.facing_angle + 360 - (self.pacman_mouth * 60)
         )
 
-
-    def _draw_cell(self, cell: Cell, from_left: float, from_bottom: float) -> None:
+    def _draw_cell(
+        self, cell: Cell, from_left: float, from_bottom: float
+    ) -> None:
         cell_center_x = from_left + (self.cell_size / 2)
         cell_center_y = from_bottom + (self.cell_size / 2)
         cell_half = self.cell_size / 2
@@ -853,30 +927,30 @@ class PacmanView(arcade.View):
                 arcade.color.CYAN
             )
 
-        if cell.walls & 1: # TOP
+        if cell.walls & 1:  # TOP
             arcade.draw_line(
-                cell_center_x - cell_half, cell_center_y + cell_half, 
-                cell_center_x + cell_half, cell_center_y + cell_half, 
+                cell_center_x - cell_half, cell_center_y + cell_half,
+                cell_center_x + cell_half, cell_center_y + cell_half,
                 arcade.color.CYAN, 2
             )
 
-        if cell.walls & 2: # RIGHT
+        if cell.walls & 2:  # RIGHT
             arcade.draw_line(
-                cell_center_x + cell_half, cell_center_y + cell_half, 
-                cell_center_x + cell_half, cell_center_y - cell_half, 
+                cell_center_x + cell_half, cell_center_y + cell_half,
+                cell_center_x + cell_half, cell_center_y - cell_half,
                 arcade.color.CYAN, 2
             )
 
-        if cell.walls & 4: # BOTTOM
+        if cell.walls & 4:  # BOTTOM
             arcade.draw_line(
-                cell_center_x - cell_half, cell_center_y - cell_half, 
-                cell_center_x + cell_half, cell_center_y - cell_half, 
+                cell_center_x - cell_half, cell_center_y - cell_half,
+                cell_center_x + cell_half, cell_center_y - cell_half,
                 arcade.color.CYAN, 2
             )
 
-        if cell.walls & 8: # LEFT
+        if cell.walls & 8:  # LEFT
             arcade.draw_line(
-                cell_center_x - cell_half, cell_center_y - cell_half, 
-                cell_center_x - cell_half, cell_center_y + cell_half, 
+                cell_center_x - cell_half, cell_center_y - cell_half,
+                cell_center_x - cell_half, cell_center_y + cell_half,
                 arcade.color.CYAN, 2
             )

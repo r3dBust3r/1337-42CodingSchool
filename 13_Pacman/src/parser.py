@@ -15,7 +15,6 @@ class Parser:
         self._check_arg()
         self._parse_config()
 
-
     def _strip_comments(self) -> str:
         striped = ''
 
@@ -23,13 +22,14 @@ class Parser:
             content = file.readlines()
             for line in content:
                 line = line.strip()
-                if '//' in line: line = line[0:line.index('//')]
-                if '#' in line: line = line[0:line.index('#')]
+                if '//' in line:
+                    line = line[0:line.index('//')]
+                if '#' in line:
+                    line = line[0:line.index('#')]
 
                 striped += line
 
         return striped
-
 
     def _parse_config(self) -> None:
         config: Any = self._strip_comments()
@@ -49,10 +49,8 @@ class Parser:
 
         self._config = config
 
-
     def get_config(self) -> ConfigModel:
         return self._config
-
 
     def _check_arg(self) -> None:
         l: int = len(argv)
@@ -69,7 +67,7 @@ class Parser:
             raise PacmanError('config file must be a json')
 
         try:
-            with open(config_file) as file:
+            with open(config_file):
                 pass
         except FileNotFoundError:
             raise PacmanError(f'no such file: {config_file}')

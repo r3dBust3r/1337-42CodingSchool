@@ -30,14 +30,14 @@ class MainView(arcade.View):
         self.menu_indicator = len(self.options) - 1
 
         # Screens
+        assets = "assets/images/screens"
         self.screens = {
-            "main-menu": arcade.load_texture('assets/images/screens/screen-01.png'),
-            "high-scores": arcade.load_texture('assets/images/screens/screen-02.png'),
-            "settings": arcade.load_texture('assets/images/screens/screen-03.png'),
-            "credits": arcade.load_texture('assets/images/screens/screen-04.png'),
-            "instructions": arcade.load_texture('assets/images/screens/screen-05.png'),
+            "main-menu": arcade.load_texture(f'{assets}/screen-01.png'),
+            "high-scores": arcade.load_texture(f'{assets}/screen-02.png'),
+            "settings": arcade.load_texture(f'{assets}/screen-03.png'),
+            "credits": arcade.load_texture(f'{assets}/screen-04.png'),
+            "instructions": arcade.load_texture(f'{assets}/screen-05.png'),
         }
-
 
         # Settings
         self.settings: dict[str, Any] = {
@@ -56,23 +56,25 @@ class MainView(arcade.View):
             "click": arcade.load_sound('assets/sounds/click.wav'),
         }
 
-
     def on_show_view(self) -> None:
         self.current_screen = self.screens["main-menu"]
         self._load_highscores()
 
         self.bg_sound = arcade.play_sound(self.sounds["bg"], volume=.5)
 
-
-    def _generate_levels(self, levels_dimensions: list[LevelConfig]) -> list[dict[str, Any]]:
+    def _generate_levels(
+        self, levels_dimensions: list[LevelConfig]
+    ) -> list[dict[str, Any]]:
         levels = []
 
         if not levels_dimensions:
             raise PacmanError('no levels in the config file')
 
         for level in levels_dimensions:
-            maze_gen = MazeGenerator((level.width, level.height), seed=self.config.seed)
-            maze_grid = maze_gen.maze            
+            maze_gen = MazeGenerator(
+                (level.width, level.height), seed=self.config.seed
+            )
+            maze_grid = maze_gen.maze
 
             maze: list[list[Cell]] = []
             valid_empty_cells = []
@@ -82,7 +84,7 @@ class MainView(arcade.View):
                 maze.append([])
                 for j in range(len(maze_grid[i])):
                     cell = Cell(maze_grid[i][j])
-                    
+
                     cell.has_pacgum = False
                     cell.super_pacgum = False
                     maze[i].append(cell)
@@ -91,7 +93,10 @@ class MainView(arcade.View):
                         (i == 0 and j == 0) or
                         (i == 0 and j == len(maze_grid[0]) - 1) or
                         (i == len(maze_grid) - 1 and j == 0) or
-                        (i == len(maze_grid) - 1 and j == len(maze_grid[0]) - 1)
+                        (
+                            i == len(maze_grid) - 1 and
+                            j == len(maze_grid[0]) - 1
+                        )
                     )
 
                     if is_corner:
@@ -102,9 +107,9 @@ class MainView(arcade.View):
                         valid_empty_cells.append(cell)
 
             pacgums_to_place = min(self.config.pacgum, len(valid_empty_cells))
-            
+
             selected_cells = sample(valid_empty_cells, pacgums_to_place)
-            
+
             for cell in selected_cells:
                 cell.has_pacgum = True
                 level_pacgums += 1
@@ -113,12 +118,10 @@ class MainView(arcade.View):
 
         return levels
 
-
     def _click(self) -> None:
         arcade.play_sound(
             self.sounds["click"]
         )
-
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol in (arcade.key.ESCAPE, arcade.key.BACKSPACE):
@@ -130,7 +133,6 @@ class MainView(arcade.View):
                 self.current_screen = self.screens["main-menu"]
             return
 
-
         # Main Menu
         if self.current_screen == self.screens["main-menu"]:
             if symbol == arcade.key.UP:
@@ -141,9 +143,9 @@ class MainView(arcade.View):
                 self._click()
                 self.menu_indicator -= 1
 
-
             if symbol == arcade.key.ENTER:
-                option = self.options[self.menu_indicator % len(self.options)]
+                opt_idx = self.menu_indicator % len(self.options)
+                option = self.options[opt_idx]
 
                 if option == "NEW GAME":
                     arcade.play_sound(self.sounds["enter"])
@@ -172,73 +174,93 @@ class MainView(arcade.View):
                 elif option == "QUIT":
                     arcade.exit()
 
-
-
         # Settings Screen
         if self.current_screen == self.screens["settings"]:
             if symbol == arcade.key.M:
                 self._click()
                 self.setting_buffer_draw = True
                 self.settings["mute"] = not self.settings["mute"]
-                self.settings_buffer = 'MUTED' if self.settings['mute'] else 'UNMUTED'
-                
+                is_muted = self.settings['mute']
+                self.settings_buffer = 'MUTED' if is_muted else 'UNMUTED'
+
                 if self.bg_sound is not None:
                     if self.settings["mute"]:
                         self.bg_sound.volume = 0.0
                     else:
                         self.bg_sound.volume = self.settings["volume"] / 2
-                
+
             elif symbol in (arcade.key.PLUS, arcade.key.EQUAL):
                 self._click()
                 self.setting_buffer_draw = True
-                self.settings["volume"] = min(3.0, self.settings["volume"] + 0.1)
-                self.settings_buffer = f'VOLUME: {100 * self.settings["volume"]:.0f}%'
-                
+                self.settings["volume"] = min(
+                    3.0, self.settings["volume"] + 0.1
+                )
+                vol_pct = 100 * self.settings["volume"]
+                self.settings_buffer = f'VOLUME: {vol_pct:.0f}%'
+
                 if self.bg_sound is not None and not self.settings["mute"]:
                     self.bg_sound.volume = self.settings["volume"] / 2
 
             elif symbol in (arcade.key.MINUS, arcade.key.UNDERSCORE):
                 self._click()
                 self.setting_buffer_draw = True
-                self.settings["volume"] = max(0.0, self.settings["volume"] - 0.1)
-                self.settings_buffer = f'VOLUME: {100 * self.settings["volume"]:.0f}%'
-                
+                self.settings["volume"] = max(
+                    0.0, self.settings["volume"] - 0.1
+                )
+                vol_pct = 100 * self.settings["volume"]
+                self.settings_buffer = f'VOLUME: {vol_pct:.0f}%'
+
                 if self.bg_sound is not None and not self.settings["mute"]:
                     self.bg_sound.volume = self.settings["volume"] / 2
 
             elif symbol == arcade.key.UP:
                 self._click()
                 self.setting_buffer_draw = True
-                self.settings["speed"] = min(3000, self.settings["speed"] + 10)
-                self.settings_buffer = f'SPEED: {self.settings["speed"]}'
+                self.settings["speed"] = min(
+                    3000, self.settings["speed"] + 10
+                )
+                spd = self.settings["speed"]
+                self.settings_buffer = f'SPEED: {spd}'
 
             elif symbol == arcade.key.DOWN:
                 self._click()
                 self.setting_buffer_draw = True
-                self.settings["speed"] = max(10, self.settings["speed"] - 10)
-                self.settings_buffer = f'SPEED: {self.settings["speed"]}'
-                
+                self.settings["speed"] = max(
+                    10, self.settings["speed"] - 10
+                )
+                spd = self.settings["speed"]
+                self.settings_buffer = f'SPEED: {spd}'
+
             elif symbol == arcade.key.I:
                 self._click()
                 self.setting_buffer_draw = True
-                self.settings["invincibility"] = not self.settings["invincibility"]
-                self.settings_buffer = 'INVINCIBILE' if self.settings['invincibility'] else 'BEATABLE'
-                
+                self.settings["invincibility"] = (
+                    not self.settings["invincibility"]
+                )
+                is_inv = self.settings['invincibility']
+                self.settings_buffer = (
+                    'INVINCIBILE' if is_inv else 'BEATABLE'
+                )
+
             elif symbol == arcade.key.E:
                 self._click()
                 self.setting_buffer_draw = True
                 self.settings["lives"] += 1
-                self.settings_buffer = f'LIVES: {self.settings["lives"]}'
+                lvs = self.settings["lives"]
+                self.settings_buffer = f'LIVES: {lvs}'
 
             elif symbol == arcade.key.F:
                 self._click()
                 self.setting_buffer_draw = True
-                self.settings["ghost-freeze"] = not self.settings["ghost-freeze"]
-                self.settings_buffer = 'GHOST FREEZED' if self.settings['ghost-freeze'] else 'GHOST UNFREEZED'
+                self.settings["ghost-freeze"] = (
+                    not self.settings["ghost-freeze"]
+                )
+                is_frz = self.settings['ghost-freeze']
+                self.settings_buffer = (
+                    'GHOST FREEZED' if is_frz else 'GHOST UNFREEZED'
+                )
 
             return
-
-
 
     def on_update(self, delta_time: float) -> None:
         # Settings buffer
@@ -249,14 +271,12 @@ class MainView(arcade.View):
             self.setting_buffer_draw = False
             self.settings_buffer_timer = 0.0
 
-
         # Sounds
         if self.bg_sound is not None:
             if self.settings["mute"]:
                 self.bg_sound.volume = 0.0
             else:
                 self.bg_sound.volume = self.settings["volume"] / 2
-
 
     def on_draw(self) -> None:
         # Screen Texture
@@ -295,16 +315,18 @@ class MainView(arcade.View):
                 )
 
             # Draw the indicator
+            ind_y = self.window.height / 4 + (
+                self.menu_indicator % len(self.options) * fsize * 1.5
+            )
             arcade.draw_arc_filled(
                 self.window.width / 2 - fsize * 4,
-                self.window.height / 4 + (self.menu_indicator % len(self.options) * fsize * 1.5),
+                ind_y,
                 fsize,
                 fsize,
                 arcade.color.YELLOW,
                 30,
                 330
             )
-
 
         # High Scores Screen
         if self.current_screen == self.screens["high-scores"]:
@@ -355,10 +377,9 @@ class MainView(arcade.View):
                 anchor_y='center',
             )
 
-
     def _load_highscores(self) -> None:
         hs_fname = self.config.highscore_filename
-        
+
         try:
             with open(hs_fname) as hs:
                 high_scrs = hs.read().strip()
@@ -381,4 +402,3 @@ class MainView(arcade.View):
 
         except PermissionError:
             raise PacmanError(f'no access permission to: {hs_fname}')
-

@@ -1,5 +1,4 @@
 from src.models import ConfigModel
-from src.error import PacmanError
 import arcade
 import json
 import os
@@ -14,16 +13,16 @@ class GameOverView(arcade.View):
         self.won = won
         self.player_name = ""
 
+        assets = "assets/images/screens"
         self.screens = {
-            "won": arcade.load_texture('assets/images/screens/game-over-s.png'),
-            "failed": arcade.load_texture('assets/images/screens/game-over-f.png'),
+            "won": arcade.load_texture(f'{assets}/game-over-s.png'),
+            "failed": arcade.load_texture(f'{assets}/game-over-f.png'),
         }
 
         self.sounds = {
             "won": arcade.load_sound('assets/sounds/game-over-s.wav'),
             "failed": arcade.load_sound('assets/sounds/game-over-f.wav'),
         }
-
 
     def on_show_view(self) -> None:
         if self.won:
@@ -33,8 +32,6 @@ class GameOverView(arcade.View):
         else:
             self.bg_sound = arcade.play_sound(self.sounds["failed"])
             self.screen = self.screens["failed"]
-
-
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         ak = arcade.key
@@ -69,7 +66,6 @@ class GameOverView(arcade.View):
                 self.player_name += chr(symbol)
             return
 
-
     def _save_score(self) -> None:
         scores = []
 
@@ -82,7 +78,7 @@ class GameOverView(arcade.View):
 
         scores.append({
             "name": self.player_name.strip(),
-            "score": self.score 
+            "score": self.score
         })
 
         scores = sorted(scores, key=lambda s: s["score"], reverse=True)
@@ -90,7 +86,6 @@ class GameOverView(arcade.View):
 
         with open(self.save_file, 'w') as file:
             json.dump(scores, file, indent=4)
- 
 
     def on_draw(self) -> None:
         # Screen Texture
