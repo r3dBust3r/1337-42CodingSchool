@@ -1,6 +1,7 @@
-- [ ] The JSON Comments Trap (#)
-    Strip comments then pass it to `json.loads`
-
-
-- [ ] Faulty Config Handling & Defaults
-    Set default values for pydantic
+- [ ] save settings on an external file
+- [ ] ghost algorithms (chasing & run away)
+- [ ] mypy
+- [ ] flake
+- [ ] makefile
+- [ ] host the game online
+- [ ] docstrings
