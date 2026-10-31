@@ -1,6 +1,7 @@
 from langchain_text_splitters import PythonCodeTextSplitter
 from langchain_text_splitters import MarkdownTextSplitter
 from pydantic import BaseModel
+import pickle
 import os
 
 
@@ -82,12 +83,72 @@ class Chunker:
                         )
                     )
 
+                    search_start = first_character_index + 1
+
+        return self.minimal_sources
+
+
+class Tokenizer:
+    def __init__(self, minimal_sources):
+        self.minimal_sources = minimal_sources
+        self.raw_chunks = []
+        self.tokenized_chunks = []
+        self.save_dir = 'data/processed/'
+
+    def save_tokens_to_disk(self):
+        os.makedirs(self.save_dir, exist_ok=True)
+
+        minimal_sources_path = os.path.join(self.save_dir, 'minimal_sources.pkl')
+        with open(minimal_sources_path, 'wb') as f:
+            pickle.dump(self.minimal_sources, f)
+
+        tokenized_chunks_path = os.path.join(self.save_dir, 'tokenized_chunks.pkl')
+        with open(tokenized_chunks_path, 'wb') as f:
+            pickle.dump(self.tokenized_chunks, f)
+
+        print(f"Successfully saved index artifacts to {self.save_dir}")
+
+
+    def tokenize(self):
+        f = None
+        last_opened = ''
+        raw_content = ''
+
+        for ms in self.minimal_sources:
+            file_path = ms.file_path
+
+            if file_path != last_opened:
+                if f: f.close()
+
+                try:
+                    f = open(file_path, 'r', encoding='utf-8')
+                    last_opened = file_path
+                    raw_content = f.read()
+
+                except Exception as e:
+                    print(f'skipping {file_path}: {e}')
+                    continue
+
+            ms_raw_content = raw_content[ms.first_character_index:ms.last_character_index]
+            self.raw_chunks.append(ms_raw_content)
+
+            tokens = ms_raw_content.lower().split()
+            self.tokenized_chunks.append(tokens)
+
+        if f: f.close()
+
+
 
 
 def main():
     chunker = Chunker()
-    chunker.chunk()
+    minimal_sources = chunker.chunk()
     print(f"Successfully processed {len(chunker.minimal_sources)} chunks.")
+
+    tokenizer = Tokenizer(minimal_sources)
+    tokenizer.tokenize()
+    tokenizer.save_tokens_to_disk()
+    print("Tokenization processed successfully")
 
 
 if __name__ == "__main__":
