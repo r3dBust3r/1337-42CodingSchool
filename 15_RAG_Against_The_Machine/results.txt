@@ -1,0 +1,1300 @@
+Question 1: What HTTP endpoint is used to dynamically load a LoRA adapter in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/lora.md [4695:6098]
+
+MY RESULT for: What HTTP endpoint is used to dynamically load a LoRA adapter in vLLM?
+('score: 26.51017951965332', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/lora.md', first_character_index=4690, last_character_index=6094))
+('score: 22.204349517822266', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/lora.md', first_character_index=3463, last_character_index=4689))
+('score: 21.027315139770508', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/openai/serving_models.py', first_character_index=10634, last_character_index=11280))
+('score: 20.179943084716797', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/openai/serving_models.py', first_character_index=7853, last_character_index=9408))
+('score: 19.731966018676758', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/openai/serving_models.py', first_character_index=6276, last_character_index=7864))
+
+..........................................
+
+Question 2: What command can be used to evaluate the accuracy of a quantized model using lm_eval with vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/int8.md [2439:4084]
+
+MY RESULT for: What command can be used to evaluate the accuracy of a quantized model using lm_eval with vLLM?
+('score: 27.626306533813477', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/fp8.md', first_character_index=3158, last_character_index=4340))
+('score: 25.188323974609375', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/tpu/test_quantization_accuracy.py', first_character_index=0, last_character_index=1602))
+('score: 24.44100570678711', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=2454, last_character_index=3803))
+('score: 24.294269561767578', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int8.md', first_character_index=2422, last_character_index=3915))
+('score: 23.93645477294922', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/quark.md', first_character_index=7787, last_character_index=9402))
+
+..........................................
+
+Question 3: What method does vLLM's LLM class provide for generating embedding vectors from prompts?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/pooling_models.md [3619:4765]
+
+MY RESULT for: What method does vLLM's LLM class provide for generating embedding vectors from prompts?
+('score: 14.466772079467773', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/llm.py', first_character_index=52167, last_character_index=53777))
+('score: 13.752522468566895', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/llm.py', first_character_index=54267, last_character_index=55841))
+('score: 13.458271026611328', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/llm.py', first_character_index=3099, last_character_index=3541))
+('score: 12.283466339111328', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/pooling_models.md', first_character_index=4184, last_character_index=5648))
+('score: 12.148977279663086', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/prefix_caching.py', first_character_index=1296, last_character_index=2689))
+
+..........................................
+
+Question 4: What hardware platforms does vLLM support?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/usage/v1_guide.md [3311:4170]
+
+MY RESULT for: What hardware platforms does vLLM support?
+('score: 9.621784210205078', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/supported_hardware.md', first_character_index=2059, last_character_index=2697))
+('score: 7.7255964279174805', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/supported_hardware.md', first_character_index=0, last_character_index=219))
+('score: 6.528179168701172', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/reproducibility.md', first_character_index=0, last_character_index=1696))
+('score: 6.467361927032471', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/platforms/rocm.py', first_character_index=8739, last_character_index=9045))
+('score: 6.29572057723999', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/platforms/tpu.py', first_character_index=6543, last_character_index=7553))
+
+..........................................
+
+Question 5: What are the differences between mm_kwargs and tok_kwargs when using the _call_hf_processor method in vLLM multimodal processing?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md [24856:25721]
+
+MY RESULT for: What are the differences between mm_kwargs and tok_kwargs when using the _call_hf_processor method in vLLM multimodal processing?
+('score: 43.42243576049805', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/minicpmv.py', first_character_index=22935, last_character_index=24520))
+('score: 43.04765319824219', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/llava_onevision.py', first_character_index=11036, last_character_index=12385))
+('score: 42.6954231262207', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md', first_character_index=23195, last_character_index=24838))
+('score: 42.08970260620117', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/mllama4.py', first_character_index=20409, last_character_index=21665))
+('score: 41.461124420166016', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/fuyu.py', first_character_index=5703, last_character_index=6670))
+
+..........................................
+
+Question 6: Where can I find information about using generative models in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/supported_models.md [12252:12366]
+
+MY RESULT for: Where can I find information about using generative models in vLLM?
+('score: 12.146705627441406', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=34333, last_character_index=35122))
+('score: 9.87469482421875', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=11890, last_character_index=12652))
+('score: 9.052925109863281', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/language/pooling/test_gritlm.py', first_character_index=3691, last_character_index=4796))
+('score: 9.038810729980469', MinimalSource(file_path='data/raw/vllm-0.10.1/CONTRIBUTING.md', first_character_index=0, last_character_index=139))
+('score: 8.702656745910645', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=7384, last_character_index=8128))
+
+..........................................
+
+Question 7: How is the number of placeholder feature tokens for an image calculated in vLLM's multimodal implementation?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md [9837:11737]
+
+MY RESULT for: How is the number of placeholder feature tokens for an image calculated in vLLM's multimodal implementation?
+('score: 13.301209449768066', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md', first_character_index=11248, last_character_index=11953))
+('score: 13.009176254272461', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/mm_processing.md', first_character_index=0, last_character_index=1693))
+('score: 12.891170501708984', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md', first_character_index=8019, last_character_index=8980))
+('score: 12.337448120117188', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/multimodal/processing.py', first_character_index=8270, last_character_index=9745))
+('score: 12.10418701171875', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/multimodal/processing.py', first_character_index=6534, last_character_index=8174))
+
+..........................................
+
+Question 8: What parallelism strategy does vLLM support for large-scale deployment of Mixture of Experts models?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md [2554:2949]
+
+MY RESULT for: What parallelism strategy does vLLM support for large-scale deployment of Mixture of Experts models?
+('score: 15.990422248840332', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=1493, last_character_index=3173))
+('score: 13.004972457885742', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/expert_parallel_deployment.md', first_character_index=0, last_character_index=1659))
+('score: 12.379881858825684', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=5714, last_character_index=7384))
+('score: 10.679189682006836', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=4132, last_character_index=5713))
+('score: 10.315543174743652', MinimalSource(file_path='data/raw/vllm-0.10.1/tools/ep_kernels/README.md', first_character_index=0, last_character_index=1369))
+
+..........................................
+
+Question 9: How do you achieve reproducible results in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/usage/reproducibility.md [0:849]
+
+MY RESULT for: How do you achieve reproducible results in vLLM?
+('score: 11.719447135925293', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/reproducibility.md', first_character_index=0, last_character_index=1696))
+('score: 8.375741004943848', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/reproducibility.py', first_character_index=0, last_character_index=1322))
+('score: 7.627388000488281', MinimalSource(file_path='data/raw/vllm-0.10.1/.buildkite/nightly-benchmarks/README.md', first_character_index=5350, last_character_index=6847))
+('score: 7.449228286743164', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=0, last_character_index=1296))
+('score: 7.132387161254883', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=2552, last_character_index=4131))
+
+..........................................
+
+Question 10: Where can I find vLLM setup and installation instructions for Google TPU?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/configuration/tpu.md [114:243]
+
+MY RESULT for: Where can I find vLLM setup and installation instructions for Google TPU?
+('score: 24.14476203918457', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/tpu.md', first_character_index=0, last_character_index=1609))
+('score: 20.451757431030273', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=7095, last_character_index=8600))
+('score: 20.33060073852539', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=5825, last_character_index=7182))
+('score: 20.309799194335938', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=0, last_character_index=1576))
+('score: 19.985939025878906', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=5071, last_character_index=5707))
+
+..........................................
+
+Question 11: What parameter does vLLM set according to different quantization schemes to support weight quantization in linear layers?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/basic.md [5934:6110]
+
+MY RESULT for: What parameter does vLLM set according to different quantization schemes to support weight quantization in linear layers?
+('score: 17.93309211730957', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=5934, last_character_index=7626))
+('score: 16.817718505859375', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=4566, last_character_index=6152))
+('score: 14.650156021118164', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/quark/schemes/quark_w8a8_int8.py', first_character_index=0, last_character_index=707))
+('score: 14.583200454711914', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py', first_character_index=0, last_character_index=804))
+('score: 13.97225570678711', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/compressed_tensors/schemes/compressed_tensors_24.py', first_character_index=0, last_character_index=1399))
+
+..........................................
+
+Question 12: What is the main configuration object that is passed around in vLLM's class hierarchy?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/arch_overview.md [4810:6139]
+
+MY RESULT for: What is the main configuration object that is passed around in vLLM's class hierarchy?
+('score: 21.849164962768555', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/arch_overview.md', first_character_index=4830, last_character_index=6139))
+('score: 10.14218807220459', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/arch_overview.md', first_character_index=3573, last_character_index=5081))
+('score: 8.56020736694336', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/qwen3_reranker.py', first_character_index=2551, last_character_index=3440))
+('score: 8.49095344543457', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/generative_models.md', first_character_index=0, last_character_index=1578))
+('score: 8.343637466430664', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/v1/logits_processors/test_custom_offline.py', first_character_index=4129, last_character_index=5639))
+
+..........................................
+
+Question 13: How do you build and run a vLLM Docker image for s390x CPU architecture?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/s390x.inc.md [2452:3126]
+
+MY RESULT for: How do you build and run a vLLM Docker image for s390x CPU architecture?
+('score: 35.77531051635742', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/s390x.inc.md', first_character_index=2447, last_character_index=3126))
+('score: 34.14764404296875', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu.md', first_character_index=1504, last_character_index=2261))
+('score: 32.77095413208008', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/s390x.inc.md', first_character_index=0, last_character_index=1468))
+('score: 31.82436180114746', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu.md', first_character_index=0, last_character_index=1679))
+('score: 25.35826873779297', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/s390x.inc.md', first_character_index=1282, last_character_index=2442))
+
+..........................................
+
+Question 14: What interface should a multimodal model class inherit from in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md [5126:5539]
+
+MY RESULT for: What interface should a multimodal model class inherit from in vLLM?
+('score: 10.432312965393066', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/worker/worker_base.py', first_character_index=8927, last_character_index=10516))
+('score: 8.860146522521973', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/compilation/compiler_interface.py', first_character_index=548, last_character_index=2033))
+('score: 8.292375564575195', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/transformers_utils/configs/arctic.py', first_character_index=922, last_character_index=1512))
+('score: 8.055941581726074', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/rlhf_utils.py', first_character_index=2409, last_character_index=4016))
+('score: 8.014663696289062', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/rlhf_utils.py', first_character_index=878, last_character_index=2406))
+
+..........................................
+
+Question 15: What is stored in the logits array during the qk_max calculation in vLLM's paged attention implementation?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/paged_attention.md [13161:14568]
+
+MY RESULT for: What is stored in the logits array during the qk_max calculation in vLLM's paged attention implementation?
+('score: 25.856849670410156', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=13161, last_character_index=13651))
+('score: 24.99953269958496', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=13652, last_character_index=14899))
+('score: 24.276906967163086', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=14900, last_character_index=15367))
+('score: 24.21095085144043', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=11716, last_character_index=13186))
+('score: 18.364154815673828', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=15368, last_character_index=17025))
+
+..........................................
+
+Question 16: How do you use GPTQModel quantized models with vLLM's Python API?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/gptqmodel.md [2975:4032]
+
+MY RESULT for: How do you use GPTQModel quantized models with vLLM's Python API?
+('score: 28.220518112182617', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/gptqmodel.md', first_character_index=2970, last_character_index=4032))
+('score: 25.60017967224121', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/gptqmodel.md', first_character_index=1579, last_character_index=2969))
+('score: 24.210071563720703', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/gptqmodel.md', first_character_index=0, last_character_index=1578))
+('score: 17.107994079589844', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/gptq.py', first_character_index=1047, last_character_index=2688))
+('score: 16.67720603942871', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_completion_with_reasoning.py', first_character_index=0, last_character_index=674))
+
+..........................................
+
+Question 17: How can you manually set the attention backend in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/quickstart.md [10780:11525]
+
+MY RESULT for: How can you manually set the attention backend in vLLM?
+('score: 13.382966995239258', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=10775, last_character_index=11525))
+('score: 9.224390029907227', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/config/cache.py', first_character_index=1251, last_character_index=2897))
+('score: 8.542766571044922', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/envs.py', first_character_index=10413, last_character_index=11983))
+('score: 8.3877534866333', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/nginx.md', first_character_index=0, last_character_index=1614))
+('score: 8.293403625488281', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=0, last_character_index=908))
+
+..........................................
+
+Question 18: What is the fastest matrix multiplication kernel in vLLM's torch compile autotuning for an 8x2048 by 2048x3072 matrix multiplication?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/torch_compile.md [10307:12199]
+
+MY RESULT for: What is the fastest matrix multiplication kernel in vLLM's torch compile autotuning for an 8x2048 by 2048x3072 matrix multiplication?
+('score: 20.095630645751953', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/torch_compile.md', first_character_index=12196, last_character_index=13740))
+('score: 19.9977970123291', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/torch_compile.md', first_character_index=10331, last_character_index=11908))
+('score: 16.023412704467773', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/_custom_ops.py', first_character_index=30273, last_character_index=31890))
+('score: 15.526288986206055', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/_custom_ops.py', first_character_index=36051, last_character_index=37377))
+('score: 15.351444244384766', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/attention/ops/nki_flash_attn.py', first_character_index=8721, last_character_index=10338))
+
+..........................................
+
+Question 19: How do you pass audio inputs to vLLM for multimodal inference?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md [8690:8877]
+
+MY RESULT for: How do you pass audio inputs to vLLM for multimodal inference?
+('score: 11.966808319091797', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md', first_character_index=0, last_character_index=1373))
+('score: 11.407552719116211', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md', first_character_index=8517, last_character_index=9791))
+('score: 11.394911766052246', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=33160, last_character_index=34209))
+('score: 10.1559419631958', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md', first_character_index=20282, last_character_index=21420))
+('score: 9.745563507080078', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md', first_character_index=3005, last_character_index=4341))
+
+..........................................
+
+Question 20: What are the key capabilities of Ray Serve LLM for vLLM deployment?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md [27171:27920]
+
+MY RESULT for: What are the key capabilities of Ray Serve LLM for vLLM deployment?
+('score: 16.560651779174805', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/ray_serve_deepseek.py', first_character_index=0, last_character_index=801))
+('score: 16.272281646728516', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=26270, last_character_index=27920))
+('score: 15.282346725463867', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/integrations/kuberay.md', first_character_index=0, last_character_index=1445))
+('score: 14.018872261047363', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/ray_serve_deepseek.py', first_character_index=607, last_character_index=1868))
+('score: 14.016289710998535', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/dify.md', first_character_index=0, last_character_index=984))
+
+..........................................
+
+Question 21: How can you view Nsight Systems profiles in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/profiling.md [4932:5306]
+
+MY RESULT for: How can you view Nsight Systems profiles in vLLM?
+('score: 17.08685302734375', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/profiling.md', first_character_index=4859, last_character_index=5306))
+('score: 12.845738410949707', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/profiling.md', first_character_index=2223, last_character_index=3862))
+('score: 7.997488021850586', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/profiling_tpu/README.md', first_character_index=1098, last_character_index=2453))
+('score: 7.5220184326171875', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/docker.md', first_character_index=2676, last_character_index=3946))
+('score: 7.439242839813232', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=11772, last_character_index=13345))
+
+..........................................
+
+Question 22: What quantization parameter should be specified when loading a Quark quantized model in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/quark.md [6638:8031]
+
+MY RESULT for: What quantization parameter should be specified when loading a Quark quantized model in vLLM?
+('score: 10.800558090209961', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/quark/schemes/quark_scheme.py', first_character_index=0, last_character_index=1559))
+('score: 10.74663257598877', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/quark.md', first_character_index=7787, last_character_index=9402))
+('score: 10.301215171813965', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/schema.py', first_character_index=0, last_character_index=764))
+('score: 9.995436668395996', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/quark/schemes/quark_w8a8_int8.py', first_character_index=4111, last_character_index=5461))
+('score: 9.892806053161621', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/quark/schemes/quark_w8a8_int8.py', first_character_index=0, last_character_index=707))
+
+..........................................
+
+Question 23: How do you enable GPUDirect RDMA in vLLM using Docker?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md [8767:10579]
+
+MY RESULT for: How do you enable GPUDirect RDMA in vLLM using Docker?
+('score: 42.09025573730469', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=8116, last_character_index=9606))
+('score: 39.609256744384766', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=9607, last_character_index=11170))
+('score: 36.00839614868164', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=14836, last_character_index=16070))
+('score: 32.293460845947266', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=12912, last_character_index=13977))
+('score: 25.516748428344727', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=13750, last_character_index=14835))
+
+..........................................
+
+Question 24: What git commit should I checkout when installing Triton flash attention for ROCm with vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md [786:2783]
+
+MY RESULT for: What git commit should I checkout when installing Triton flash attention for ROCm with vLLM?
+('score: 31.045913696289062', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md', first_character_index=1624, last_character_index=2992))
+('score: 25.402463912963867', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md', first_character_index=2997, last_character_index=4259))
+('score: 20.38771629333496', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md', first_character_index=4268, last_character_index=5906))
+('score: 19.978824615478516', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/attention/backends/rocm_flash_attn.py', first_character_index=20106, last_character_index=21671))
+('score: 18.7148494720459', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/platforms/rocm.py', first_character_index=1270, last_character_index=2873))
+
+..........................................
+
+Question 25: What is the purpose of vLLM's plugin system?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/plugin_system.md [0:947]
+
+MY RESULT for: What is the purpose of vLLM's plugin system?
+('score: 8.973132133483887', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/plugin_system.md', first_character_index=0, last_character_index=1618))
+('score: 8.621253967285156', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/plugin_system.md', first_character_index=1829, last_character_index=3527))
+('score: 7.782078742980957', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/plugin_system.md', first_character_index=3529, last_character_index=4314))
+('score: 6.599730014801025', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/lora.md', first_character_index=8800, last_character_index=9794))
+('score: 6.574939727783203', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/registration.md', first_character_index=0, last_character_index=1474))
+
+..........................................
+
+Question 26: How can you check if a model is natively supported in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/supported_models.md [6684:8464]
+
+MY RESULT for: How can you check if a model is natively supported in vLLM?
+('score: 13.105134010314941', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=5950, last_character_index=7627))
+('score: 10.997669219970703', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=0, last_character_index=1144))
+('score: 9.479964256286621', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=12912, last_character_index=13977))
+('score: 9.389150619506836', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=1145, last_character_index=2728))
+('score: 8.91275405883789', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/registration.md', first_character_index=0, last_character_index=1474))
+
+..........................................
+
+Question 27: What backends does vLLM support for generating structured outputs?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/structured_outputs.md [0:309]
+
+MY RESULT for: What backends does vLLM support for generating structured outputs?
+('score: 7.678706169128418', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/automatic_prefix_caching.md', first_character_index=1557, last_character_index=2066))
+('score: 7.2669758796691895', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/structured_outputs.md', first_character_index=0, last_character_index=1665))
+('score: 6.999643325805664', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/prefix_caching.py', first_character_index=1296, last_character_index=2689))
+('score: 6.993448257446289', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/structured_outputs/README.md', first_character_index=0, last_character_index=1461))
+('score: 6.7753753662109375', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/structured_outputs.md', first_character_index=10740, last_character_index=11963))
+
+..........................................
+
+Question 28: What minimum CUDA compiler version is required for building cutlass_scaled_mm kernels for Blackwell SM100 in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/CMakeLists.txt [17949:19384]
+
+MY RESULT for: What minimum CUDA compiler version is required for building cutlass_scaled_mm kernels for Blackwell SM100 in vLLM?
+('score: 21.67378807067871', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/quantization/test_cutlass_scaled_mm.py', first_character_index=18421, last_character_index=19404))
+('score: 21.267845153808594', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/compile/test_async_tp.py', first_character_index=6417, last_character_index=7897))
+('score: 20.731794357299805', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/moe/test_cutlass_grouped_gemm.py', first_character_index=0, last_character_index=1022))
+('score: 20.43656349182129', MinimalSource(file_path='data/raw/vllm-0.10.1/benchmarks/cutlass_benchmarks/sparse_benchmarks.py', first_character_index=1116, last_character_index=2761))
+('score: 20.401622772216797', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/quantization/test_cutlass_scaled_mm.py', first_character_index=3228, last_character_index=4579))
+
+..........................................
+
+Question 29: What Python environment manager is recommended for vLLM installation?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/python_env_setup.inc.md [0:412]
+
+MY RESULT for: What Python environment manager is recommended for vLLM installation?
+('score: 14.810074806213379', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/python_env_setup.inc.md', first_character_index=0, last_character_index=412))
+('score: 11.433403015136719', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=0, last_character_index=1414))
+('score: 11.24621295928955', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=913, last_character_index=2609))
+('score: 10.452661514282227', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=0, last_character_index=1256))
+('score: 10.247118949890137', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md', first_character_index=0, last_character_index=1619))
+
+..........................................
+
+Question 30: What runner parameter is required when serving the DSE-Qwen2-MRL model in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md [11812:12626]
+
+MY RESULT for: What runner parameter is required when serving the DSE-Qwen2-MRL model in vLLM?
+('score: 50.38460922241211', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=11807, last_character_index=13165))
+('score: 44.565086364746094', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=10357, last_character_index=12047))
+('score: 39.30157470703125', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_embedding_client_for_multimodal.py', first_character_index=1044, last_character_index=2681))
+('score: 33.86357879638672', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/multimodal/pooling/test_dse_qwen2_vl.py', first_character_index=0, last_character_index=951))
+('score: 25.819869995117188', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_embedding_client_for_multimodal.py', first_character_index=2755, last_character_index=3625))
+
+..........................................
+
+Question 31: What is the minimum version of bitsandbytes required for vLLM quantization?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/bnb.md [0:1744]
+
+MY RESULT for: What is the minimum version of bitsandbytes required for vLLM quantization?
+('score: 8.659764289855957', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/bitsandbytes.py', first_character_index=7147, last_character_index=8297))
+('score: 8.505746841430664', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/registry.py', first_character_index=411, last_character_index=2039))
+('score: 8.309325218200684', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/bitsandbytes.py', first_character_index=15893, last_character_index=17374))
+('score: 8.254501342773438', MinimalSource(file_path='data/raw/vllm-0.10.1/benchmarks/kernels/benchmark_bitblas.py', first_character_index=0, last_character_index=1157))
+('score: 8.0322847366333', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/bnb.md', first_character_index=0, last_character_index=1592))
+
+..........................................
+
+Question 32: How can you make a vLLM model compatible with both old and new versions of vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/arch_overview.md [7948:8684]
+
+MY RESULT for: How can you make a vLLM model compatible with both old and new versions of vLLM?
+('score: 13.242693901062012', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/multiprocessing.md', first_character_index=0, last_character_index=1586))
+('score: 11.280567169189453', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=5012, last_character_index=6170))
+('score: 11.02725601196289', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/README.md', first_character_index=1135, last_character_index=2005))
+('score: 10.818936347961426', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=4868, last_character_index=5422))
+('score: 10.788680076599121', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/generative_models.md', first_character_index=4653, last_character_index=5589))
+
+..........................................
+
+Question 33: What is the primary motivation behind the Modular Kernel framework in vLLM's FusedMoE implementation?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md [1786:2707]
+
+MY RESULT for: What is the primary motivation behind the Modular Kernel framework in vLLM's FusedMoE implementation?
+('score: 27.964635848999023', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=1431, last_character_index=2917))
+('score: 20.617321014404297', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=5328, last_character_index=6885))
+('score: 18.93339729309082', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=12487, last_character_index=13988))
+('score: 18.620155334472656', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=0, last_character_index=1615))
+('score: 17.570241928100586', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/warmup/deep_gemm_warmup.py', first_character_index=2883, last_character_index=3653))
+
+..........................................
+
+Question 34: How many inner iterations does a warp need to handle a whole block of value tokens in vLLM's paged attention when BLOCK_SIZE is 16, V_VEC_SIZE is 8, HEAD_SIZE is 128, and WARP_SIZE is 32?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/paged_attention.md [17270:18521]
+
+MY RESULT for: How many inner iterations does a warp need to handle a whole block of value tokens in vLLM's paged attention when BLOCK_SIZE is 16, V_VEC_SIZE is 8, HEAD_SIZE is 128, and WARP_SIZE is 32?
+('score: 88.59431457519531', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=17265, last_character_index=18931))
+('score: 60.61262130737305', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=5182, last_character_index=6815))
+('score: 53.59540939331055', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=15368, last_character_index=17025))
+('score: 49.185585021972656', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/paged_attention.md', first_character_index=9107, last_character_index=10253))
+('score: 39.09064865112305', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/platforms/rocm.py', first_character_index=3830, last_character_index=5119))
+
+..........................................
+
+Question 35: What endpoint does vLLM use to expose production metrics?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/usage/metrics.md [0:1840]
+
+MY RESULT for: What endpoint does vLLM use to expose production metrics?
+('score: 12.920565605163574', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/metrics.md', first_character_index=0, last_character_index=1118))
+('score: 10.891820907592773', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/metrics.md', first_character_index=23944, last_character_index=25447))
+('score: 8.72308349609375', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/metrics.md', first_character_index=0, last_character_index=1617))
+('score: 8.595785140991211', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/metrics.md', first_character_index=26862, last_character_index=28558))
+('score: 7.776057243347168', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/openai/cli_args.py', first_character_index=6889, last_character_index=7998))
+
+..........................................
+
+Question 36: How do you build and install vLLM from source for AWS Neuron?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/aws_neuron.md [2222:3908]
+
+MY RESULT for: How do you build and install vLLM from source for AWS Neuron?
+('score: 27.898880004882812', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/aws_neuron.md', first_character_index=0, last_character_index=1621))
+('score: 27.032386779785156', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/aws_neuron.md', first_character_index=1622, last_character_index=2545))
+('score: 25.809314727783203', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/aws_neuron.md', first_character_index=3426, last_character_index=4947))
+('score: 25.42608642578125', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/aws_neuron.md', first_character_index=2546, last_character_index=3425))
+('score: 22.40277099609375', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/aws_neuron.md', first_character_index=5194, last_character_index=6821))
+
+..........................................
+
+Question 37: What are the two main reasons for using disaggregated prefilling in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/disagg_prefill.md [0:1114]
+
+MY RESULT for: What are the two main reasons for using disaggregated prefilling in vLLM?
+('score: 17.53525733947754', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=0, last_character_index=1296))
+('score: 12.066128730773926', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=2638, last_character_index=4256))
+('score: 10.799040794372559', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=4041, last_character_index=5292))
+('score: 10.552383422851562', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/multiprocessing.md', first_character_index=4457, last_character_index=5767))
+('score: 9.753321647644043', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/README.md', first_character_index=1135, last_character_index=2005))
+
+..........................................
+
+Question 38: Where can I find information about debugging distributed vLLM deployments?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md [11003:11170]
+
+MY RESULT for: Where can I find information about debugging distributed vLLM deployments?
+('score: 14.093403816223145', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=9607, last_character_index=11170))
+('score: 14.069761276245117', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/distributed_troubleshooting.md', first_character_index=1377, last_character_index=2105))
+('score: 10.684896469116211', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=0, last_character_index=1620))
+('score: 9.61475944519043', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/distributed_troubleshooting.md', first_character_index=0, last_character_index=1397))
+('score: 9.038810729980469', MinimalSource(file_path='data/raw/vllm-0.10.1/CONTRIBUTING.md', first_character_index=0, last_character_index=139))
+
+..........................................
+
+Question 39: How do you configure default multimodal LoRAs when starting the vLLM server?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/lora.md [13150:14470]
+
+MY RESULT for: How do you configure default multimodal LoRAs when starting the vLLM server?
+('score: 16.796260833740234', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/lora.md', first_character_index=14027, last_character_index=15147))
+('score: 15.107747077941895', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/lora.md', first_character_index=1879, last_character_index=3458))
+('score: 13.82785415649414', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/lora.md', first_character_index=11495, last_character_index=13143))
+('score: 13.672588348388672', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/openai/serving_engine.py', first_character_index=16926, last_character_index=18564))
+('score: 13.540812492370605', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/config/__init__.py', first_character_index=105073, last_character_index=106018))
+
+..........................................
+
+Question 40: What flag do you need to specify when serving a reasoning model in vLLM to extract reasoning content?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md [1673:3268]
+
+MY RESULT for: What flag do you need to specify when serving a reasoning model in vLLM to extract reasoning content?
+('score: 20.161365509033203', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md', first_character_index=1673, last_character_index=2041))
+('score: 15.749860763549805', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/reasoning/granite_reasoning_parser.py', first_character_index=2950, last_character_index=4406))
+('score: 15.681879043579102', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md', first_character_index=8925, last_character_index=10483))
+('score: 15.355462074279785', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/reasoning/abs_reasoning_parsers.py', first_character_index=2553, last_character_index=3767))
+('score: 15.003488540649414', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_completion_with_reasoning_streaming.py', first_character_index=0, last_character_index=1140))
+
+..........................................
+
+Question 41: What are the three key abstractions used for disaggregated prefilling in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/disagg_prefill.md [2755:4662]
+
+MY RESULT for: What are the three key abstractions used for disaggregated prefilling in vLLM?
+('score: 17.237014770507812', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=2638, last_character_index=4256))
+('score: 14.64583969116211', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/README.md', first_character_index=1, last_character_index=1306))
+('score: 13.309661865234375', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=4041, last_character_index=5292))
+('score: 11.957564353942871', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=0, last_character_index=1296))
+('score: 10.938395500183105', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/README.md', first_character_index=1135, last_character_index=2005))
+
+..........................................
+
+Question 42: Which model architectures support tensor parallelism in vLLM for the Llama family of models?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/supported_models.md [17942:19791]
+
+MY RESULT for: Which model architectures support tensor parallelism in vLLM for the Llama family of models?
+('score: 10.092814445495605', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=23228, last_character_index=24866))
+('score: 9.933348655700684', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=4132, last_character_index=5713))
+('score: 9.423874855041504', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=3489, last_character_index=4564))
+('score: 8.823227882385254', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=5714, last_character_index=7384))
+('score: 8.72278118133545', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/model_resolution.md', first_character_index=0, last_character_index=987))
+
+..........................................
+
+Question 43: What method needs to be overridden in BaseProcessingInfo to specify the maximum number of input items for each modality in vLLM multimodal models?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md [5541:6196]
+
+MY RESULT for: What method needs to be overridden in BaseProcessingInfo to specify the maximum number of input items for each modality in vLLM multimodal models?
+('score: 27.635099411010742', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md', first_character_index=4538, last_character_index=6192))
+('score: 26.532546997070312', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/multimodal/processing.py', first_character_index=27571, last_character_index=29111))
+('score: 23.871313095092773', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/multimodal/processing.py', first_character_index=26198, last_character_index=27740))
+('score: 18.041479110717773', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/granite_speech.py', first_character_index=2819, last_character_index=4130))
+('score: 17.86539077758789', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/mllama.py', first_character_index=2906, last_character_index=3289))
+
+..........................................
+
+Question 44: What are the system requirements for running vLLM with Intel Gaudi devices?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md [0:715]
+
+MY RESULT for: What are the system requirements for running vLLM with Intel Gaudi devices?
+('score: 15.918527603149414', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=0, last_character_index=1325))
+('score: 14.397977828979492', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=1326, last_character_index=2950))
+('score: 11.009688377380371', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/README.md', first_character_index=0, last_character_index=1156))
+('score: 10.805599212646484', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=3338, last_character_index=4842))
+('score: 10.667977333068848', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=2951, last_character_index=3337))
+
+..........................................
+
+Question 45: What backend allows many decoder language models to be automatically loaded in vLLM without manual implementation?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/README.md [0:1176]
+
+MY RESULT for: What backend allows many decoder language models to be automatically loaded in vLLM without manual implementation?
+('score: 14.18746280670166', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/README.md', first_character_index=0, last_character_index=1176))
+('score: 11.889226913452148', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=0, last_character_index=1144))
+('score: 9.649660110473633', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/language/generation/test_bart.py', first_character_index=4221, last_character_index=5696))
+('score: 8.532955169677734', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=0, last_character_index=1414))
+('score: 8.298425674438477', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/bentoml.md', first_character_index=0, last_character_index=444))
+
+..........................................
+
+Question 46: What resources are available for vLLM contributors working on speculative decoding?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/spec_decode.md [13289:13765]
+
+MY RESULT for: What resources are available for vLLM contributors working on speculative decoding?
+('score: 11.470792770385742', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/spec_decode.md', first_character_index=12290, last_character_index=13765))
+('score: 9.80523681640625', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/neuron_eagle.py', first_character_index=0, last_character_index=613))
+('score: 8.39130973815918', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/v1/spec_decode/test_max_len.py', first_character_index=0, last_character_index=1370))
+('score: 8.223752975463867', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/spec_decode.md', first_character_index=0, last_character_index=1584))
+('score: 8.030779838562012', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/spec_decode.md', first_character_index=10670, last_character_index=12288))
+
+..........................................
+
+Question 47: Which vLLM versions are affected by the zmq bug that can cause hanging?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/usage/troubleshooting.md [15156:16070]
+
+MY RESULT for: Which vLLM versions are affected by the zmq bug that can cause hanging?
+('score: 11.442276954650879', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=14836, last_character_index=16070))
+('score: 9.381254196166992', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=0, last_character_index=1620))
+('score: 8.397384643554688', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=0, last_character_index=1256))
+('score: 8.096280097961426', MinimalSource(file_path='data/raw/vllm-0.10.1/.buildkite/nightly-benchmarks/README.md', first_character_index=9744, last_character_index=10290))
+('score: 7.8242902755737305', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/engine/multiprocessing/client.py', first_character_index=2238, last_character_index=2681))
+
+..........................................
+
+Question 48: How do you install vLLM with a specific CUDA version using pip?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md [2266:2756]
+
+MY RESULT for: How do you install vLLM with a specific CUDA version using pip?
+('score: 19.795204162597656', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=0, last_character_index=1256))
+('score: 19.475610733032227', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=1109, last_character_index=2718))
+('score: 18.884212493896484', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=0, last_character_index=1414))
+('score: 18.72948455810547', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=1415, last_character_index=2543))
+('score: 18.26660919189453', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=0, last_character_index=908))
+
+..........................................
+
+Question 49: What quantization methods are supported and unsupported for vLLM on Intel Gaudi?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md [3772:4673]
+
+MY RESULT for: What quantization methods are supported and unsupported for vLLM on Intel Gaudi?
+('score: 13.24709415435791', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=3338, last_character_index=4842))
+('score: 12.896158218383789', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/inc.md', first_character_index=0, last_character_index=1498))
+('score: 12.365467071533203', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=0, last_character_index=1325))
+('score: 10.082613945007324', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=1326, last_character_index=2950))
+('score: 9.97993278503418', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=7269, last_character_index=8774))
+
+..........................................
+
+Question 50: How do you uninstall a vLLM deployment using Helm?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md [4054:5719]
+
+MY RESULT for: How do you uninstall a vLLM deployment using Helm?
+('score: 17.880834579467773', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/helm.md', first_character_index=0, last_character_index=1342))
+('score: 14.694319725036621', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md', first_character_index=1624, last_character_index=2137))
+('score: 13.259462356567383', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/k8s.md', first_character_index=0, last_character_index=1315))
+('score: 12.79513168334961', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md', first_character_index=3706, last_character_index=4674))
+('score: 11.606992721557617', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/dstack.md', first_character_index=2738, last_character_index=3169))
+
+..........................................
+
+Question 51: What are the three main usage patterns supported by vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/usage/README.md [0:434]
+
+MY RESULT for: What are the three main usage patterns supported by vLLM?
+('score: 7.076541900634766', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/README.md', first_character_index=0, last_character_index=434))
+('score: 6.770266532897949', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/troubleshooting.md', first_character_index=9942, last_character_index=11053))
+('score: 6.433600902557373', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/README.md', first_character_index=0, last_character_index=334))
+('score: 6.206033229827881', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/multiprocessing.md', first_character_index=4457, last_character_index=5767))
+('score: 6.145681858062744', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/model_loader/weight_utils.py', first_character_index=9149, last_character_index=10617))
+
+..........................................
+
+Question 52: How do you serve a model with audio input support in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md [17286:19281]
+
+MY RESULT for: How do you serve a model with audio input support in vLLM?
+('score: 11.295806884765625', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_transcription_client.py', first_character_index=0, last_character_index=710))
+('score: 9.303484916687012', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/README.md', first_character_index=0, last_character_index=1683))
+('score: 8.814485549926758', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/extensions/tensorizer.md', first_character_index=1600, last_character_index=2684))
+('score: 8.808087348937988', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=23228, last_character_index=24866))
+('score: 7.929541110992432', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/dstack.md', first_character_index=2738, last_character_index=3169))
+
+..........................................
+
+Question 53: How do you add support for a new reasoning model in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md [8174:10067]
+
+MY RESULT for: How do you add support for a new reasoning model in vLLM?
+('score: 11.827934265136719', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/README.md', first_character_index=0, last_character_index=1683))
+('score: 11.230170249938965', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md', first_character_index=7915, last_character_index=8915))
+('score: 9.763480186462402', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=23228, last_character_index=24866))
+('score: 8.66309928894043', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_completion_with_reasoning_streaming.py', first_character_index=0, last_character_index=1140))
+('score: 8.587106704711914', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/registration.md', first_character_index=0, last_character_index=1474))
+
+..........................................
+
+Question 54: What shape must multimodal embeddings have when returned from get_multimodal_embeddings in vLLM multimodal models?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md [1859:3654]
+
+MY RESULT for: What shape must multimodal embeddings have when returned from get_multimodal_embeddings in vLLM multimodal models?
+('score: 23.049579620361328', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/interfaces.py', first_character_index=1417, last_character_index=2837))
+('score: 21.869842529296875', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/v1/worker/utils.py', first_character_index=4429, last_character_index=5843))
+('score: 21.11785888671875', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md', first_character_index=1330, last_character_index=2760))
+('score: 20.96666717529297', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/minicpmv.py', first_character_index=34222, last_character_index=35709))
+('score: 19.468149185180664', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/transformers.py', first_character_index=29553, last_character_index=31136))
+
+..........................................
+
+Question 55: What vLLM server endpoints correspond to the offline LLM.generate and LLM.chat APIs?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/generative_models.md [4934:5589]
+
+MY RESULT for: What vLLM server endpoints correspond to the offline LLM.generate and LLM.chat APIs?
+('score: 34.06087112426758', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/generative_models.md', first_character_index=4653, last_character_index=5589))
+('score: 27.85702896118164', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/pooling_models.md', first_character_index=6946, last_character_index=8523))
+('score: 26.362133026123047', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/offline_inference.md', first_character_index=393, last_character_index=1666))
+('score: 25.836082458496094', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/litellm.md', first_character_index=0, last_character_index=1628))
+('score: 25.074174880981445', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=4282, last_character_index=5817))
+
+..........................................
+
+Question 56: What are the three recommended ways to implement third-party connectors for vLLM disaggregated prefilling?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/disagg_prefill.md [4986:5892]
+
+MY RESULT for: What are the three recommended ways to implement third-party connectors for vLLM disaggregated prefilling?
+('score: 27.544376373291016', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=4041, last_character_index=5292))
+('score: 19.003568649291992', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=5249, last_character_index=5892))
+('score: 14.74548625946045', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=0, last_character_index=1296))
+('score: 13.587529182434082', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=1051, last_character_index=2635))
+('score: 12.476055145263672', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/disagg_prefill.md', first_character_index=2638, last_character_index=4256))
+
+..........................................
+
+Question 57: What should you do if you encounter persistent or strange build errors in vLLM after significant changes or switching branches?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/incremental_build.md [7404:8351]
+
+MY RESULT for: What should you do if you encounter persistent or strange build errors in vLLM after significant changes or switching branches?
+('score: 30.68935775756836', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=7124, last_character_index=8351))
+('score: 13.5237455368042', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=5790, last_character_index=7123))
+('score: 13.111200332641602', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/README.md', first_character_index=10060, last_character_index=11555))
+('score: 12.48294734954834', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=8129, last_character_index=9705))
+('score: 11.651152610778809', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=913, last_character_index=2609))
+
+..........................................
+
+Question 58: How do you evaluate accuracy of a quantized model using lm_eval in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/int4.md [2459:3972]
+
+MY RESULT for: How do you evaluate accuracy of a quantized model using lm_eval in vLLM?
+('score: 26.689050674438477', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/fp8.md', first_character_index=3158, last_character_index=4340))
+('score: 24.81671714782715', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=2454, last_character_index=3803))
+('score: 24.66734504699707', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int8.md', first_character_index=2422, last_character_index=3915))
+('score: 24.454742431640625', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/tpu/test_quantization_accuracy.py', first_character_index=0, last_character_index=1602))
+('score: 24.208003997802734', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/quark.md', first_character_index=6633, last_character_index=8027))
+
+..........................................
+
+Question 59: How do you report security vulnerabilities in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/usage/security.md [4018:4366]
+
+MY RESULT for: How do you report security vulnerabilities in vLLM?
+('score: 17.376123428344727', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/security.md', first_character_index=3184, last_character_index=4366))
+('score: 16.645427703857422', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/vulnerability_management.md', first_character_index=1377, last_character_index=2610))
+('score: 16.522769927978516', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/vulnerability_management.md', first_character_index=0, last_character_index=1515))
+('score: 14.19369888305664', MinimalSource(file_path='data/raw/vllm-0.10.1/SECURITY.md', first_character_index=0, last_character_index=1374))
+('score: 11.56788444519043', MinimalSource(file_path='data/raw/vllm-0.10.1/SECURITY.md', first_character_index=1357, last_character_index=3014))
+
+..........................................
+
+Question 60: What requirements must a model meet to be compatible with vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/basic.md [514:640]
+
+MY RESULT for: What requirements must a model meet to be compatible with vLLM?
+('score: 10.355023384094238', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=0, last_character_index=1565))
+('score: 7.6627349853515625', MinimalSource(file_path='data/raw/vllm-0.10.1/tools/generate_nightly_torch_test.py', first_character_index=0, last_character_index=1132))
+('score: 7.537804126739502', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_transcription_client.py', first_character_index=0, last_character_index=710))
+('score: 7.14803409576416', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=1145, last_character_index=2728))
+('score: 7.092156410217285', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/registry.py', first_character_index=1832, last_character_index=2904))
+
+..........................................
+
+Question 61: What is the recommended starting number of samples for calibration data in INT4 quantization?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/int4.md [3974:5807]
+
+MY RESULT for: What is the recommended starting number of samples for calibration data in INT4 quantization?
+('score: 20.749710083007812', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=3804, last_character_index=4980))
+('score: 19.615154266357422', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=1463, last_character_index=2449))
+('score: 17.227373123168945', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=4873, last_character_index=5799))
+('score: 16.19084930419922', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=2454, last_character_index=3803))
+('score: 15.920819282531738', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=0, last_character_index=1462))
+
+..........................................
+
+Question 62: What tool calling format does vLLM support for Llama 3.1 and 3.2 models?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/tool_calling.md [8624:10533]
+
+MY RESULT for: What tool calling format does vLLM support for Llama 3.1 and 3.2 models?
+('score: 14.610965728759766', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=8508, last_character_index=10203))
+('score: 11.612306594848633', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=6991, last_character_index=8675))
+('score: 11.02214241027832', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=0, last_character_index=589))
+('score: 10.256694793701172', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=2232, last_character_index=3874))
+('score: 10.143158912658691', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=3876, last_character_index=5555))
+
+..........................................
+
+Question 63: How many calibration samples are recommended when preparing calibration data for INT4 quantization in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/int4.md [894:2457]
+
+MY RESULT for: How many calibration samples are recommended when preparing calibration data for INT4 quantization in vLLM?
+('score: 28.85100555419922', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=1463, last_character_index=2449))
+('score: 26.82324981689453', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=3804, last_character_index=4980))
+('score: 22.20731544494629', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=0, last_character_index=1462))
+('score: 21.13673210144043', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=2454, last_character_index=3803))
+('score: 20.40106964111328', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=4873, last_character_index=5799))
+
+..........................................
+
+Question 64: What CUDA compiler version is required to build Machete kernels in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/CMakeLists.txt [31032:32876]
+
+MY RESULT for: What CUDA compiler version is required to build Machete kernels in vLLM?
+('score: 16.854114532470703', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=2610, last_character_index=4273))
+('score: 15.576926231384277', MinimalSource(file_path='data/raw/vllm-0.10.1/tools/generate_cmake_presets.py', first_character_index=3658, last_character_index=5118))
+('score: 14.881977081298828', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=4274, last_character_index=5785))
+('score: 13.341814994812012', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=11772, last_character_index=13345))
+('score: 12.826297760009766', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=913, last_character_index=2609))
+
+..........................................
+
+Question 65: What model architectures does vLLM support for GPT-2 models?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/supported_models.md [16232:18112]
+
+MY RESULT for: What model architectures does vLLM support for GPT-2 models?
+('score: 17.607778549194336', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/model_resolution.md', first_character_index=0, last_character_index=987))
+('score: 13.318060874938965', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=27938, last_character_index=29307))
+('score: 12.730311393737793', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/ernie45.py', first_character_index=0, last_character_index=1290))
+('score: 12.728479385375977', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/granitemoe.py', first_character_index=0, last_character_index=1381))
+('score: 12.696823120117188', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/nemotron.py', first_character_index=0, last_character_index=1362))
+
+..........................................
+
+Question 66: How can you disable unused modalities completely in vLLM multimodal models?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/configuration/conserving_memory.md [3571:4959]
+
+MY RESULT for: How can you disable unused modalities completely in vLLM multimodal models?
+('score: 13.958817481994629', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/conserving_memory.md', first_character_index=3721, last_character_index=4959))
+('score: 11.411724090576172', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=34333, last_character_index=35122))
+('score: 11.016742706298828', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=33160, last_character_index=34209))
+('score: 9.87576675415039', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=7502, last_character_index=8514))
+('score: 9.803574562072754', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md', first_character_index=28092, last_character_index=29134))
+
+..........................................
+
+Question 67: What argument should be included when evaluating FP8 quantized models with lm_eval to ensure proper accuracy assessment?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/fp8.md [3163:4344]
+
+MY RESULT for: What argument should be included when evaluating FP8 quantized models with lm_eval to ensure proper accuracy assessment?
+('score: 36.07538604736328', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/fp8.md', first_character_index=3158, last_character_index=4340))
+('score: 27.011737823486328', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/quark.md', first_character_index=7787, last_character_index=9402))
+('score: 26.969478607177734', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/quark.md', first_character_index=6633, last_character_index=8027))
+('score: 21.849475860595703', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=2454, last_character_index=3803))
+('score: 21.711938858032227', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int8.md', first_character_index=2422, last_character_index=3915))
+
+..........................................
+
+Question 68: What three requirements must a custom model meet to be compatible with vLLM's Transformers backend?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/supported_models.md [3368:5336]
+
+MY RESULT for: What three requirements must a custom model meet to be compatible with vLLM's Transformers backend?
+('score: 13.626880645751953', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=1145, last_character_index=2728))
+('score: 13.471336364746094', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=2701, last_character_index=4181))
+('score: 11.913280487060547', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=0, last_character_index=1565))
+('score: 9.258997917175293', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=4598, last_character_index=5949))
+('score: 9.257848739624023', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/registry.py', first_character_index=1832, last_character_index=2904))
+
+..........................................
+
+Question 69: How does vLLM handle sharding and quantization of model weights during initialization?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/arch_overview.md [8616:10192]
+
+MY RESULT for: How does vLLM handle sharding and quantization of model weights during initialization?
+('score: 12.823774337768555', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/arch_overview.md', first_character_index=8607, last_character_index=10192))
+('score: 8.235636711120605', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/model_loader/bitsandbytes_loader.py', first_character_index=22920, last_character_index=24486))
+('score: 7.958013534545898', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/config/__init__.py', first_character_index=166675, last_character_index=168312))
+('score: 7.669896125793457', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=0, last_character_index=1565))
+('score: 7.28986930847168', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/arch_overview.md', first_character_index=6141, last_character_index=7109))
+
+..........................................
+
+Question 70: How do you build a vLLM wheel from source for CUDA GPU installations?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md [5696:5736]
+
+MY RESULT for: How do you build a vLLM wheel from source for CUDA GPU installations?
+('score: 27.33249282836914', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=7384, last_character_index=8128))
+('score: 25.066373825073242', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu.md', first_character_index=1384, last_character_index=3078))
+('score: 21.498111724853516', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=5012, last_character_index=6170))
+('score: 20.96355628967285', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=0, last_character_index=1256))
+('score: 20.198301315307617', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=11772, last_character_index=13345))
+
+..........................................
+
+Question 71: What models are currently covered in vLLM's end-to-end performance validation before each release?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/RELEASE.md [3440:5003]
+
+MY RESULT for: What models are currently covered in vLLM's end-to-end performance validation before each release?
+('score: 17.45262908935547', MinimalSource(file_path='data/raw/vllm-0.10.1/RELEASE.md', first_character_index=2747, last_character_index=4239))
+('score: 12.141745567321777', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md', first_character_index=4268, last_character_index=5906))
+('score: 8.87728500366211', MinimalSource(file_path='data/raw/vllm-0.10.1/RELEASE.md', first_character_index=1279, last_character_index=2745))
+('score: 8.77880573272705', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md', first_character_index=5663, last_character_index=6878))
+('score: 8.741532325744629', MinimalSource(file_path='data/raw/vllm-0.10.1/.buildkite/nightly-benchmarks/nightly-descriptions.md', first_character_index=1, last_character_index=541))
+
+..........................................
+
+Question 72: What is the minimum NVIDIA GPU compute capability required for INT4 computation in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/quantization/int4.md [0:892]
+
+MY RESULT for: What is the minimum NVIDIA GPU compute capability required for INT4 computation in vLLM?
+('score: 26.77129554748535', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/int4.md', first_character_index=0, last_character_index=1462))
+('score: 21.02739143371582', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/k8s.md', first_character_index=4593, last_character_index=4871))
+('score: 20.87200355529785', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/platforms/cuda.py', first_character_index=1492, last_character_index=3191))
+('score: 20.57712173461914', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/README.md', first_character_index=0, last_character_index=579))
+('score: 20.41871452331543', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu.md', first_character_index=0, last_character_index=1620))
+
+..........................................
+
+Question 73: What is the minimum vLLM version required for P2P NCCL connector functionality?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/p2p_nccl_connector.md [9005:9060]
+
+MY RESULT for: What is the minimum vLLM version required for P2P NCCL connector functionality?
+('score: 22.180734634399414', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_engine.py', first_character_index=0, last_character_index=1639))
+('score: 21.752599716186523', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py', first_character_index=8624, last_character_index=10070))
+('score: 21.139122009277344', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py', first_character_index=0, last_character_index=983))
+('score: 20.491535186767578', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py', first_character_index=9916, last_character_index=11467))
+('score: 20.457923889160156', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/p2p_nccl_connector.md', first_character_index=3892, last_character_index=5470))
+
+..........................................
+
+Question 74: Can vLLM serve multiple models on a single port using the OpenAI API?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/usage/faq.md [0:1564]
+
+MY RESULT for: Can vLLM serve multiple models on a single port using the OpenAI API?
+('score: 25.43326187133789', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/faq.md', first_character_index=0, last_character_index=1564))
+('score: 24.83475685119629', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/cli/README.md', first_character_index=0, last_character_index=1665))
+('score: 24.607898712158203', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=6261, last_character_index=7801))
+('score: 24.028583526611328', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=0, last_character_index=1339))
+('score: 22.94367218017578', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=7802, last_character_index=9140))
+
+..........................................
+
+Question 75: How do you configure data parallel deployment in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/data_parallel_deployment.md [2491:3465]
+
+MY RESULT for: How do you configure data parallel deployment in vLLM?
+('score: 12.423555374145508', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/dstack.md', first_character_index=2738, last_character_index=3169))
+('score: 11.763300895690918', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/integrations/kubeai.md', first_character_index=0, last_character_index=764))
+('score: 8.713332176208496', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=1493, last_character_index=3173))
+('score: 8.660374641418457', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/k8s.md', first_character_index=10639, last_character_index=11847))
+('score: 8.594063758850098', MinimalSource(file_path='data/raw/vllm-0.10.1/tools/ep_kernels/README.md', first_character_index=0, last_character_index=1369))
+
+..........................................
+
+Question 76: What CUDA architectures are supported for Marlin MOE kernels in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/CMakeLists.txt [32779:34672]
+
+MY RESULT for: What CUDA architectures are supported for Marlin MOE kernels in vLLM?
+('score: 14.4522123336792', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/moe/test_moe.py', first_character_index=19257, last_character_index=20697))
+('score: 14.262053489685059', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/moe/test_block_fp8.py', first_character_index=4376, last_character_index=4483))
+('score: 13.869919776916504', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/moe/test_moe.py', first_character_index=25808, last_character_index=27501))
+('score: 13.819526672363281', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/moe/test_cutlass_moe.py', first_character_index=1374, last_character_index=2548))
+('score: 13.780936241149902', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/kernels/moe/test_triton_moe_ptpc_fp8.py', first_character_index=3693, last_character_index=4099))
+
+..........................................
+
+Question 77: What FusedMoEPrepareAndFinalize implementation is used when there is no expert parallelism in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md [16011:16915]
+
+MY RESULT for: What FusedMoEPrepareAndFinalize implementation is used when there is no expert parallelism in vLLM?
+('score: 27.192136764526367', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=15519, last_character_index=17056))
+('score: 25.98965835571289', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=13819, last_character_index=15517))
+('score: 25.273571014404297', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=10890, last_character_index=12535))
+('score: 25.12079429626465', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md', first_character_index=8122, last_character_index=9750))
+('score: 24.3974552154541', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/fused_moe/modular_kernel.py', first_character_index=1998, last_character_index=2491))
+
+..........................................
+
+Question 78: How should security issues be reported in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/SECURITY.md [0:736]
+
+MY RESULT for: How should security issues be reported in vLLM?
+('score: 12.241052627563477', MinimalSource(file_path='data/raw/vllm-0.10.1/SECURITY.md', first_character_index=0, last_character_index=1374))
+('score: 11.951129913330078', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/usage/security.md', first_character_index=3184, last_character_index=4366))
+('score: 11.77727222442627', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/README.md', first_character_index=4341, last_character_index=5881))
+('score: 10.304251670837402', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/vulnerability_management.md', first_character_index=0, last_character_index=1515))
+('score: 9.818397521972656', MinimalSource(file_path='data/raw/vllm-0.10.1/SECURITY.md', first_character_index=1357, last_character_index=3014))
+
+..........................................
+
+Question 79: What are the three communication backends available for Expert Parallelism in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/expert_parallel_deployment.md [0:1505]
+
+MY RESULT for: What are the three communication backends available for Expert Parallelism in vLLM?
+('score: 10.82722282409668', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/expert_parallel_deployment.md', first_character_index=0, last_character_index=1659))
+('score: 8.33465576171875', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/p2p_nccl_connector.md', first_character_index=5447, last_character_index=6748))
+('score: 7.85411262512207', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=1493, last_character_index=3173))
+('score: 7.842084884643555', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=5714, last_character_index=7384))
+('score: 7.4591169357299805', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/config/parallel.py', first_character_index=2564, last_character_index=3301))
+
+..........................................
+
+Question 80: What do the symbols ✅, 🚧, and ⚠️ mean in vLLM's feature status legend?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/supported_models.md [11792:12212]
+
+MY RESULT for: What do the symbols ✅, 🚧, and ⚠️ mean in vLLM's feature status legend?
+('score: 12.071320533752441', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=11890, last_character_index=12652))
+('score: 7.122699737548828', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/compatibility_matrix.md', first_character_index=0, last_character_index=668))
+('score: 6.651147842407227', MinimalSource(file_path='data/raw/vllm-0.10.1/tools/profiler/visualize_layerwise_profile.py', first_character_index=14512, last_character_index=15396))
+('score: 6.593577861785889', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_embedding_long_text/client.py', first_character_index=0, last_character_index=1586))
+('score: 6.089381694793701', MinimalSource(file_path='data/raw/vllm-0.10.1/benchmarks/disagg_benchmarks/visualize_benchmark_results.py', first_character_index=0, last_character_index=1310))
+
+..........................................
+
+Question 81: What datatypes are supported by vLLM's ARM CPU backend?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/arm.inc.md [0:1636]
+
+MY RESULT for: What datatypes are supported by vLLM's ARM CPU backend?
+('score: 29.26886749267578', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/arm.inc.md', first_character_index=0, last_character_index=1636))
+('score: 26.43892478942871', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu.md', first_character_index=0, last_character_index=1679))
+('score: 25.743417739868164', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/engine/arg_utils.py', first_character_index=50166, last_character_index=51805))
+('score: 25.660400390625', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/layers/quantization/kernels/mixed_precision/dynamic_4bit.py', first_character_index=393, last_character_index=1797))
+('score: 25.458702087402344', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/platforms/interface.py', first_character_index=11468, last_character_index=12670))
+
+..........................................
+
+Question 82: What are the two ways to format input when making requests to vLLM's classify endpoint?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md [16632:18629]
+
+MY RESULT for: What are the two ways to format input when making requests to vLLM's classify endpoint?
+('score: 8.136537551879883', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=5423, last_character_index=6757))
+('score: 8.104344367980957', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/design/metrics.md', first_character_index=12235, last_character_index=13396))
+('score: 7.9114813804626465', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/data_parallel_deployment.md', first_character_index=4597, last_character_index=6262))
+('score: 7.847880840301514', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/data_parallel_deployment.md', first_character_index=1224, last_character_index=2882))
+('score: 7.641647815704346', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md', first_character_index=1673, last_character_index=2041))
+
+..........................................
+
+Question 83: What is the current limitation when using MLP speculators for speculative decoding in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/spec_decode.md [3949:5423]
+
+MY RESULT for: What is the current limitation when using MLP speculators for speculative decoding in vLLM?
+('score: 18.531654357910156', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/spec_decode.md', first_character_index=3944, last_character_index=5017))
+('score: 13.282283782958984', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/mlp_speculator.py', first_character_index=1840, last_character_index=3167))
+('score: 12.833305358886719', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/config/__init__.py', first_character_index=92694, last_character_index=94198))
+('score: 12.368749618530273', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/spec_decode.md', first_character_index=7507, last_character_index=8885))
+('score: 11.90695858001709', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/registry.py', first_character_index=15553, last_character_index=17244))
+
+..........................................
+
+Question 84: How do you forward the vllm-router-service port to access the vLLM deployment?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md [2815:4142]
+
+MY RESULT for: How do you forward the vllm-router-service port to access the vLLM deployment?
+('score: 16.36302947998047', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md', first_character_index=2138, last_character_index=3705))
+('score: 12.719184875488281', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/k8s.md', first_character_index=9195, last_character_index=10632))
+('score: 12.582393646240234', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/dstack.md', first_character_index=2738, last_character_index=3169))
+('score: 11.768733024597168', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/env_vars.md', first_character_index=0, last_character_index=907))
+('score: 11.505505561828613', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/retrieval_augmented_generation.md', first_character_index=0, last_character_index=1524))
+
+..........................................
+
+Question 85: Which vLLM model architectures support LoRA fine-tuning?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/models/supported_models.md [12654:14537]
+
+MY RESULT for: Which vLLM model architectures support LoRA fine-tuning?
+('score: 13.579728126525879', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/lora/test_minicpmv_tp.py', first_character_index=0, last_character_index=843))
+('score: 13.271732330322266', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/chameleon.py', first_character_index=42292, last_character_index=42851))
+('score: 13.044671058654785', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/granite.py', first_character_index=19762, last_character_index=20355))
+('score: 12.884358406066895', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=23228, last_character_index=24866))
+('score: 12.452497482299805', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/lora/models.py', first_character_index=2340, last_character_index=3707))
+
+..........................................
+
+Question 86: Where can I find the configurable parameters for the vLLM Helm chart?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/deployment/frameworks/helm.md [1591:1686]
+
+MY RESULT for: Where can I find the configurable parameters for the vLLM Helm chart?
+('score: 17.740812301635742', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/helm.md', first_character_index=1343, last_character_index=1686))
+('score: 14.079856872558594', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/helm.md', first_character_index=0, last_character_index=1342))
+('score: 12.292763710021973', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md', first_character_index=1624, last_character_index=2137))
+('score: 12.071198463439941', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/chart-helm/README.md', first_character_index=0, last_character_index=1122))
+('score: 6.597294330596924', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/extensions/runai_model_streamer.md', first_character_index=1529, last_character_index=3016))
+
+..........................................
+
+Question 87: What quantization methods are supported by vLLM CPU?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/cpu.md [9439:9926]
+
+MY RESULT for: What quantization methods are supported by vLLM CPU?
+('score: 11.590960502624512', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/quantization/test_cpu_offload.py', first_character_index=0, last_character_index=1139))
+('score: 11.38892936706543', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/cpu.md', first_character_index=8636, last_character_index=9926))
+('score: 11.277587890625', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/platforms/interface.py', first_character_index=11468, last_character_index=12670))
+('score: 10.57359790802002', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/quantization/test_ipex_quant.py', first_character_index=0, last_character_index=1065))
+('score: 10.226943016052246', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/quantization/test_cpu_offload.py', first_character_index=1140, last_character_index=2666))
+
+..........................................
+
+Question 88: What is Reinforcement Learning from Human Feedback (RLHF)?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/training/rlhf.md [0:1162]
+
+MY RESULT for: What is Reinforcement Learning from Human Feedback (RLHF)?
+('score: 35.97725296020508', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/training/rlhf.md', first_character_index=0, last_character_index=1162))
+('score: 26.99287986755371', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/rlhf.py', first_character_index=0, last_character_index=1688))
+('score: 25.032590866088867', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/rlhf_colocate.py', first_character_index=0, last_character_index=1443))
+('score: 16.9110107421875', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/sleep_mode.md', first_character_index=1843, last_character_index=3071))
+('score: 15.192317962646484', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/sleep_mode.md', first_character_index=0, last_character_index=1682))
+
+..........................................
+
+Question 89: Which models support the process_vision_info function in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md [8526:8688]
+
+MY RESULT for: Which models support the process_vision_info function in vLLM?
+('score: 16.293102264404297', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md', first_character_index=7888, last_character_index=8512))
+('score: 15.321680068969727', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md', first_character_index=8517, last_character_index=9791))
+('score: 13.284912109375', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md', first_character_index=6341, last_character_index=7882))
+('score: 7.336705684661865', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/model_executor/models/vision.py', first_character_index=1174, last_character_index=2426))
+('score: 6.8133721351623535', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/v1/engine/async_llm.py', first_character_index=11084, last_character_index=12609))
+
+..........................................
+
+Question 90: What OpenAI APIs are supported by vLLM's OpenAI-compatible server?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md [7569:9381]
+
+MY RESULT for: What OpenAI APIs are supported by vLLM's OpenAI-compatible server?
+('score: 35.531131744384766', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=1344, last_character_index=3007))
+('score: 32.264373779296875', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/open-webui.md', first_character_index=0, last_character_index=1380))
+('score: 31.13339614868164', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=4868, last_character_index=5422))
+('score: 30.29656410217285', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/deprecation_policy.md', first_character_index=0, last_character_index=1190))
+('score: 29.958887100219727', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/litellm.md', first_character_index=0, last_character_index=1628))
+
+..........................................
+
+Question 91: Where can I find a complete example of structured outputs in vLLM online serving?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/structured_outputs.md [5461:5535]
+
+MY RESULT for: Where can I find a complete example of structured outputs in vLLM online serving?
+('score: 14.929685592651367', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/structured_outputs.md', first_character_index=10740, last_character_index=11963))
+('score: 14.23995304107666', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/structured_outputs.md', first_character_index=4208, last_character_index=5741))
+('score: 14.035516738891602', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/structured_outputs/README.md', first_character_index=0, last_character_index=1461))
+('score: 13.482121467590332', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/structured_outputs.md', first_character_index=0, last_character_index=1665))
+('score: 11.393081665039062', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/structured_outputs/structured_outputs.py', first_character_index=3526, last_character_index=4846))
+
+..........................................
+
+Question 92: How do you serve the JinaVL-Reranker model using vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md [22494:24288]
+
+MY RESULT for: How do you serve the JinaVL-Reranker model using vLLM?
+('score: 22.67336082458496', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/supported_models.md', first_character_index=49441, last_character_index=50683))
+('score: 22.17875099182129', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=21335, last_character_index=22803))
+('score: 15.55927848815918', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/multimodal/pooling/test_jinavl_reranker.py', first_character_index=7136, last_character_index=7947))
+('score: 14.760171890258789', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/multimodal/pooling/test_jinavl_reranker.py', first_character_index=2771, last_character_index=3622))
+('score: 14.365994453430176', MinimalSource(file_path='data/raw/vllm-0.10.1/tests/models/multimodal/pooling/test_jinavl_reranker.py', first_character_index=0, last_character_index=520))
+
+..........................................
+
+Question 93: Which TPU versions are supported by vLLM for Google Cloud TPU?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md [0:1907]
+
+MY RESULT for: Which TPU versions are supported by vLLM for Google Cloud TPU?
+('score: 37.76707458496094', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=0, last_character_index=1576))
+('score: 34.901268005371094', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=1485, last_character_index=3046))
+('score: 34.07749557495117', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=3715, last_character_index=5296))
+('score: 33.28818130493164', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=5825, last_character_index=7182))
+('score: 30.914716720581055', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md', first_character_index=5071, last_character_index=5707))
+
+..........................................
+
+Question 94: What is the recommended tensor parallel size and pipeline parallel size configuration when running vLLM on a Ray cluster with 16 GPUs across 2 nodes?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md [7232:8307]
+
+MY RESULT for: What is the recommended tensor parallel size and pipeline parallel size configuration when running vLLM on a Ray cluster with 16 GPUs across 2 nodes?
+('score: 42.02423858642578', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=6317, last_character_index=7995))
+('score: 29.931875228881836', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/configuration/optimization.md', first_character_index=4132, last_character_index=5713))
+('score: 27.589492797851562', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/distributed/parallel_state.py', first_character_index=40743, last_character_index=42246))
+('score: 27.47243309020996', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md', first_character_index=8116, last_character_index=9606))
+('score: 27.070737838745117', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/distributed_troubleshooting.md', first_character_index=0, last_character_index=1397))
+
+..........................................
+
+Question 95: How can you limit the number of compilation jobs when building vLLM to avoid system overload?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md [9569:11494]
+
+MY RESULT for: How can you limit the number of compilation jobs when building vLLM to avoid system overload?
+('score: 22.37047576904297', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=10396, last_character_index=11771))
+('score: 15.424098014831543', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/docker.md', first_character_index=2676, last_character_index=3946))
+('score: 13.039460182189941', MinimalSource(file_path='data/raw/vllm-0.10.1/setup.py', first_character_index=2678, last_character_index=4302))
+('score: 12.796157836914062', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/incremental_build.md', first_character_index=7124, last_character_index=8351))
+('score: 12.672224044799805', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md', first_character_index=8129, last_character_index=9705))
+
+..........................................
+
+Question 96: How do you access the parsed response from OpenAI's structured output completion in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/structured_outputs.md [8447:9263]
+
+MY RESULT for: How do you access the parsed response from OpenAI's structured output completion in vLLM?
+('score: 21.932992935180664', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/structured_outputs.md', first_character_index=6600, last_character_index=8100))
+('score: 18.694921493530273', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/structured_outputs.md', first_character_index=8105, last_character_index=9246))
+('score: 17.34748077392578', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_completion_tool_calls_with_reasoning.py', first_character_index=0, last_character_index=620))
+('score: 17.337486267089844', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_completion_with_reasoning_streaming.py', first_character_index=0, last_character_index=1140))
+('score: 16.44878578186035', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/deployment/frameworks/litellm.md', first_character_index=0, last_character_index=1628))
+
+..........................................
+
+Question 97: What flag is mandatory to enable automatic function calling in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/features/tool_calling.md [5465:7110]
+
+MY RESULT for: What flag is mandatory to enable automatic function calling in vLLM?
+('score: 12.021795272827148', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=5465, last_character_index=7140))
+('score: 10.308667182922363', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=3876, last_character_index=5555))
+('score: 9.151962280273438', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_completion_tool_calls_with_reasoning.py', first_character_index=3176, last_character_index=4613))
+('score: 8.120080947875977', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=0, last_character_index=589))
+('score: 7.721589088439941', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/automatic_prefix_caching.py', first_character_index=0, last_character_index=773))
+
+..........................................
+
+Question 98: How do you apply chat templates to prompts in vLLM?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/getting_started/quickstart.md [5145:6292]
+
+MY RESULT for: How do you apply chat templates to prompts in vLLM?
+('score: 9.9853515625', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/tool_calling.md', first_character_index=5465, last_character_index=7140))
+('score: 9.689554214477539', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/getting_started/quickstart.md', first_character_index=4709, last_character_index=6252))
+('score: 9.390199661254883', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/features/quantization/gguf.md', first_character_index=2101, last_character_index=3489))
+('score: 8.97457504272461', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/models/generative_models.md', first_character_index=4653, last_character_index=5589))
+('score: 8.896529197692871', MinimalSource(file_path='data/raw/vllm-0.10.1/vllm/entrypoints/llm.py', first_character_index=40273, last_character_index=41955))
+
+..........................................
+
+Question 99: What is the first step to implement a basic vLLM model?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/contributing/model/basic.md [0:512]
+
+MY RESULT for: What is the first step to implement a basic vLLM model?
+('score: 10.17235279083252', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/README.md', first_character_index=0, last_character_index=1176))
+('score: 8.199224472045898', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=0, last_character_index=1565))
+('score: 8.065567016601562', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=3489, last_character_index=4564))
+('score: 7.213098049163818', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/contributing/model/basic.md', first_character_index=4566, last_character_index=6152))
+('score: 6.98258113861084', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/offline_inference/basic/README.md', first_character_index=0, last_character_index=1200))
+
+..........................................
+
+Question 100: What flag must be explicitly passed when serving VLM2Vec-Full model in vLLM to run it in embedding mode?
+Ground Truth Sources:
+  File: data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md [9910:11856]
+
+MY RESULT for: What flag must be explicitly passed when serving VLM2Vec-Full model in vLLM to run it in embedding mode?
+('score: 26.78104591369629', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=10357, last_character_index=12047))
+('score: 25.193113327026367', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_embedding_client_for_multimodal.py', first_character_index=2755, last_character_index=3625))
+('score: 23.59649085998535', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=9195, last_character_index=10352))
+('score: 23.046945571899414', MinimalSource(file_path='data/raw/vllm-0.10.1/examples/online_serving/openai_chat_embedding_client_for_multimodal.py', first_character_index=0, last_character_index=1041))
+('score: 22.369131088256836', MinimalSource(file_path='data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md', first_character_index=11807, last_character_index=13165))
+
+..........................................
+

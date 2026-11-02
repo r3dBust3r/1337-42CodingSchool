@@ -4,6 +4,8 @@ from pydantic import BaseModel
 import pickle
 import bm25s
 import os
+import re
+
 
 
 class MinimalSource(BaseModel):
@@ -14,7 +16,7 @@ class MinimalSource(BaseModel):
 
 class Chunker:
     def __init__(self):
-        self.max_chunk_size = 1800
+        self.max_chunk_size = 1700
         self.chunk_overlap = int(self.max_chunk_size * 0.15)
         self.chunks_data = []
 
@@ -88,14 +90,76 @@ class Chunker:
 
 
 
+# ---------- HELPER FUNCTIONS ---------------
+def temp_identifier_splitter(keyword: str) -> list[str]:
+    """Split any identifier (camelCase, PascalCase, snake_case, acronyms, digits)
+    into the original word plus all its sub-words.
+    """
+    if not keyword:
+        return []
+
+    # 1. Boundary: lowercase or digit followed by uppercase (e.g. myVar -> my Var)
+    s = re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', keyword)
+
+    # 2. Boundary: acronym followed by title word (e.g. GPUModel -> GPU Model)
+    s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
+
+    # 3. Boundary: letters and digits (e.g. mamba2 -> mamba 2, FP8 -> FP 8)
+    s = re.sub(r'([a-zA-Z])([0-9])', r'\1 \2', s)
+    s = re.sub(r'([0-9])([a-zA-Z])', r'\1 \2', s)
+
+    # 4. Replace underscores, hyphens, and slashes with spaces
+    s = re.sub(r'[_.\-/]+', ' ', s)
+
+    # 5. Extract all distinct parts
+    parts = s.split()
+
+    # Keep original keyword + all parts (in original case and lowercase)
+    tokens = [keyword]
+    for p in parts:
+        tokens.append(p)
+        if p and p not in tokens:
+            p_lower = p.lower()
+            if p_lower not in tokens:
+                tokens.append(p_lower)
+
+    return tokens
+
+
+
+
+def expand_text(text: str) -> str:
+    words = re.findall(r'\b\w+\b', text)
+    expanded = []
+    for w in words:
+        if '_' in w or any(c.isupper() for c in w[1:]) or any(c.isdigit() for c in w):
+            expanded.extend(temp_identifier_splitter(w))
+    return text + "\n" + " ".join(expanded)
+
+# ---------- HELPER FUNCTIONS ---------------
+
+
+
+
 class Indexer:
     def __init__(self, chunks_data):
         self.minimal_sources = [ch[0] for ch in chunks_data]
-        self.raw_chunks = [ch[1] for ch in chunks_data]
+        # self.raw_chunks = [f'File: {ch[0].file_path}\n{ch[1]}' for ch in chunks_data]
         self.save_dir = 'data/processed/'
 
+
+        self.raw_chunks = [
+            f"File: {ch[0].file_path} {expand_text(ch[0].file_path)}\n{expand_text(ch[1])}" 
+            for ch in chunks_data
+        ]
+
+
+
     def build_and_save_index(self):
-        corpus_tokens = bm25s.tokenize(self.raw_chunks, stopwords="en")
+        corpus_tokens = bm25s.tokenize(
+            self.raw_chunks,
+            stopwords="en"
+        )
         retriever = bm25s.BM25()
         retriever.index(corpus_tokens)
 
@@ -113,6 +177,12 @@ class Indexer:
 
 
 
+class Retriever:
+    def __init__(self):
+        pass
+
+
+
 def main():
     chunker = Chunker()
     chunks_data = chunker.chunk()
@@ -121,6 +191,8 @@ def main():
     indexer = Indexer(chunks_data)
     indexer.build_and_save_index()
 
+    # retriever = Retriever()
+    # retriever.retrieve()
 
 
 if __name__ == "__main__":
