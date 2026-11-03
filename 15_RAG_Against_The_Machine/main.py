@@ -5,6 +5,8 @@ import pickle
 import bm25s
 import os
 import re
+import json
+from typing import Any, List, Tuple
 
 
 
@@ -90,66 +92,61 @@ class Chunker:
 
 
 
-# ---------- HELPER FUNCTIONS ---------------
-def temp_identifier_splitter(keyword: str) -> list[str]:
-    """Split any identifier (camelCase, PascalCase, snake_case, acronyms, digits)
-    into the original word plus all its sub-words.
-    """
-    if not keyword:
-        return []
+class Splitter:
+    def temp_identifier_splitter(self, keyword: str) -> list[str]:
+        """Split any identifier (camelCase, PascalCase, snake_case, acronyms, digits)
+        into the original word plus all its sub-words.
+        """
+        if not keyword:
+            return []
 
-    # 1. Boundary: lowercase or digit followed by uppercase (e.g. myVar -> my Var)
-    s = re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', keyword)
+        # 1. Boundary: lowercase or digit followed by uppercase (e.g. myVar -> my Var)
+        s = re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', keyword)
 
-    # 2. Boundary: acronym followed by title word (e.g. GPUModel -> GPU Model)
-    s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
+        # 2. Boundary: acronym followed by title word (e.g. GPUModel -> GPU Model)
+        s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', s)
 
-    # 3. Boundary: letters and digits (e.g. mamba2 -> mamba 2, FP8 -> FP 8)
-    s = re.sub(r'([a-zA-Z])([0-9])', r'\1 \2', s)
-    s = re.sub(r'([0-9])([a-zA-Z])', r'\1 \2', s)
+        # 3. Boundary: letters and digits (e.g. mamba2 -> mamba 2, FP8 -> FP 8)
+        s = re.sub(r'([a-zA-Z])([0-9])', r'\1 \2', s)
+        s = re.sub(r'([0-9])([a-zA-Z])', r'\1 \2', s)
 
-    # 4. Replace underscores, hyphens, and slashes with spaces
-    s = re.sub(r'[_.\-/]+', ' ', s)
+        # 4. Replace underscores, hyphens, and slashes with spaces
+        s = re.sub(r'[_.\-/]+', ' ', s)
 
-    # 5. Extract all distinct parts
-    parts = s.split()
+        # 5. Extract all distinct parts
+        parts = s.split()
 
-    # Keep original keyword + all parts (in original case and lowercase)
-    tokens = [keyword]
-    for p in parts:
-        tokens.append(p)
-        if p and p not in tokens:
-            p_lower = p.lower()
-            if p_lower not in tokens:
-                tokens.append(p_lower)
+        # Keep original keyword + all parts (in original case and lowercase)
+        tokens = [keyword]
+        for p in parts:
+            tokens.append(p)
+            if p and p not in tokens:
+                p_lower = p.lower()
+                if p_lower not in tokens:
+                    tokens.append(p_lower)
 
-    return tokens
-
-
+        return tokens
 
 
-def expand_text(text: str) -> str:
-    words = re.findall(r'\b\w+\b', text)
-    expanded = []
-    for w in words:
-        if '_' in w or any(c.isupper() for c in w[1:]) or any(c.isdigit() for c in w):
-            expanded.extend(temp_identifier_splitter(w))
-    return text + "\n" + " ".join(expanded)
-
-# ---------- HELPER FUNCTIONS ---------------
-
+    def expand_text(self, text: str) -> str:
+        words = re.findall(r'\b\w+\b', text)
+        expanded = []
+        for w in words:
+            if '_' in w or any(c.isupper() for c in w[1:]) or any(c.isdigit() for c in w):
+                expanded.extend(self.temp_identifier_splitter(w))
+        return text + "\n" + " ".join(expanded)
 
 
 
 class Indexer:
-    def __init__(self, chunks_data):
+    def __init__(self, chunks_data, splitter):
         self.minimal_sources = [ch[0] for ch in chunks_data]
         # self.raw_chunks = [f'File: {ch[0].file_path}\n{ch[1]}' for ch in chunks_data]
         self.save_dir = 'data/processed/'
 
 
         self.raw_chunks = [
-            f"File: {ch[0].file_path} {expand_text(ch[0].file_path)}\n{expand_text(ch[1])}" 
+            f"File: {ch[0].file_path} {splitter.expand_text(ch[0].file_path)}\n{splitter.expand_text(ch[1])}" 
             for ch in chunks_data
         ]
 
@@ -178,21 +175,46 @@ class Indexer:
 
 
 class Retriever:
-    def __init__(self):
-        pass
+    def __init__(self, splitter, index_dir: str = "data/processed/") -> None:
+        self.splitter = splitter
+        self.index_dir = index_dir
+        self.retriever = bm25s.BM25.load(os.path.join(index_dir, 'bm25_index'), load_corpus=False)
+        self.minimal_sources: List[MinimalSource] = []
+        self.results_minimal_sources: Tuple[int, List[MinimalSource]] = []
+
+        with open(os.path.join(index_dir, 'minimal_sources.pkl'), 'rb') as f:
+            self.minimal_sources = pickle.load(f)
+
+
+    def retrieve(self, query: str, k: int = 5) -> List[MinimalSource]:
+        query = self.splitter.expand_text(query)
+        qr_tokens = bm25s.tokenize(query)
+        results, scores = self.retriever.retrieve(qr_tokens, k=k)
+
+        for i, r in enumerate(results[0]):
+            self.results_minimal_sources.append(
+                (f'score: {scores[0][i]}', self.minimal_sources[r])
+            )
+
+        return self.results_minimal_sources
 
 
 
 def main():
-    chunker = Chunker()
-    chunks_data = chunker.chunk()
-    # print(f"Successfully processed {len(chunker.chunks_data)} chunks.")
+    splitter = Splitter()
 
-    indexer = Indexer(chunks_data)
-    indexer.build_and_save_index()
+    # chunker = Chunker()
+    # chunks = chunker.chunk()
 
-    # retriever = Retriever()
-    # retriever.retrieve()
+    # indexer = Indexer(chunks, splitter)
+    # indexer.build_and_save_index()
+
+    question = "hello man"
+    retriever = Retriever(splitter)
+    top_sources = retriever.retrieve(question, k=5)
+
+    for r in top_sources:
+        print(r)
 
 
 if __name__ == "__main__":
