@@ -9,3 +9,15 @@ check:
 
 
 all: index test check
+
+eval-docs:
+	./moulinette-ubuntu evaluate_student_search_results \
+	data/output/search_results/UnansweredQuestions/dataset_docs_public.json \
+	datasets_public/public/AnsweredQuestions/dataset_docs_public.json \
+	--k 5 --max_context_length 1700 # MARKDOWN (DOCS)
+
+eval-code:
+	./moulinette-ubuntu evaluate_student_search_results \
+	data/output/search_results/UnansweredQuestions/dataset_code_public.json \
+	datasets_public/public/AnsweredQuestions/dataset_code_public.json \
+	--k 5 --max_context_length 1700 # PYTHON (CODE)
