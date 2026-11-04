@@ -1,4 +1,4 @@
 data/processed/
 data/output/
-moulinette-fedora
-moulinette-ubuntu
+__pycache__/
+moulinette

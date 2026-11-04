@@ -1,5 +1,5 @@
 [project]
-name = "15-rag-against-the-machine"
+name = "rag-against-the-machine"
 version = "0.1.0"
 description = "RAG Against The Machine: a 42/1337 coding school common core project"
 readme = "README.md"
@@ -17,9 +17,9 @@ dependencies = [
     "tqdm>=4.70.1",
 ]
 
-[project.scripts]
-15-rag-against-the-machine = "15_rag_against_the_machine:main"
-
 [build-system]
 requires = ["uv_build>=0.12.5,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.uv]
+package = false
