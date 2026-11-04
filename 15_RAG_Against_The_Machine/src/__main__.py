@@ -6,10 +6,14 @@ from src.searcher import SearchDataset
 
 
 def main():
+    # search whole dataset
     dataset_path = 'datasets_public/public/UnansweredQuestions/dataset_code_public.json'
     save_dir = 'data/output/search_results/UnansweredQuestions/'
     search_dataset = SearchDataset(dataset_path, save_dir, k=5)
     search_dataset.search_dataset()
+
+    # search one query
+    search_dataset.search_query("what's the best way to get a random number in python")
 
 
     # # ---------- FOR DEBUGGING YOU IDIOT ----------

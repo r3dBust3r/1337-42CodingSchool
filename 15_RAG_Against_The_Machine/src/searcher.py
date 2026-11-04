@@ -3,6 +3,7 @@ from src.models import StudentSearchResults
 from src.models import RagDataset
 from src.retriever import Retriever
 from src.splitter import Splitter
+import uuid
 import json
 import os
 
@@ -26,21 +27,27 @@ class SearchDataset:
             print(f'Something went wrong: {e}')
 
 
+    def search_query(self, question, question_id=str(uuid.uuid4())):
+        top_sources = self.retriever.retrieve(
+            question,
+            k=self.k
+        )
+
+        return MinimalSearchResults(
+            question_id=question_id,
+            question=question,
+            retrieved_sources=top_sources
+        )
+
+
     def search_dataset(self):
-        self.validated_dataset = self.validated_dataset
         minimal_search_results = []
 
         for q in self.validated_dataset:
-            top_sources = self.retriever.retrieve(
-                q.question,
-                k=self.k
-            )
-
             minimal_search_results.append(
-                MinimalSearchResults(
-                    question_id=q.question_id,
+                self.search_query(
                     question=q.question,
-                    retrieved_sources=top_sources
+                    question_id=q.question_id
                 )
             )
 

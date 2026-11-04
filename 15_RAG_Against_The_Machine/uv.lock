@@ -964,7 +964,7 @@ wheels = [
 [[package]]
 name = "rag-against-the-machine"
 version = "0.1.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "bm25s" },
     { name = "fire" },
