@@ -1,4 +1,5 @@
-from src.models import MinimalSource
+from error import RagError
+from models import MinimalSource
 from typing import List
 import pickle
 import bm25s
@@ -17,6 +18,14 @@ class Retriever:
 
 
     def retrieve(self, query: str, k: int = 5) -> List[MinimalSource]:
+        try:
+            k = int(k)
+        except Exception:
+            raise RagError('k must be a valid number')
+
+        if k < 1 or k > 1000:
+            raise RagError('k must be strictly positive less or equal to 1000')
+
         results_minimal_sources = []
         query = self.splitter.expand_text(query)
         qr_tokens = bm25s.tokenize(query)

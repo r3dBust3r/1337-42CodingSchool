@@ -1,8 +1,9 @@
-from src.models import MinimalSearchResults
-from src.models import StudentSearchResults
-from src.models import RagDataset
-from src.retriever import Retriever
-from src.splitter import Splitter
+from models import MinimalSearchResults
+from models import StudentSearchResults
+from models import RagDataset
+from retriever import Retriever
+from splitter import Splitter
+from error import RagError
 import uuid
 import json
 import os
@@ -15,16 +16,6 @@ class SearchDataset:
         self.k = k
         self.validated_dataset = []
         self.retriever = Retriever(Splitter())
-
-        try:
-            with open(dataset_path, 'r') as f:
-                dataset = json.load(f)['rag_questions']
-                self.validated_dataset = RagDataset(
-                    rag_questions=dataset
-                ).rag_questions
-
-        except Exception as e:
-            print(f'Something went wrong: {e}')
 
 
     def search_query(self, question, question_id=str(uuid.uuid4())):
@@ -41,6 +32,16 @@ class SearchDataset:
 
 
     def search_dataset(self):
+        try:
+            with open(self.dataset_path, 'r') as f:
+                dataset = json.load(f)['rag_questions']
+                self.validated_dataset = RagDataset(
+                    rag_questions=dataset
+                ).rag_questions
+
+        except Exception as e:
+            raise RagError(f'Error: {e}')
+
         minimal_search_results = []
 
         for q in self.validated_dataset:

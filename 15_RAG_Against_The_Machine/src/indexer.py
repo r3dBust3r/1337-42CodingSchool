@@ -24,8 +24,9 @@ class Indexer:
 
         os.makedirs(self.save_dir, exist_ok=True)
 
+        chunks_save_dir = os.path.join(self.save_dir, 'bm25_index/')
         retriever.save(
-            os.path.join(self.save_dir, 'bm25_index'),
+            chunks_save_dir,
             corpus=self.raw_chunks
         )
 
@@ -33,3 +34,5 @@ class Indexer:
         minimal_sources_path = os.path.join(self.save_dir, 'minimal_sources.pkl')
         with open(minimal_sources_path, 'wb') as f:
             pickle.dump(self.minimal_sources, f)
+
+        print(f'[*] chunked, index and saved {len(self.raw_chunks)} chunks to {chunks_save_dir}')

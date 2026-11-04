@@ -1,12 +1,12 @@
 from langchain_text_splitters import PythonCodeTextSplitter
 from langchain_text_splitters import MarkdownTextSplitter
-from src.models import MinimalSource
+from models import MinimalSource
 import os
 
 
 class Chunker:
-    def __init__(self):
-        self.max_chunk_size = 1700
+    def __init__(self, max_chunk_size=1700):
+        self.max_chunk_size = max_chunk_size
         self.chunk_overlap = int(self.max_chunk_size * 0.15)
         self.chunks_data = []
 

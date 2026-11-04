@@ -1,0 +1,2 @@
+class RagError(Exception):
+    pass
