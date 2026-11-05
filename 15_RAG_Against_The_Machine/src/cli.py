@@ -123,8 +123,100 @@ class CommandLineInterface:
         print(f'[*] Answers saved to {save_path}')
 
 
-    def evaluate(self):
+
+    @staticmethod
+    def _calculate_iou(start1: int, end1: int, start2: int, end2: int) -> float:
+        intersection = max(0, min(end1, end2) - max(start1, start2))
+        union = (end1 - start1) + (end2 - start2) - intersection
+        return 0.0 if union <= 0 else intersection / union
+
+
+    def evaluate(self, student_search_results_path, dataset_path):
         ...
+        # with open(student_search_results_path, 'r', encoding='utf-8') as f:
+        #     student_search_results = StudentSearchResults(**json.load(f))
+
+        # with open(dataset_path, 'r', encoding='utf-8') as f:
+        #     truth_results_and_answer = TruthResultsAndAnswer(**json.load(f))
+
+        # # Map ground-truth questions by question_id (with fallback to index)
+        # truth_map = {q.question_id: q for q in truth_results_and_answer.rag_questions}
+
+        # ks = [1, 3, 5, 10]
+        # recalls_at_k = {k: [] for k in ks}
+
+        # for i, mini_search_res in enumerate(student_search_results.search_results):
+        #     # === Previous draft code (preserved as comments) ===
+        #     # my_question_id = mini_search_res.question_id
+        #     # my_question = mini_search_res.question
+        #     # my_retrieved_sources = mini_search_res.retrieved_sources
+
+        #     # tr_question_id = truth_results_and_answer.rag_questions[i].question_id
+        #     # tr_question = truth_results_and_answer.rag_questions[i].question
+        #     # tr_retrieved_sources = truth_results_and_answer.rag_questions[i].sources
+
+        #     # tr_files = [s.file_path for s in tr_retrieved_sources]
+        #     # my_files = [s.file_path for s in my_retrieved_sources]
+
+        #     # for rank, r in enumerate(b.retrieved[:top_k], 1):
+        #     #     for gt in b.gt_sources:
+        #     #         if r.file_path == gt.file_path:
+        #     #             iou = _calculate_iou(gt.start, gt.end, r.start, r.end)
+        #     #             if iou > best_iou:
+        #     #                 best_iou = iou
+        #     #             if iou >= iou_thresh and best_rank is None:
+        #     #                 best_rank = rank
+            
+        #     # k = 5
+
+        #     # relevant_retrieved = len(set(tr_files) & set(my_files[:k]))
+
+        #     # print(relevant_retrieved)
+        #     # exit()
+
+        #     # recall_at_k = relevant_retrieved / len(tr_files)
+
+        #     # print(f"Recall@{k}: {recall_at_k:.2%}")
+        #     # ====================================================
+
+        #     gt = truth_map.get(mini_search_res.question_id)
+        #     if gt is None and i < len(truth_results_and_answer.rag_questions):
+        #         gt = truth_results_and_answer.rag_questions[i]
+
+        #     if not gt or not gt.sources:
+        #         continue
+
+        #     gt_sources = gt.sources
+        #     retrieved = mini_search_res.retrieved_sources
+
+        #     for k in ks:
+        #         found_gt = 0
+        #         for gt_s in gt_sources:
+        #             matched = False
+        #             for ret_s in retrieved[:k]:
+        #                 if ret_s.file_path == gt_s.file_path:
+        #                     iou = self._calculate_iou(
+        #                         gt_s.first_character_index,
+        #                         gt_s.last_character_index,
+        #                         ret_s.first_character_index,
+        #                         ret_s.last_character_index
+        #                     )
+        #                     if iou >= 0.05:
+        #                         matched = True
+        #                         break
+        #             if matched:
+        #                 found_gt += 1
+        #         recalls_at_k[k].append(found_gt / len(gt_sources))
+
+        # total_questions = len(recalls_at_k[1])
+        # print("\nEvaluation Results")
+        # print("=" * 40)
+        # print(f"Questions evaluated: {total_questions}")
+        # for k in ks:
+        #     avg_recall = sum(recalls_at_k[k]) / total_questions if total_questions > 0 else 0.0
+        #     print(f"Recall@{k}: {avg_recall:.3f} ({avg_recall * 100:.1f}%)")
+        # print()
+
 
 
 if __name__ == "__main__":
