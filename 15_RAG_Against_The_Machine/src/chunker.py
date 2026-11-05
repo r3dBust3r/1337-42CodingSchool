@@ -1,6 +1,6 @@
 from langchain_text_splitters import PythonCodeTextSplitter
 from langchain_text_splitters import MarkdownTextSplitter
-from models import MinimalSource
+from src.models import MinimalSource
 import os
 
 

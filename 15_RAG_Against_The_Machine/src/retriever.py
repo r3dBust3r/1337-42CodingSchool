@@ -1,5 +1,5 @@
-from error import RagError
-from models import MinimalSource
+from src.error import RagError
+from src.models import MinimalSource
 from typing import List
 import pickle
 import bm25s

@@ -1,9 +1,9 @@
-from models import MinimalSearchResults
-from models import StudentSearchResults
-from models import RagDataset
-from retriever import Retriever
-from splitter import Splitter
-from error import RagError
+from src.models import MinimalSearchResults
+from src.models import StudentSearchResults
+from src.models import RagDataset
+from src.retriever import Retriever
+from src.splitter import Splitter
+from src.error import RagError
 import uuid
 import json
 import os
