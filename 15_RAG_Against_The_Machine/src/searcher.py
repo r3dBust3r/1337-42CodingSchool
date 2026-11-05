@@ -33,7 +33,7 @@ class SearchDataset:
 
     def search_dataset(self):
         try:
-            with open(self.dataset_path, 'r') as f:
+            with open(self.dataset_path, 'r', encoding='utf-8') as f:
                 dataset = json.load(f)['rag_questions']
                 self.validated_dataset = RagDataset(
                     rag_questions=dataset
@@ -64,7 +64,7 @@ class SearchDataset:
         )
 
         try:
-            with open(save_file, 'w') as f:
+            with open(save_file, 'w', encoding='utf-8') as f:
                 f.write(
                     student_search_results.model_dump_json(indent=4)
                 )
