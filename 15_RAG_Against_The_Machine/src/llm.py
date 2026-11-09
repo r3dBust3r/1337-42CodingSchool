@@ -27,7 +27,7 @@ class LLM:
         model_inputs = self.tokenizer([text], return_tensors="pt").to(self.model.device)
         generated_ids = self.model.generate(
             **model_inputs,
-            max_new_tokens=100
+            max_new_tokens=300
         )
 
         output_ids = generated_ids[0][len(model_inputs.input_ids[0]):].tolist() 

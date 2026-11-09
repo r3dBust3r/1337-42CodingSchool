@@ -9,22 +9,25 @@ import os
 class Retriever:
     def __init__(self, splitter, index_dir: str = "data/processed/") -> None:
         self.splitter = splitter
-        self.index_dir = index_dir
         self.retriever = bm25s.BM25.load(os.path.join(index_dir, 'bm25_index'), load_corpus=False)
         self.minimal_sources: List[MinimalSource] = []
 
-        with open(os.path.join(index_dir, 'minimal_sources.pkl'), 'rb') as f:
-            self.minimal_sources = pickle.load(f)
+        try:
+            minimal_sources_path = os.path.join(index_dir, 'minimal_sources.pkl')
+            with open(minimal_sources_path, 'rb') as f:
+                self.minimal_sources = pickle.load(f)
+        except Exception as e:
+            raise RagError(f'cannot read: {minimal_sources_path}, {e}')
 
 
     def retrieve(self, query: str, k: int = 5) -> List[MinimalSource]:
         try:
             k = int(k)
         except Exception:
-            raise RagError('k must be a valid number')
+            raise RagError('k must be a valid positive number')
 
-        if k < 1 or k > 1000:
-            raise RagError('k must be strictly positive less or equal to 1000')
+        if k < 1:
+            raise RagError('k must be strictly positive')
 
         results_minimal_sources = []
         query = self.splitter.expand_text(query)

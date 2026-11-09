@@ -4,21 +4,23 @@ from src.models import RagDataset
 from src.retriever import Retriever
 from src.splitter import Splitter
 from src.error import RagError
+import tqdm
 import uuid
 import json
 import os
 
 
 class SearchDataset:
-    def __init__(self, dataset_path, save_directory, k):
-        self.dataset_path = dataset_path
-        self.save_directory = save_directory
+    def __init__(self, k, index_dir):
         self.k = k
         self.validated_dataset = []
-        self.retriever = Retriever(Splitter())
+        self.retriever = Retriever(Splitter(), index_dir)
 
 
-    def search_query(self, question, question_id=str(uuid.uuid4())):
+    def search_query(self, question, question_id=None):
+        if not question_id:
+            question_id = str(uuid.uuid4())
+
         top_sources = self.retriever.retrieve(
             question,
             k=self.k
@@ -31,9 +33,9 @@ class SearchDataset:
         )
 
 
-    def search_dataset(self):
+    def search_dataset(self, dataset_path, save_directory):
         try:
-            with open(self.dataset_path, 'r', encoding='utf-8') as f:
+            with open(dataset_path, 'r', encoding='utf-8') as f:
                 dataset = json.load(f)['rag_questions']
                 self.validated_dataset = RagDataset(
                     rag_questions=dataset
@@ -44,7 +46,7 @@ class SearchDataset:
 
         minimal_search_results = []
 
-        for q in self.validated_dataset:
+        for q in tqdm.tqdm(self.validated_dataset, desc='searching dataset'):
             minimal_search_results.append(
                 self.search_query(
                     question=q.question,
@@ -57,10 +59,10 @@ class SearchDataset:
             k=self.k
         )
 
-        os.makedirs(self.save_directory, exist_ok=True)
+        os.makedirs(save_directory, exist_ok=True)
         save_file = os.path.join(
-            self.save_directory,
-            os.path.basename(self.dataset_path)
+            save_directory,
+            os.path.basename(dataset_path)
         )
 
         try:

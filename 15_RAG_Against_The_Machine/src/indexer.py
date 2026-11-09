@@ -1,12 +1,13 @@
+from src.error import RagError
 import pickle
 import bm25s
 import os
 
 
 class Indexer:
-    def __init__(self, chunks_data, splitter):
+    def __init__(self, chunks_data, splitter, save_dir='data/processed/'):
         self.minimal_sources = [ch[0] for ch in chunks_data]
-        self.save_dir = 'data/processed/'
+        self.save_dir = save_dir
 
         self.raw_chunks = [
             f"File: {ch[0].file_path} {splitter.expand_text(ch[0].file_path)}\n{splitter.expand_text(ch[1])}" 
@@ -19,6 +20,10 @@ class Indexer:
             self.raw_chunks,
             stopwords="en"
         )
+
+        if not self.raw_chunks:
+            raise RagError('no data to index')
+
         retriever = bm25s.BM25()
         retriever.index(corpus_tokens)
 

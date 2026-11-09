@@ -5,6 +5,7 @@ from src.models import MinimalAnswer
 from src.splitter import Splitter
 from src.chunker import Chunker
 from src.indexer import Indexer
+from src.evaluator import Evaluator
 from src.retriever import Retriever
 from src.searcher import SearchDataset
 from src.error import RagError
@@ -38,22 +39,42 @@ class CommandLineInterface:
         return prompt
 
 
-    def index(self, max_chunk_size=1700):
-        if max_chunk_size > 2000:
-            raise RagError('max chunk size cannot be bigger than 2000 character')
+    def _valide_int(self, n):
+        if isinstance(n, int):
+            return True
 
-        splitter = Splitter()
-        chunker = Chunker(max_chunk_size)
+        if isinstance(n, str):
+            if n.isdigit():
+                return True
+
+        return False
+
+
+    def index(self, max_chunk_size=1700, raw_dir='data/raw/vllm-0.10.1/', save_dir='data/processed/'):
+        if self._valide_int(max_chunk_size):
+            max_chunk_size = int(max_chunk_size)
+        else:
+            raise RagError('max_chunk_size must be a valid positive number')
+
+        if max_chunk_size > 2000 or max_chunk_size <= 0:
+            raise RagError('max_chunk_size must be in the range 1-2000')
+
+        if not os.path.isdir(raw_dir):
+            raise RagError(f"chunks directory not found: {raw_dir}")
+
+        chunker = Chunker(max_chunk_size, raw_dir)
         chunks = chunker.chunk()
 
-        indexer = Indexer(chunks, splitter)
+        indexer = Indexer(chunks, Splitter(), save_dir)
         indexer.build_and_save_index()
 
 
-    def search(self, query, k=5):
-        dataset_path = ''
-        save_dir = ''
-        search_dataset = SearchDataset(dataset_path, save_dir, k=k)
+    def search(self, query, k=5, index_dir='data/processed/'):
+        query = query.strip()
+        if not query:
+            raise RagError('query cannot be empty')
+
+        search_dataset = SearchDataset(k, index_dir)
         res = search_dataset.search_query(query)
 
         print(f'Q: {res.question}')
@@ -63,15 +84,20 @@ class CommandLineInterface:
             print(f'{ms.file_path} [{ms.first_character_index}:{ms.last_character_index}]')
 
 
-    def search_dataset(self, dataset_path, save_directory, k=5):
-        search_dataset = SearchDataset(dataset_path, save_directory, k=k)
-        search_dataset.search_dataset()
-        print(f'[*] results saved to {search_dataset.save_directory}')
+    def search_dataset(self, dataset_path, save_directory, k=5, index_dir='data/processed/'):
+        search_dataset = SearchDataset(k, index_dir)
+        search_dataset.search_dataset(dataset_path, save_directory)
+        print(f'[*] results saved to {save_directory}')
 
 
-    def answer(self, query: str, k: int = 5):
+    def answer(self, query: str, k: int = 5, index_dir='data/processed/'):
+        query = query.strip()
+
+        if not query:
+            raise RagError('query cannot be empty')
+
         llm = LLM()
-        retriever = Retriever(Splitter())
+        retriever = Retriever(Splitter(), index_dir)
         sources = retriever.retrieve(query, k=k)
         prompt = self._build_prompt(query, sources)
         
@@ -123,100 +149,9 @@ class CommandLineInterface:
         print(f'[*] Answers saved to {save_path}')
 
 
-
-    @staticmethod
-    def _calculate_iou(start1: int, end1: int, start2: int, end2: int) -> float:
-        intersection = max(0, min(end1, end2) - max(start1, start2))
-        union = (end1 - start1) + (end2 - start2) - intersection
-        return 0.0 if union <= 0 else intersection / union
-
-
     def evaluate(self, student_search_results_path, dataset_path):
-        ...
-        # with open(student_search_results_path, 'r', encoding='utf-8') as f:
-        #     student_search_results = StudentSearchResults(**json.load(f))
-
-        # with open(dataset_path, 'r', encoding='utf-8') as f:
-        #     truth_results_and_answer = TruthResultsAndAnswer(**json.load(f))
-
-        # # Map ground-truth questions by question_id (with fallback to index)
-        # truth_map = {q.question_id: q for q in truth_results_and_answer.rag_questions}
-
-        # ks = [1, 3, 5, 10]
-        # recalls_at_k = {k: [] for k in ks}
-
-        # for i, mini_search_res in enumerate(student_search_results.search_results):
-        #     # === Previous draft code (preserved as comments) ===
-        #     # my_question_id = mini_search_res.question_id
-        #     # my_question = mini_search_res.question
-        #     # my_retrieved_sources = mini_search_res.retrieved_sources
-
-        #     # tr_question_id = truth_results_and_answer.rag_questions[i].question_id
-        #     # tr_question = truth_results_and_answer.rag_questions[i].question
-        #     # tr_retrieved_sources = truth_results_and_answer.rag_questions[i].sources
-
-        #     # tr_files = [s.file_path for s in tr_retrieved_sources]
-        #     # my_files = [s.file_path for s in my_retrieved_sources]
-
-        #     # for rank, r in enumerate(b.retrieved[:top_k], 1):
-        #     #     for gt in b.gt_sources:
-        #     #         if r.file_path == gt.file_path:
-        #     #             iou = _calculate_iou(gt.start, gt.end, r.start, r.end)
-        #     #             if iou > best_iou:
-        #     #                 best_iou = iou
-        #     #             if iou >= iou_thresh and best_rank is None:
-        #     #                 best_rank = rank
-            
-        #     # k = 5
-
-        #     # relevant_retrieved = len(set(tr_files) & set(my_files[:k]))
-
-        #     # print(relevant_retrieved)
-        #     # exit()
-
-        #     # recall_at_k = relevant_retrieved / len(tr_files)
-
-        #     # print(f"Recall@{k}: {recall_at_k:.2%}")
-        #     # ====================================================
-
-        #     gt = truth_map.get(mini_search_res.question_id)
-        #     if gt is None and i < len(truth_results_and_answer.rag_questions):
-        #         gt = truth_results_and_answer.rag_questions[i]
-
-        #     if not gt or not gt.sources:
-        #         continue
-
-        #     gt_sources = gt.sources
-        #     retrieved = mini_search_res.retrieved_sources
-
-        #     for k in ks:
-        #         found_gt = 0
-        #         for gt_s in gt_sources:
-        #             matched = False
-        #             for ret_s in retrieved[:k]:
-        #                 if ret_s.file_path == gt_s.file_path:
-        #                     iou = self._calculate_iou(
-        #                         gt_s.first_character_index,
-        #                         gt_s.last_character_index,
-        #                         ret_s.first_character_index,
-        #                         ret_s.last_character_index
-        #                     )
-        #                     if iou >= 0.05:
-        #                         matched = True
-        #                         break
-        #             if matched:
-        #                 found_gt += 1
-        #         recalls_at_k[k].append(found_gt / len(gt_sources))
-
-        # total_questions = len(recalls_at_k[1])
-        # print("\nEvaluation Results")
-        # print("=" * 40)
-        # print(f"Questions evaluated: {total_questions}")
-        # for k in ks:
-        #     avg_recall = sum(recalls_at_k[k]) / total_questions if total_questions > 0 else 0.0
-        #     print(f"Recall@{k}: {avg_recall:.3f} ({avg_recall * 100:.1f}%)")
-        # print()
-
+        evaluator = Evaluator()
+        evaluator.evaluate(student_search_results_path, dataset_path)
 
 
 if __name__ == "__main__":
