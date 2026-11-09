@@ -1,23 +1,24 @@
+install:
+	@uv sync
+
 index:
-	@uv run main.py
+	@uv run -m src index
 
-test:
-	@uv run playground.py > results.txt
+run:
+	@uv run -m src
 
-check:
-	@uv run checker.py results.txt
+debug:
+	@uv run -m pdb -m src
 
+clean:
+	@find -type d -name "__pycache__" -exec rm -rf {} +
+	@find -type d -name ".mypy_cache" -exec rm -rf {} +
 
-all: index test check
-
-eval-docs:
-	./moulinette-ubuntu evaluate_student_search_results \
-	data/output/search_results/UnansweredQuestions/dataset_docs_public.json \
-	datasets_public/public/AnsweredQuestions/dataset_docs_public.json \
-	--k 5 --max_context_length 1700 # MARKDOWN (DOCS)
-
-eval-code:
-	./moulinette-ubuntu evaluate_student_search_results \
-	data/output/search_results/UnansweredQuestions/dataset_code_public.json \
-	datasets_public/public/AnsweredQuestions/dataset_code_public.json \
-	--k 5 --max_context_length 1700 # PYTHON (CODE)
+lint:
+	@uv run -m flake8 src
+	@uv run -m mypy src \
+		--warn-return-any \
+		--warn-unused-ignores \
+		--ignore-missing-imports \
+		--disallow-untyped-defs \
+		--check-untyped-defs

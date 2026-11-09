@@ -1,21 +1,30 @@
 from src.error import RagError
+from src.models import MinimalSource
+from src.splitter import Splitter
+from typing import List, Tuple
 import pickle
 import bm25s
 import os
 
 
 class Indexer:
-    def __init__(self, chunks_data, splitter, save_dir='data/processed/'):
+    def __init__(
+        self,
+        chunks_data: List[Tuple[MinimalSource, str]],
+        splitter: Splitter,
+        save_dir: str = 'data/processed/'
+    ) -> None:
         self.minimal_sources = [ch[0] for ch in chunks_data]
         self.save_dir = save_dir
 
         self.raw_chunks = [
-            f"File: {ch[0].file_path} {splitter.expand_text(ch[0].file_path)}\n{splitter.expand_text(ch[1])}" 
+            f"File: {ch[0].file_path} "
+            f"{splitter.expand_text(ch[0].file_path)}\n"
+            f"{splitter.expand_text(ch[1])}"
             for ch in chunks_data
         ]
 
-
-    def build_and_save_index(self):
+    def build_and_save_index(self) -> None:
         corpus_tokens = bm25s.tokenize(
             self.raw_chunks,
             stopwords="en"
@@ -35,9 +44,16 @@ class Indexer:
             corpus=self.raw_chunks
         )
 
+        minimal_sources_path = os.path.join(
+            self.save_dir, 'minimal_sources.pkl'
+        )
+        try:
+            with open(minimal_sources_path, 'wb') as f:
+                pickle.dump(self.minimal_sources, f)
+        except Exception as e:
+            raise RagError(f'error: {e}')
 
-        minimal_sources_path = os.path.join(self.save_dir, 'minimal_sources.pkl')
-        with open(minimal_sources_path, 'wb') as f:
-            pickle.dump(self.minimal_sources, f)
-
-        print(f'[*] chunked, index and saved {len(self.raw_chunks)} chunks to {chunks_save_dir}')
+        print(
+            f'[*] chunked, index and saved {len(self.raw_chunks)} '
+            f'chunks to {chunks_save_dir}'
+        )

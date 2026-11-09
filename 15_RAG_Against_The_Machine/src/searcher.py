@@ -1,9 +1,12 @@
 from src.models import MinimalSearchResults
 from src.models import StudentSearchResults
 from src.models import RagDataset
+from src.models import AnsweredQuestion
+from src.models import UnansweredQuestion
 from src.retriever import Retriever
 from src.splitter import Splitter
 from src.error import RagError
+from typing import Optional, List, Union
 import tqdm
 import uuid
 import json
@@ -11,13 +14,16 @@ import os
 
 
 class SearchDataset:
-    def __init__(self, k, index_dir):
+    def __init__(self, k: int, index_dir: str) -> None:
         self.k = k
-        self.validated_dataset = []
+        self.validated_dataset: List[
+            Union[AnsweredQuestion, UnansweredQuestion]
+        ] = []
         self.retriever = Retriever(Splitter(), index_dir)
 
-
-    def search_query(self, question, question_id=None):
+    def search_query(
+        self, question: str, question_id: Optional[str] = None
+    ) -> MinimalSearchResults:
         if not question_id:
             question_id = str(uuid.uuid4())
 
@@ -32,8 +38,11 @@ class SearchDataset:
             retrieved_sources=top_sources
         )
 
-
-    def search_dataset(self, dataset_path, save_directory):
+    def search_dataset(
+        self,
+        dataset_path: str,
+        save_directory: str
+    ) -> None:
         try:
             with open(dataset_path, 'r', encoding='utf-8') as f:
                 dataset = json.load(f)['rag_questions']
@@ -42,7 +51,7 @@ class SearchDataset:
                 ).rag_questions
 
         except Exception as e:
-            raise RagError(f'Error: {e}')
+            raise RagError(f'unable to read {dataset_path}: {e}')
 
         minimal_search_results = []
 
@@ -72,4 +81,4 @@ class SearchDataset:
                 )
 
         except Exception as e:
-            print(f'Error: {e}')
+            print(f'unable to save to {save_file}: {e}')

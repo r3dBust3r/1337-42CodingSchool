@@ -1,15 +1,21 @@
-from src.splitter import Splitter
-from src.chunker import Chunker
-from src.indexer import Indexer
-from src.retriever import Retriever
-from src.searcher import SearchDataset
-from src.cli import CommandLineInterface
-from fire import Fire
+from sys import stderr
 
 
-def main():
+def main() -> None:
+    from src.cli import CommandLineInterface
+    from fire import Fire
     Fire(CommandLineInterface)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+
+    except KeyboardInterrupt:
+        print('\nCtrl+C')
+
+    except Exception as e:
+        print(e, file=stderr)
+
+    except BaseException as e:
+        print(e, file=stderr)

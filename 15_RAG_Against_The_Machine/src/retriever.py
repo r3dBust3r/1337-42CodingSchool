@@ -1,5 +1,6 @@
 from src.error import RagError
 from src.models import MinimalSource
+from src.splitter import Splitter
 from typing import List
 import pickle
 import bm25s
@@ -7,18 +8,23 @@ import os
 
 
 class Retriever:
-    def __init__(self, splitter, index_dir: str = "data/processed/") -> None:
+    def __init__(
+        self, splitter: Splitter, index_dir: str = "data/processed/"
+    ) -> None:
         self.splitter = splitter
-        self.retriever = bm25s.BM25.load(os.path.join(index_dir, 'bm25_index'), load_corpus=False)
+        self.retriever = bm25s.BM25.load(
+            os.path.join(index_dir, 'bm25_index'), load_corpus=False
+        )
         self.minimal_sources: List[MinimalSource] = []
 
         try:
-            minimal_sources_path = os.path.join(index_dir, 'minimal_sources.pkl')
+            minimal_sources_path = os.path.join(
+                index_dir, 'minimal_sources.pkl'
+            )
             with open(minimal_sources_path, 'rb') as f:
                 self.minimal_sources = pickle.load(f)
         except Exception as e:
             raise RagError(f'cannot read: {minimal_sources_path}, {e}')
-
 
     def retrieve(self, query: str, k: int = 5) -> List[MinimalSource]:
         try:

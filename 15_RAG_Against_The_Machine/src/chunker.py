@@ -1,3 +1,4 @@
+from typing import List, Tuple, Dict, Any
 from langchain_text_splitters import PythonCodeTextSplitter
 from langchain_text_splitters import MarkdownTextSplitter
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -7,26 +8,29 @@ import os
 
 
 class Chunker:
-    def __init__(self, max_chunk_size=1700, codebase_dir='data/raw/vllm-0.10.1/'):
+    def __init__(
+        self,
+        max_chunk_size: int = 1700,
+        codebase_dir: str = 'data/raw/vllm-0.10.1/'
+    ) -> None:
         self.max_chunk_size = max_chunk_size
         self.chunk_overlap = int(self.max_chunk_size * 0.15)
-        self.chunks_data = []
+        self.chunks_data: List[Tuple[MinimalSource, str]] = []
         self.codebase_dir = codebase_dir
 
-        self.files = {
+        self.files: Dict[str, List[str]] = {
             'txt': [],
             'md':  [],
             'py':  [],
         }
 
-        self.splitters = {
+        self.splitters: Dict[str, Any] = {
             'txt': RecursiveCharacterTextSplitter,
             'md': MarkdownTextSplitter,
             'py': PythonCodeTextSplitter,
         }
 
-
-    def _get_files(self):
+    def _get_files(self) -> None:
         for root, _, files in os.walk(self.codebase_dir):
             for file in files:
                 f_path = os.path.join(root, file)
@@ -35,14 +39,14 @@ class Chunker:
                 if f_ext in ['txt', 'md', 'py']:
                     self.files[f_ext].append(f_path)
 
-
-    def chunk(self):
+    def chunk(self) -> List[Tuple[MinimalSource, str]]:
         self._get_files()
 
         for ext, files in self.files.items():
             splitter_class = self.splitters.get(ext)
 
-            if not splitter_class: continue
+            if not splitter_class:
+                continue
 
             splitter = splitter_class(
                 chunk_size=self.max_chunk_size,
@@ -78,4 +82,3 @@ class Chunker:
                     search_start = first_character_index + 1
 
         return self.chunks_data
-
