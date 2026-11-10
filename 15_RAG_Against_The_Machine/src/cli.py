@@ -58,7 +58,7 @@ class CommandLineInterface:
 
     def index(
         self,
-        max_chunk_size: int | str = 1700,
+        max_chunk_size: int | str = 2000,
         raw_dir: str = 'data/raw/vllm-0.10.1/',
         save_dir: str = 'data/processed/'
     ) -> None:

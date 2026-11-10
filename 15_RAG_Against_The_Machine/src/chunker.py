@@ -10,7 +10,7 @@ import os
 class Chunker:
     def __init__(
         self,
-        max_chunk_size: int = 1700,
+        max_chunk_size: int = 2000,
         codebase_dir: str = 'data/raw/vllm-0.10.1/'
     ) -> None:
         self.max_chunk_size = max_chunk_size
