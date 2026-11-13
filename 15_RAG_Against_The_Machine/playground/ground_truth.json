@@ -1,0 +1,902 @@
+[
+  {
+    "question": "What parameter does vLLM set according to different quantization schemes to support weight quantization in linear layers?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/model/basic.md",
+        "first_char": 5934,
+        "last_char": 6110
+      }
+    ]
+  },
+  {
+    "question": "What is the main configuration object that is passed around in vLLM's class hierarchy?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/arch_overview.md",
+        "first_char": 4810,
+        "last_char": 6139
+      }
+    ]
+  },
+  {
+    "question": "How do you build and run a vLLM Docker image for s390x CPU architecture?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/s390x.inc.md",
+        "first_char": 2452,
+        "last_char": 3126
+      }
+    ]
+  },
+  {
+    "question": "What interface should a multimodal model class inherit from in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md",
+        "first_char": 5126,
+        "last_char": 5539
+      }
+    ]
+  },
+  {
+    "question": "What is stored in the logits array during the qk_max calculation in vLLM's paged attention implementation?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/paged_attention.md",
+        "first_char": 13161,
+        "last_char": 14568
+      }
+    ]
+  },
+  {
+    "question": "How do you use GPTQModel quantized models with vLLM's Python API?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/gptqmodel.md",
+        "first_char": 2975,
+        "last_char": 4032
+      }
+    ]
+  },
+  {
+    "question": "How can you manually set the attention backend in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/quickstart.md",
+        "first_char": 10780,
+        "last_char": 11525
+      }
+    ]
+  },
+  {
+    "question": "What is the fastest matrix multiplication kernel in vLLM's torch compile autotuning for an 8x2048 by 2048x3072 matrix multiplication?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/torch_compile.md",
+        "first_char": 10307,
+        "last_char": 12199
+      }
+    ]
+  },
+  {
+    "question": "How do you pass audio inputs to vLLM for multimodal inference?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md",
+        "first_char": 8690,
+        "last_char": 8877
+      }
+    ]
+  },
+  {
+    "question": "What are the key capabilities of Ray Serve LLM for vLLM deployment?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md",
+        "first_char": 27171,
+        "last_char": 27920
+      }
+    ]
+  },
+  {
+    "question": "How can you view Nsight Systems profiles in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/profiling.md",
+        "first_char": 4932,
+        "last_char": 5306
+      }
+    ]
+  },
+  {
+    "question": "What quantization parameter should be specified when loading a Quark quantized model in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/quark.md",
+        "first_char": 6638,
+        "last_char": 8031
+      }
+    ]
+  },
+  {
+    "question": "How do you enable GPUDirect RDMA in vLLM using Docker?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md",
+        "first_char": 8767,
+        "last_char": 10579
+      }
+    ]
+  },
+  {
+    "question": "What git commit should I checkout when installing Triton flash attention for ROCm with vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/rocm.inc.md",
+        "first_char": 786,
+        "last_char": 2783
+      }
+    ]
+  },
+  {
+    "question": "What is the purpose of vLLM's plugin system?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/plugin_system.md",
+        "first_char": 0,
+        "last_char": 947
+      }
+    ]
+  },
+  {
+    "question": "How can you check if a model is natively supported in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/models/supported_models.md",
+        "first_char": 6684,
+        "last_char": 8464
+      }
+    ]
+  },
+  {
+    "question": "What backends does vLLM support for generating structured outputs?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/structured_outputs.md",
+        "first_char": 0,
+        "last_char": 309
+      }
+    ]
+  },
+  {
+    "question": "What minimum CUDA compiler version is required for building cutlass_scaled_mm kernels for Blackwell SM100 in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/CMakeLists.txt",
+        "first_char": 17949,
+        "last_char": 19384
+      }
+    ]
+  },
+  {
+    "question": "What Python environment manager is recommended for vLLM installation?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/python_env_setup.inc.md",
+        "first_char": 0,
+        "last_char": 412
+      }
+    ]
+  },
+  {
+    "question": "What runner parameter is required when serving the DSE-Qwen2-MRL model in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md",
+        "first_char": 11812,
+        "last_char": 12626
+      }
+    ]
+  },
+  {
+    "question": "What is the minimum version of bitsandbytes required for vLLM quantization?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/bnb.md",
+        "first_char": 0,
+        "last_char": 1744
+      }
+    ]
+  },
+  {
+    "question": "How can you make a vLLM model compatible with both old and new versions of vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/arch_overview.md",
+        "first_char": 7948,
+        "last_char": 8684
+      }
+    ]
+  },
+  {
+    "question": "What is the primary motivation behind the Modular Kernel framework in vLLM's FusedMoE implementation?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md",
+        "first_char": 1786,
+        "last_char": 2707
+      }
+    ]
+  },
+  {
+    "question": "How many inner iterations does a warp need to handle a whole block of value tokens in vLLM's paged attention when BLOCK_SIZE is 16, V_VEC_SIZE is 8, HEAD_SIZE is 128, and WARP_SIZE is 32?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/paged_attention.md",
+        "first_char": 17270,
+        "last_char": 18521
+      }
+    ]
+  },
+  {
+    "question": "What endpoint does vLLM use to expose production metrics?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/usage/metrics.md",
+        "first_char": 0,
+        "last_char": 1840
+      }
+    ]
+  },
+  {
+    "question": "How do you build and install vLLM from source for AWS Neuron?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/aws_neuron.md",
+        "first_char": 2222,
+        "last_char": 3908
+      }
+    ]
+  },
+  {
+    "question": "What are the two main reasons for using disaggregated prefilling in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/disagg_prefill.md",
+        "first_char": 0,
+        "last_char": 1114
+      }
+    ]
+  },
+  {
+    "question": "Where can I find information about debugging distributed vLLM deployments?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md",
+        "first_char": 11003,
+        "last_char": 11170
+      }
+    ]
+  },
+  {
+    "question": "How do you configure default multimodal LoRAs when starting the vLLM server?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/lora.md",
+        "first_char": 13150,
+        "last_char": 14470
+      }
+    ]
+  },
+  {
+    "question": "What flag do you need to specify when serving a reasoning model in vLLM to extract reasoning content?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md",
+        "first_char": 1673,
+        "last_char": 3268
+      }
+    ]
+  },
+  {
+    "question": "What are the three key abstractions used for disaggregated prefilling in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/disagg_prefill.md",
+        "first_char": 2755,
+        "last_char": 4662
+      }
+    ]
+  },
+  {
+    "question": "Which model architectures support tensor parallelism in vLLM for the Llama family of models?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/models/supported_models.md",
+        "first_char": 17942,
+        "last_char": 19791
+      }
+    ]
+  },
+  {
+    "question": "What method needs to be overridden in BaseProcessingInfo to specify the maximum number of input items for each modality in vLLM multimodal models?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md",
+        "first_char": 5541,
+        "last_char": 6196
+      }
+    ]
+  },
+  {
+    "question": "What are the system requirements for running vLLM with Intel Gaudi devices?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md",
+        "first_char": 0,
+        "last_char": 715
+      }
+    ]
+  },
+  {
+    "question": "What backend allows many decoder language models to be automatically loaded in vLLM without manual implementation?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/model/README.md",
+        "first_char": 0,
+        "last_char": 1176
+      }
+    ]
+  },
+  {
+    "question": "What resources are available for vLLM contributors working on speculative decoding?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/spec_decode.md",
+        "first_char": 13289,
+        "last_char": 13765
+      }
+    ]
+  },
+  {
+    "question": "Which vLLM versions are affected by the zmq bug that can cause hanging?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/usage/troubleshooting.md",
+        "first_char": 15156,
+        "last_char": 16070
+      }
+    ]
+  },
+  {
+    "question": "How do you install vLLM with a specific CUDA version using pip?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md",
+        "first_char": 2266,
+        "last_char": 2756
+      }
+    ]
+  },
+  {
+    "question": "What quantization methods are supported and unsupported for vLLM on Intel Gaudi?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/intel_gaudi.md",
+        "first_char": 3772,
+        "last_char": 4673
+      }
+    ]
+  },
+  {
+    "question": "How do you uninstall a vLLM deployment using Helm?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md",
+        "first_char": 4054,
+        "last_char": 5719
+      }
+    ]
+  },
+  {
+    "question": "What are the three main usage patterns supported by vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/usage/README.md",
+        "first_char": 0,
+        "last_char": 434
+      }
+    ]
+  },
+  {
+    "question": "How do you serve a model with audio input support in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md",
+        "first_char": 17286,
+        "last_char": 19281
+      }
+    ]
+  },
+  {
+    "question": "How do you add support for a new reasoning model in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/reasoning_outputs.md",
+        "first_char": 8174,
+        "last_char": 10067
+      }
+    ]
+  },
+  {
+    "question": "What shape must multimodal embeddings have when returned from get_multimodal_embeddings in vLLM multimodal models?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/model/multimodal.md",
+        "first_char": 1859,
+        "last_char": 3654
+      }
+    ]
+  },
+  {
+    "question": "What vLLM server endpoints correspond to the offline LLM.generate and LLM.chat APIs?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/models/generative_models.md",
+        "first_char": 4934,
+        "last_char": 5589
+      }
+    ]
+  },
+  {
+    "question": "What are the three recommended ways to implement third-party connectors for vLLM disaggregated prefilling?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/disagg_prefill.md",
+        "first_char": 4986,
+        "last_char": 5892
+      }
+    ]
+  },
+  {
+    "question": "What should you do if you encounter persistent or strange build errors in vLLM after significant changes or switching branches?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/incremental_build.md",
+        "first_char": 7404,
+        "last_char": 8351
+      }
+    ]
+  },
+  {
+    "question": "How do you evaluate accuracy of a quantized model using lm_eval in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/int4.md",
+        "first_char": 2459,
+        "last_char": 3972
+      }
+    ]
+  },
+  {
+    "question": "How do you report security vulnerabilities in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/usage/security.md",
+        "first_char": 4018,
+        "last_char": 4366
+      }
+    ]
+  },
+  {
+    "question": "What requirements must a model meet to be compatible with vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/model/basic.md",
+        "first_char": 514,
+        "last_char": 640
+      }
+    ]
+  },
+  {
+    "question": "What is the recommended starting number of samples for calibration data in INT4 quantization?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/int4.md",
+        "first_char": 3974,
+        "last_char": 5807
+      }
+    ]
+  },
+  {
+    "question": "What tool calling format does vLLM support for Llama 3.1 and 3.2 models?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/tool_calling.md",
+        "first_char": 8624,
+        "last_char": 10533
+      }
+    ]
+  },
+  {
+    "question": "How many calibration samples are recommended when preparing calibration data for INT4 quantization in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/int4.md",
+        "first_char": 894,
+        "last_char": 2457
+      }
+    ]
+  },
+  {
+    "question": "What CUDA compiler version is required to build Machete kernels in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/CMakeLists.txt",
+        "first_char": 31032,
+        "last_char": 32876
+      }
+    ]
+  },
+  {
+    "question": "What model architectures does vLLM support for GPT-2 models?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/models/supported_models.md",
+        "first_char": 16232,
+        "last_char": 18112
+      }
+    ]
+  },
+  {
+    "question": "How can you disable unused modalities completely in vLLM multimodal models?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/configuration/conserving_memory.md",
+        "first_char": 3571,
+        "last_char": 4959
+      }
+    ]
+  },
+  {
+    "question": "What argument should be included when evaluating FP8 quantized models with lm_eval to ensure proper accuracy assessment?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/fp8.md",
+        "first_char": 3163,
+        "last_char": 4344
+      }
+    ]
+  },
+  {
+    "question": "What three requirements must a custom model meet to be compatible with vLLM's Transformers backend?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/models/supported_models.md",
+        "first_char": 3368,
+        "last_char": 5336
+      }
+    ]
+  },
+  {
+    "question": "How does vLLM handle sharding and quantization of model weights during initialization?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/arch_overview.md",
+        "first_char": 8616,
+        "last_char": 10192
+      }
+    ]
+  },
+  {
+    "question": "How do you build a vLLM wheel from source for CUDA GPU installations?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md",
+        "first_char": 5696,
+        "last_char": 5736
+      }
+    ]
+  },
+  {
+    "question": "What models are currently covered in vLLM's end-to-end performance validation before each release?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/RELEASE.md",
+        "first_char": 3440,
+        "last_char": 5003
+      }
+    ]
+  },
+  {
+    "question": "What is the minimum NVIDIA GPU compute capability required for INT4 computation in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/quantization/int4.md",
+        "first_char": 0,
+        "last_char": 892
+      }
+    ]
+  },
+  {
+    "question": "What is the minimum vLLM version required for P2P NCCL connector functionality?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/p2p_nccl_connector.md",
+        "first_char": 9005,
+        "last_char": 9060
+      }
+    ]
+  },
+  {
+    "question": "Can vLLM serve multiple models on a single port using the OpenAI API?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/usage/faq.md",
+        "first_char": 0,
+        "last_char": 1564
+      }
+    ]
+  },
+  {
+    "question": "How do you configure data parallel deployment in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/data_parallel_deployment.md",
+        "first_char": 2491,
+        "last_char": 3465
+      }
+    ]
+  },
+  {
+    "question": "What CUDA architectures are supported for Marlin MOE kernels in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/CMakeLists.txt",
+        "first_char": 32779,
+        "last_char": 34672
+      }
+    ]
+  },
+  {
+    "question": "What FusedMoEPrepareAndFinalize implementation is used when there is no expert parallelism in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/design/fused_moe_modular_kernel.md",
+        "first_char": 16011,
+        "last_char": 16915
+      }
+    ]
+  },
+  {
+    "question": "How should security issues be reported in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/SECURITY.md",
+        "first_char": 0,
+        "last_char": 736
+      }
+    ]
+  },
+  {
+    "question": "What are the three communication backends available for Expert Parallelism in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/expert_parallel_deployment.md",
+        "first_char": 0,
+        "last_char": 1505
+      }
+    ]
+  },
+  {
+    "question": "What do the symbols ✅, 🚧, and ⚠️ mean in vLLM's feature status legend?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/models/supported_models.md",
+        "first_char": 11792,
+        "last_char": 12212
+      }
+    ]
+  },
+  {
+    "question": "What datatypes are supported by vLLM's ARM CPU backend?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/cpu/arm.inc.md",
+        "first_char": 0,
+        "last_char": 1636
+      }
+    ]
+  },
+  {
+    "question": "What are the two ways to format input when making requests to vLLM's classify endpoint?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md",
+        "first_char": 16632,
+        "last_char": 18629
+      }
+    ]
+  },
+  {
+    "question": "What is the current limitation when using MLP speculators for speculative decoding in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/spec_decode.md",
+        "first_char": 3949,
+        "last_char": 5423
+      }
+    ]
+  },
+  {
+    "question": "How do you forward the vllm-router-service port to access the vLLM deployment?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/deployment/integrations/production-stack.md",
+        "first_char": 2815,
+        "last_char": 4142
+      }
+    ]
+  },
+  {
+    "question": "Which vLLM model architectures support LoRA fine-tuning?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/models/supported_models.md",
+        "first_char": 12654,
+        "last_char": 14537
+      }
+    ]
+  },
+  {
+    "question": "Where can I find the configurable parameters for the vLLM Helm chart?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/deployment/frameworks/helm.md",
+        "first_char": 1591,
+        "last_char": 1686
+      }
+    ]
+  },
+  {
+    "question": "What quantization methods are supported by vLLM CPU?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/cpu.md",
+        "first_char": 9439,
+        "last_char": 9926
+      }
+    ]
+  },
+  {
+    "question": "What is Reinforcement Learning from Human Feedback (RLHF)?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/training/rlhf.md",
+        "first_char": 0,
+        "last_char": 1162
+      }
+    ]
+  },
+  {
+    "question": "Which models support the process_vision_info function in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/multimodal_inputs.md",
+        "first_char": 8526,
+        "last_char": 8688
+      }
+    ]
+  },
+  {
+    "question": "What OpenAI APIs are supported by vLLM's OpenAI-compatible server?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md",
+        "first_char": 7569,
+        "last_char": 9381
+      }
+    ]
+  },
+  {
+    "question": "Where can I find a complete example of structured outputs in vLLM online serving?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/structured_outputs.md",
+        "first_char": 5461,
+        "last_char": 5535
+      }
+    ]
+  },
+  {
+    "question": "How do you serve the JinaVL-Reranker model using vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md",
+        "first_char": 22494,
+        "last_char": 24288
+      }
+    ]
+  },
+  {
+    "question": "Which TPU versions are supported by vLLM for Google Cloud TPU?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/google_tpu.md",
+        "first_char": 0,
+        "last_char": 1907
+      }
+    ]
+  },
+  {
+    "question": "What is the recommended tensor parallel size and pipeline parallel size configuration when running vLLM on a Ray cluster with 16 GPUs across 2 nodes?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/parallelism_scaling.md",
+        "first_char": 7232,
+        "last_char": 8307
+      }
+    ]
+  },
+  {
+    "question": "How can you limit the number of compilation jobs when building vLLM to avoid system overload?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/installation/gpu/cuda.inc.md",
+        "first_char": 9569,
+        "last_char": 11494
+      }
+    ]
+  },
+  {
+    "question": "How do you access the parsed response from OpenAI's structured output completion in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/structured_outputs.md",
+        "first_char": 8447,
+        "last_char": 9263
+      }
+    ]
+  },
+  {
+    "question": "What flag is mandatory to enable automatic function calling in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/features/tool_calling.md",
+        "first_char": 5465,
+        "last_char": 7110
+      }
+    ]
+  },
+  {
+    "question": "How do you apply chat templates to prompts in vLLM?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/getting_started/quickstart.md",
+        "first_char": 5145,
+        "last_char": 6292
+      }
+    ]
+  },
+  {
+    "question": "What is the first step to implement a basic vLLM model?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/contributing/model/basic.md",
+        "first_char": 0,
+        "last_char": 512
+      }
+    ]
+  },
+  {
+    "question": "What flag must be explicitly passed when serving VLM2Vec-Full model in vLLM to run it in embedding mode?",
+    "sources": [
+      {
+        "path": "data/raw/vllm-0.10.1/docs/serving/openai_compatible_server.md",
+        "first_char": 9910,
+        "last_char": 11856
+      }
+    ]
+  }
+]
